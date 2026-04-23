@@ -312,6 +312,24 @@ model Payment {
   @@index([studentId])
 }
 
+// --- Audit Log ---
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String
+  action       String
+  resourceType String?
+  resourceId   String?
+  details      Json?
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
 // --- Schedule Sessions ---
 
 model ScheduleSession {

@@ -12,10 +12,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { UserRole, SESSION_MAX_AGE_SEC, SESSION_UPDATE_AGE_SEC } from "@/lib/constants";
+import { isAccountLocked, getLockoutRemaining, recordLoginAttempt } from "@/lib/auth-lockout";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma) as any,
-  trustHost: true, // Trust the host for NextAuth v5
+  trustHost: true,
   providers: [
     // Google OAuth Provider (optional - only enabled if credentials are configured)
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
@@ -53,19 +54,31 @@ export const authOptions = {
         const email = (credentials.email as string).toLowerCase();
         const password = credentials.password as string;
 
+        // Enforce account lockout before attempting auth
+        if (isAccountLocked(email)) {
+          const remaining = getLockoutRemaining(email);
+          recordLoginAttempt(email, false);
+          throw new Error(
+            `Account locked due to too many failed attempts. Please try again in ${Math.ceil((remaining || 0) / 60)} minutes.`
+          );
+        }
+
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
         if (!user || !user.password) {
+          recordLoginAttempt(email, false);
           throw new Error("Invalid email or password");
         }
 
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
+          recordLoginAttempt(email, false);
           throw new Error("Invalid email or password");
         }
 
+        recordLoginAttempt(email, true);
         return {
           id: user.id,
           email: user.email,
@@ -83,22 +96,17 @@ export const authOptions = {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
         },
-        secure: process.env.EMAIL_SERVER_SECURE === "true", // true for port 465 (SSL), false for port 587 (TLS)
-        requireTLS: process.env.EMAIL_SERVER_SECURE !== "true", // Require TLS for port 587
+        secure: process.env.EMAIL_SERVER_SECURE === "true",
+        requireTLS: process.env.EMAIL_SERVER_SECURE !== "true",
       } : {
-        // Dummy server config for development (won't be used)
         host: "localhost",
         port: 587,
-        auth: {
-          user: "dev",
-          pass: "dev",
-        },
+        auth: { user: "dev", pass: "dev" },
         secure: false,
       }),
       from: process.env.EMAIL_FROM || "noreply@example.com",
-      // In development, log the magic link instead of sending email (unless email is configured)
       sendVerificationRequest: async ({ identifier, url, provider }) => {
-        // If no email server is configured, log the link instead
+        // Dev-only: log link when no email server is configured
         if (!process.env.EMAIL_SERVER_HOST) {
           logger.info({ identifier, url }, "DEVELOPMENT MODE - Magic Link");
           return;
@@ -135,7 +143,6 @@ export const authOptions = {
           logger.info({ identifier, url }, "EMAIL SEND FAILED - Magic Link fallback");
           // Don't throw - the verification token is still created, so the link will work
           // This allows users to sign in even if email sending fails
-        }
       },
     }),
   ],
@@ -147,10 +154,8 @@ export const authOptions = {
   callbacks: {
     async signIn(params: any) {
       const { user, email, account } = params;
-      const { isAccountLocked, getLockoutRemaining, recordLoginAttempt } = await import("@/lib/auth-lockout");
-      const { checkInvitationForEmail, markInvitationUsedByEmail } = await import("@/lib/invitations");
 
-      // Check if account is locked (for email verification requests)
+      // Magic link lockout check
       if (email?.verificationRequest && user.email) {
         if (await isAccountLocked(user.email)) {
           const remaining = await getLockoutRemaining(user.email);
@@ -161,28 +166,25 @@ export const authOptions = {
         }
       }
 
-      // Record successful login attempt
       if (user.email) {
-        // Check if this is a successful verification (user is signing in)
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
           select: { id: true, emailVerified: true, role: true },
         });
 
-        // If user exists and is verified, this is a successful login
         if (dbUser?.emailVerified) {
           await recordLoginAttempt(user.email, true);
         }
 
-        // Check for pending invitation and assign role for new OAuth users
-        // This handles the case where an admin invited a user with a specific role
+        // Atomically apply invited role for OAuth users
         if (account?.provider && account.provider !== "credentials") {
-          const invitedRole = await checkInvitationForEmail(user.email);
-          if (invitedRole && dbUser) {
-            // User has an invitation - update their role
-            await prisma.user.update({
-              where: { id: dbUser.id },
-              data: { role: invitedRole },
+          await prisma.$transaction(async (tx) => {
+            const invitation = await tx.invitation.findFirst({
+              where: {
+                email: user.email.toLowerCase(),
+                usedAt: null,
+                expiresAt: { gt: new Date() },
+              },
             });
             await markInvitationUsedByEmail(user.email);
             logger.info({ role: invitedRole, email: user.email }, "Applied invited role to user");
@@ -202,7 +204,6 @@ export const authOptions = {
       return true;
     },
     async jwt({ token, user, account }: any) {
-      // Initial sign in - add user data to token
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -249,9 +250,8 @@ export const authOptions = {
   },
   session: {
     strategy: "jwt" as const,
-    maxAge: SESSION_MAX_AGE_SEC, // 30 days
-    updateAge: SESSION_UPDATE_AGE_SEC, // 24 hours
+    maxAge: SESSION_MAX_AGE_SEC,
+    updateAge: SESSION_UPDATE_AGE_SEC,
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
