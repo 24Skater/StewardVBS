@@ -360,19 +360,3 @@ model PasswordResetToken {
   @@index([token])
   @@index([userId])
 }
-
-model AuditLog {
-  id           String   @id @default(cuid())
-  userId       String
-  action       String
-  resourceType String?
-  resourceId   String?
-  details      Json?
-  ipAddress    String?
-  userAgent    String?
-  createdAt    DateTime @default(now())
-
-  @@index([userId])
-  @@index([action])
-  @@index([createdAt])
-}
