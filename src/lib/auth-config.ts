@@ -55,9 +55,9 @@ export const authOptions = {
         const password = credentials.password as string;
 
         // Enforce account lockout before attempting auth
-        if (isAccountLocked(email)) {
-          const remaining = getLockoutRemaining(email);
-          recordLoginAttempt(email, false);
+        if (await isAccountLocked(email)) {
+          const remaining = await getLockoutRemaining(email);
+          await recordLoginAttempt(email, false);
           throw new Error(
             `Account locked due to too many failed attempts. Please try again in ${Math.ceil((remaining || 0) / 60)} minutes.`
           );
@@ -68,17 +68,17 @@ export const authOptions = {
         });
 
         if (!user || !user.password) {
-          recordLoginAttempt(email, false);
+          await recordLoginAttempt(email, false);
           throw new Error("Invalid email or password");
         }
 
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-          recordLoginAttempt(email, false);
+          await recordLoginAttempt(email, false);
           throw new Error("Invalid email or password");
         }
 
-        recordLoginAttempt(email, true);
+        await recordLoginAttempt(email, true);
         return {
           id: user.id,
           email: user.email,
@@ -143,6 +143,7 @@ export const authOptions = {
           logger.info({ identifier, url }, "EMAIL SEND FAILED - Magic Link fallback");
           // Don't throw - the verification token is still created, so the link will work
           // This allows users to sign in even if email sending fails
+        }
       },
     }),
   ],
@@ -186,9 +187,17 @@ export const authOptions = {
                 expiresAt: { gt: new Date() },
               },
             });
-            await markInvitationUsedByEmail(user.email);
-            logger.info({ role: invitedRole, email: user.email }, "Applied invited role to user");
-          }
+            if (invitation && dbUser) {
+              await tx.user.update({
+                where: { id: dbUser.id },
+                data: { role: invitation.role },
+              });
+              await tx.invitation.update({
+                where: { id: invitation.id },
+                data: { usedAt: new Date() },
+              });
+            }
+          });
         }
 
         // Require email verification for new users
