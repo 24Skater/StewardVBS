@@ -2,6 +2,7 @@
  * Application settings management
  */
 import "server-only";
+import crypto from 'crypto'
 import { prisma } from "./prisma";
 
 export type AppSettings = {
@@ -129,12 +130,11 @@ export function formatChurchAddress(settings: AppSettings): string | null {
  * Generate a secure webhook secret
  */
 export function generateWebhookSecret(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const crypto = require('crypto');
-  const randomBytes = crypto.randomBytes(32);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const randomBytes = crypto.randomBytes(32)
+  let result = ''
   for (let i = 0; i < 32; i++) {
-    result += chars[randomBytes[i] % chars.length];
+    result += chars[randomBytes[i] % chars.length]
   }
-  return result;
+  return result
 }

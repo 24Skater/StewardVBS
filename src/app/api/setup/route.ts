@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { needsSetup } from "@/lib/setup";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { BCRYPT_ROUNDS } from "@/lib/constants";
 
 const setupSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
     // Create admin user
     const user = await prisma.user.create({

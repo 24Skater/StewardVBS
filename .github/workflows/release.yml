@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD)
+          else
+            COMMITS=$(git log --oneline --pretty=format:"- %s" "${PREV_TAG}..HEAD")
+          fi
+          {
+            echo "NOTES<<EOF"
+            echo "## What's Changed"
+            echo ""
+            echo "$COMMITS"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ steps.notes.outputs.NOTES }}
+          files: |
+            Dockerfile
+            docker-compose.yml
+            docker-compose.prod.yml
+            .env.example

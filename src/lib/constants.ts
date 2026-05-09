@@ -52,3 +52,6 @@ export const MAX_NOTES_LENGTH = 1000;
 export const MAX_SIZE_LENGTH = 50;
 export const MAX_SITE_NAME_LENGTH = 100;
 export const MAX_URL_LENGTH = 500;
+
+// Crypto
+export const BCRYPT_ROUNDS = 12

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { auditLog } from "@/lib/audit-log";
 import { validateInvitation, markInvitationUsed } from "@/lib/invitations";
+import { BCRYPT_ROUNDS } from "@/lib/constants";
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -64,7 +65,7 @@ export async function POST(req: Request) {
     }
 
     // Hash password with bcrypt (12 rounds as specified in requirements)
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
     // Create user with assigned role (from invitation or default VIEWER)
     const user = await prisma.user.create({

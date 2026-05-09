@@ -50,7 +50,7 @@ async function updateUserRole(formData: FormData) {
 
   await prisma.user.update({
     where: { id: userId },
-    data: { role: role as UserRole },
+    data: { role: role as UserRole, sessionVersion: { increment: 1 } },
   });
 
   // Audit log

@@ -1,113 +1,120 @@
-/**
- * Account lockout and authentication security
- */
-import "server-only";
-import { prisma } from "./prisma";
-import {
-  MAX_LOGIN_ATTEMPTS,
-  LOCKOUT_DURATION_MS,
-  LOCKOUT_WINDOW_MS,
-  ONE_MINUTE_MS,
-} from "./constants";
+import 'server-only'
+import { MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MS, LOCKOUT_WINDOW_MS, ONE_MINUTE_MS } from './constants'
 
 export interface LoginAttempt {
-  email: string;
-  timestamp: Date;
-  success: boolean;
+  email: string
+  timestamp: Date
+  success: boolean
 }
 
-// In-memory store for login attempts (use Redis in production)
-const loginAttempts = new Map<string, LoginAttempt[]>();
-
-// Clean up old attempts periodically
-if (typeof setInterval !== "undefined") {
+// In-memory fallback (development only)
+const _memAttempts = new Map<string, Array<{ ts: number; success: boolean }>>()
+if (typeof setInterval !== 'undefined') {
   setInterval(() => {
-    const oneHourAgo = new Date(Date.now() - LOCKOUT_WINDOW_MS);
-    loginAttempts.forEach((attempts, email) => {
-      const recent = attempts.filter((a) => a.timestamp > oneHourAgo);
-      if (recent.length === 0) {
-        loginAttempts.delete(email);
-      } else {
-        loginAttempts.set(email, recent);
-      }
-    });
-  }, 5 * ONE_MINUTE_MS); // Clean every 5 minutes
+    const cutoff = Date.now() - LOCKOUT_WINDOW_MS
+    _memAttempts.forEach((attempts, email) => {
+      const recent = attempts.filter((a) => a.ts > cutoff)
+      recent.length === 0 ? _memAttempts.delete(email) : _memAttempts.set(email, recent)
+    })
+  }, 5 * ONE_MINUTE_MS)
 }
 
-/**
- * Record a login attempt
- */
-export function recordLoginAttempt(email: string, success: boolean): void {
-  const attempts = loginAttempts.get(email) || [];
-  attempts.push({
-    email,
-    timestamp: new Date(),
-    success,
-  });
-  loginAttempts.set(email, attempts);
+async function _tryGetRedis() {
+  try {
+    const { getRedis } = await import('./redis')
+    return getRedis()
+  } catch {
+    return null
+  }
 }
 
-/**
- * Check if account is locked due to too many failed attempts
- */
-export function isAccountLocked(email: string): boolean {
-  const attempts = loginAttempts.get(email) || [];
-  const oneHourAgo = new Date(Date.now() - LOCKOUT_WINDOW_MS);
-  const recentAttempts = attempts.filter((a) => a.timestamp > oneHourAgo);
+export async function recordLoginAttempt(email: string, success: boolean): Promise<void> {
+  const redis = await _tryGetRedis()
+  const key = `lockout:${email}`
 
-  if (recentAttempts.length < MAX_LOGIN_ATTEMPTS) {
-    return false;
+  if (success) {
+    // Clear lockout state on successful login
+    if (redis) {
+      await redis.del(key)
+    } else {
+      _memAttempts.delete(email)
+    }
+    return
   }
 
-  // Check if all recent attempts failed
-  const failedAttempts = recentAttempts.filter((a) => !a.success);
-  if (failedAttempts.length < MAX_LOGIN_ATTEMPTS) {
-    return false;
+  // Record failure
+  const windowSec = Math.ceil(LOCKOUT_WINDOW_MS / 1000)
+  if (redis) {
+    await redis.lpush(key, JSON.stringify({ ts: Date.now(), success: false }))
+    await redis.expire(key, windowSec)
+    return
   }
 
-  // Check if lockout period has passed
-  const lastFailedAttempt = failedAttempts[failedAttempts.length - 1];
-  const lockoutExpires = new Date(
-    lastFailedAttempt.timestamp.getTime() + LOCKOUT_DURATION_MS
-  );
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout requires Redis in production')
+  }
 
-  return new Date() < lockoutExpires;
+  const existing = _memAttempts.get(email) ?? []
+  existing.push({ ts: Date.now(), success: false })
+  _memAttempts.set(email, existing)
 }
 
-/**
- * Get remaining lockout time in seconds
- */
-export function getLockoutRemaining(email: string): number | null {
-  if (!isAccountLocked(email)) {
-    return null;
+async function _getRecentFailureCount(email: string): Promise<number> {
+  const redis = await _tryGetRedis()
+  const cutoff = Date.now() - LOCKOUT_WINDOW_MS
+
+  if (redis) {
+    const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+    return raw.filter((e) => {
+      const parsed = JSON.parse(e) as { ts: number; success: boolean }
+      return !parsed.success && parsed.ts > cutoff
+    }).length
   }
 
-  const attempts = loginAttempts.get(email) || [];
-  const oneHourAgo = new Date(Date.now() - LOCKOUT_WINDOW_MS);
-  const recentAttempts = attempts.filter((a) => a.timestamp > oneHourAgo);
-  const failedAttempts = recentAttempts.filter((a) => !a.success);
-
-  if (failedAttempts.length < MAX_LOGIN_ATTEMPTS) {
-    return null;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
   }
 
-  const lastFailedAttempt = failedAttempts[failedAttempts.length - 1];
-  const lockoutExpires = new Date(
-    lastFailedAttempt.timestamp.getTime() + LOCKOUT_DURATION_MS
-  );
-
-  const remaining = Math.ceil((lockoutExpires.getTime() - Date.now()) / 1000);
-  return Math.max(0, remaining);
+  return (_memAttempts.get(email) ?? []).filter((a) => !a.success && a.ts > cutoff).length
 }
 
-/**
- * Get remaining attempts before lockout
- */
-export function getRemainingAttempts(email: string): number {
-  const attempts = loginAttempts.get(email) || [];
-  const oneHourAgo = new Date(Date.now() - LOCKOUT_WINDOW_MS);
-  const recentAttempts = attempts.filter((a) => a.timestamp > oneHourAgo);
-  const failedAttempts = recentAttempts.filter((a) => !a.success);
+async function _getLastFailureTs(email: string): Promise<number | null> {
+  const redis = await _tryGetRedis()
+  const cutoff = Date.now() - LOCKOUT_WINDOW_MS
 
-  return Math.max(0, MAX_LOGIN_ATTEMPTS - failedAttempts.length);
+  if (redis) {
+    const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+    const failureTimes = raw
+      .map((e) => JSON.parse(e) as { ts: number; success: boolean })
+      .filter((e) => !e.success && e.ts > cutoff)
+      .map((e) => e.ts)
+    return failureTimes.length ? Math.max(...failureTimes) : null
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
+  }
+
+  const failures = (_memAttempts.get(email) ?? []).filter((a) => !a.success && a.ts > cutoff)
+  return failures.length ? Math.max(...failures.map((a) => a.ts)) : null
+}
+
+export async function isAccountLocked(email: string): Promise<boolean> {
+  const failures = await _getRecentFailureCount(email)
+  if (failures < MAX_LOGIN_ATTEMPTS) return false
+  const lastTs = await _getLastFailureTs(email)
+  if (!lastTs) return false
+  return Date.now() < lastTs + LOCKOUT_DURATION_MS
+}
+
+export async function getLockoutRemaining(email: string): Promise<number | null> {
+  if (!(await isAccountLocked(email))) return null
+  const lastTs = await _getLastFailureTs(email)
+  if (!lastTs) return null
+  return Math.max(0, Math.ceil((lastTs + LOCKOUT_DURATION_MS - Date.now()) / 1000))
+}
+
+export async function getRemainingAttempts(email: string): Promise<number> {
+  const failures = await _getRecentFailureCount(email)
+  return Math.max(0, MAX_LOGIN_ATTEMPTS - failures)
 }

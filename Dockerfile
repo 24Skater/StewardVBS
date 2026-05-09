@@ -52,6 +52,8 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 # Copy Prisma schema and migrations for runtime migrations
 COPY --from=builder /app/prisma ./prisma
+COPY scripts/start.sh /app/scripts/start.sh
+RUN chmod +x /app/scripts/start.sh
 
 USER nextjs
 
@@ -60,4 +62,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["/app/scripts/start.sh"]

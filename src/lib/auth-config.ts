@@ -4,6 +4,7 @@
  */
 import "server-only";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { logger } from "@/lib/logger";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
@@ -22,7 +23,6 @@ export const authOptions = {
           GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            allowDangerousEmailAccountLinking: true,
           }),
         ]
       : []),
@@ -35,7 +35,6 @@ export const authOptions = {
             issuer: process.env.AZURE_AD_TENANT_ID
               ? `https://login.microsoftonline.com/${process.env.AZURE_AD_TENANT_ID}/v2.0`
               : "https://login.microsoftonline.com/common/v2.0",
-            allowDangerousEmailAccountLinking: true,
           }),
         ]
       : []),
@@ -101,9 +100,7 @@ export const authOptions = {
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         // If no email server is configured, log the link instead
         if (!process.env.EMAIL_SERVER_HOST) {
-          console.log("\n📧 DEVELOPMENT MODE - Magic Link:");
-          console.log(`   Email: ${identifier}`);
-          console.log(`   Link: ${url}\n`);
+          logger.info({ identifier, url }, "DEVELOPMENT MODE - Magic Link");
           return;
         }
         // Production: send actual email
@@ -113,17 +110,16 @@ export const authOptions = {
           if (!serverConfig) {
             throw new Error("Email server configuration is missing");
           }
-          
-          console.log(`📧 Attempting to send email to ${identifier}...`);
-          console.log(`   From: ${provider.from}`);
-          
+
+          logger.info({ identifier, from: provider.from }, "Attempting to send magic link email");
+
           const nodemailer = await import("nodemailer");
           const transport = nodemailer.createTransport(serverConfig);
-          
+
           // Verify connection first
           await transport.verify();
-          console.log(`✅ SMTP connection verified`);
-          
+          logger.info("SMTP connection verified");
+
           const result = await transport.sendMail({
             to: identifier,
             from: provider.from,
@@ -131,22 +127,12 @@ export const authOptions = {
             text: `Sign in to ${host}\n\n${url}\n\n`,
             html: `<p>Sign in to ${host}</p><p><a href="${url}">${url}</a></p>`,
           });
-          
-          console.log(`✅ Magic link email sent to ${identifier}`);
-          console.log(`   Message ID: ${result.messageId}`);
-          // Also log the link as backup in case email is delayed or in spam
-          console.log(`\n📧 BACKUP - Magic Link (if email not received, use this):`);
-          console.log(`   Email: ${identifier}`);
-          console.log(`   Link: ${url}\n`);
+
+          logger.info({ identifier, messageId: result.messageId }, "Magic link email sent");
         } catch (error: any) {
-          console.error("❌ Failed to send email:", error.message);
-          if (error.response) {
-            console.error("   SendGrid response:", error.response);
-          }
+          logger.error({ err: error.message, response: error.response }, "Failed to send magic link email");
           // Log the magic link as fallback so user can still sign in
-          console.log("\n📧 EMAIL SEND FAILED - Magic Link (use this to sign in):");
-          console.log(`   Email: ${identifier}`);
-          console.log(`   Link: ${url}\n`);
+          logger.info({ identifier, url }, "EMAIL SEND FAILED - Magic Link fallback");
           // Don't throw - the verification token is still created, so the link will work
           // This allows users to sign in even if email sending fails
         }
@@ -166,9 +152,9 @@ export const authOptions = {
 
       // Check if account is locked (for email verification requests)
       if (email?.verificationRequest && user.email) {
-        if (isAccountLocked(user.email)) {
-          const remaining = getLockoutRemaining(user.email);
-          recordLoginAttempt(user.email, false);
+        if (await isAccountLocked(user.email)) {
+          const remaining = await getLockoutRemaining(user.email);
+          await recordLoginAttempt(user.email, false);
           throw new Error(
             `Account locked due to too many failed attempts. Please try again in ${Math.ceil((remaining || 0) / 60)} minutes.`
           );
@@ -185,7 +171,7 @@ export const authOptions = {
 
         // If user exists and is verified, this is a successful login
         if (dbUser?.emailVerified) {
-          recordLoginAttempt(user.email, true);
+          await recordLoginAttempt(user.email, true);
         }
 
         // Check for pending invitation and assign role for new OAuth users
@@ -199,17 +185,16 @@ export const authOptions = {
               data: { role: invitedRole },
             });
             await markInvitationUsedByEmail(user.email);
-            console.log(`✅ Applied invited role ${invitedRole} to ${user.email}`);
+            logger.info({ role: invitedRole, email: user.email }, "Applied invited role to user");
           }
         }
 
         // Require email verification for new users
-        // Allow first-time sign-in to create account, but require verification for subsequent logins
-        if (dbUser && !dbUser.emailVerified) {
-          // In production, you might want to be stricter and require verification
-          // For now, we'll allow it but log it
-          if (process.env.NODE_ENV === "development") {
-            console.warn(`Unverified user attempting to sign in: ${user.email}`);
+        // Enforce email verification in production for credentials sign-in
+        // OAuth providers (Google, Microsoft) verify email on their side
+        if (dbUser && !dbUser.emailVerified && account?.provider === 'credentials') {
+          if (process.env.NODE_ENV === 'production') {
+            return false
           }
         }
       }
@@ -223,26 +208,41 @@ export const authOptions = {
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;
+        // Fetch sessionVersion to detect role/password changes
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { sessionVersion: true },
+        });
+        token.sessionVersion = dbUser?.sessionVersion ?? 1;
       }
-      
+
       // For OAuth/email providers, fetch role from database
       if (account && account.provider !== "credentials" && token.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email },
-          select: { id: true, role: true },
+          select: { id: true, role: true, sessionVersion: true },
         });
         if (dbUser) {
           token.id = dbUser.id;
           token.role = dbUser.role;
+          token.sessionVersion = dbUser.sessionVersion;
         }
       }
-      
+
       return token;
     },
     async session({ session, token }: any) {
-      if (session.user && token) {
+      if (token && session.user) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id },
+          select: { sessionVersion: true, role: true },
+        });
+        if (!dbUser || dbUser.sessionVersion !== token.sessionVersion) {
+          // Token is stale — reject the session
+          return { ...session, user: null, expires: new Date(0).toISOString() };
+        }
         session.user.id = token.id;
-        session.user.role = (token.role as UserRole) || "VIEWER";
+        session.user.role = dbUser.role;
       }
       return session;
     },
