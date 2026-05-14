@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import ConfirmButton from "@/components/ConfirmButton";
+import { Phone, Mail, ArrowLeft } from "lucide-react";
 
 async function addParent(studentId: number, formData: FormData) {
   "use server";
@@ -88,9 +89,9 @@ export default async function ParentsPage({ params }: Props) {
         </div>
         <Link
           href={`/students/${id}`}
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back to Profile
+          <ArrowLeft className="h-4 w-4" /> Back to Profile
         </Link>
       </div>
 
@@ -119,8 +120,8 @@ export default async function ParentsPage({ params }: Props) {
                     <div className="text-sm text-gray-500">{parent.relationship}</div>
                   )}
                   <div className="mt-1 text-sm text-gray-600 space-y-1">
-                    {parent.phone && <div>📞 {parent.phone}</div>}
-                    {parent.email && <div>✉️ {parent.email}</div>}
+                    {parent.phone && <div className="flex items-center gap-1"><Phone className="h-4 w-4" /> {parent.phone}</div>}
+                    {parent.email && <div className="flex items-center gap-1"><Mail className="h-4 w-4" /> {parent.email}</div>}
                   </div>
                 </div>
                 <ConfirmButton

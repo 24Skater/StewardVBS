@@ -2,58 +2,38 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { getActiveEvent } from "@/lib/event";
 import { requireRole } from "@/lib/auth";
 import { getCategories } from "@/lib/categories";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
+import { ArrowLeft } from "lucide-react";
 
 async function createStudent(formData: FormData) {
   "use server";
   const session = await requireRole("STAFF");
 
-  const event = await getActiveEvent();
-
   const name = formData.get("name")?.toString().trim();
   const category = formData.get("category")?.toString().trim();
-  const size = formData.get("size")?.toString().trim() || "M";
+  const size = formData.get("size")?.toString().trim() || "YM";
   const grade = formData.get("grade")?.toString().trim() || null;
   const dateOfBirthInput = formData.get("dateOfBirth")?.toString();
   const dateOfBirth = dateOfBirthInput ? new Date(dateOfBirthInput) : null;
-  
-  // Parent/Guardian info
+
   const parentName = formData.get("parentName")?.toString().trim() || null;
   const parentPhone = formData.get("parentPhone")?.toString().trim() || null;
   const parentEmail = formData.get("parentEmail")?.toString().trim() || null;
-  
-  // Emergency contact
+
   const emergencyContact = formData.get("emergencyContact")?.toString().trim() || null;
   const emergencyPhone = formData.get("emergencyPhone")?.toString().trim() || null;
   const emergencyRelationship = formData.get("emergencyRelationship")?.toString().trim() || null;
-  
-  // Medical/notes
+
   const allergies = formData.get("allergies")?.toString().trim() || null;
   const medicalNotes = formData.get("medicalNotes")?.toString().trim() || null;
   const notes = formData.get("notes")?.toString().trim() || null;
 
-  // Validation
-  if (!name || name.length === 0) {
-    throw new ValidationError("Student name is required");
-  }
-  if (name.length > 100) {
-    throw new ValidationError("Name must be 100 characters or less");
-  }
-  if (!category) {
-    throw new ValidationError("Category is required");
-  }
-
-  // Check if student already exists for this event
-  const existing = await prisma.student.findFirst({
-    where: { eventId: event.id, name },
-  });
-  if (existing) {
-    throw new ValidationError(`Student "${name}" already exists for this event`);
-  }
+  if (!name || name.length === 0) throw new ValidationError("Student name is required");
+  if (name.length > 100) throw new ValidationError("Name must be 100 characters or less");
+  if (!category) throw new ValidationError("Category is required");
 
   const student = await prisma.student.create({
     data: {
@@ -71,11 +51,9 @@ async function createStudent(formData: FormData) {
       allergies,
       medicalNotes,
       notes,
-      eventId: event.id,
     },
   });
 
-  // Audit log
   await auditLog({
     userId: session.user.id,
     action: "STUDENT_CREATED",
@@ -91,25 +69,7 @@ async function createStudent(formData: FormData) {
 export default async function NewStudentPage() {
   await requireRole("STAFF");
 
-  let event;
-  try {
-    event = await getActiveEvent();
-  } catch (error) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Add Student</h1>
-        <div className="rounded-md bg-red-50 p-4">
-          <p className="text-sm text-red-800">
-            {error instanceof Error
-              ? error.message
-              : "No active event found. Please activate an event first."}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const categories = await getCategories(event.id);
+  const categories = await getCategories();
 
   const shirtSizes = ["YXS", "YS", "YM", "YL", "YXL", "AS", "AM", "AL", "AXL", "A2XL"];
 
@@ -119,14 +79,14 @@ export default async function NewStudentPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Add New Student</h1>
           <p className="mt-1 text-sm text-gray-600">
-            Register a new student for {event.year} {event.theme && `• ${event.theme}`}
+            Add a student to your roster — assign them to events from their profile
           </p>
         </div>
         <Link
           href="/students"
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back to list
+          <ArrowLeft className="h-4 w-4" /> Back to list
         </Link>
       </div>
 
@@ -213,7 +173,7 @@ export default async function NewStudentPage() {
 
             <div className="sm:col-span-2">
               <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-md">
-                📷 Profile photo can be uploaded after the student is created.
+                Profile photo can be uploaded after the student is created.
               </p>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { needsSetup } from "@/lib/setup";
 import SignInForm from "@/components/SignInForm";
+import { ArrowLeft } from "lucide-react";
 
 export default async function SignInPage({
   searchParams,
@@ -91,9 +92,9 @@ export default async function SignInPage({
         <div className="text-center">
           <Link
             href="/"
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
           >
-            ← Back to Home
+            <ArrowLeft className="h-4 w-4" /> Back to Home
           </Link>
         </div>
       </div>

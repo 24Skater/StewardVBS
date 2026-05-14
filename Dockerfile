@@ -9,7 +9,7 @@ WORKDIR /app
 # Copy package files and Prisma schema (needed for postinstall script)
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -53,7 +53,7 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 # Copy Prisma schema and migrations for runtime migrations
 COPY --from=builder /app/prisma ./prisma
 COPY scripts/start.sh /app/scripts/start.sh
-RUN chmod +x /app/scripts/start.sh
+RUN sed -i 's/\r$//' /app/scripts/start.sh && chmod +x /app/scripts/start.sh
 
 USER nextjs
 

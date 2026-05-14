@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { getActiveEvent } from "@/lib/event";
 import { requireAuth } from "@/lib/auth";
+import { Users, DollarSign, Clock, CheckCircle2, BarChart3, ClipboardList, Calendar, Settings } from "lucide-react";
 
 export default async function Dashboard() {
   await requireAuth();
@@ -20,7 +21,7 @@ export default async function Dashboard() {
       totalAttendance,
     ] = await Promise.all([
       prisma.student.findMany({
-        where: { eventId: event.id },
+        where: { events: { some: { eventId: event.id } } },
         select: {
           id: true,
           name: true,
@@ -30,7 +31,7 @@ export default async function Dashboard() {
         },
       }),
       prisma.studentCategory.findMany({
-        where: { eventId: event.id },
+        where: { OR: [{ eventId: event.id }, { eventId: null }] },
         select: { id: true, name: true, color: true },
         orderBy: { order: "asc" },
       }),
@@ -45,7 +46,7 @@ export default async function Dashboard() {
         select: { studentId: true },
       }),
       prisma.student.findMany({
-        where: { eventId: event.id },
+        where: { events: { some: { eventId: event.id } } },
         orderBy: { createdAt: "desc" },
         take: 5,
         select: {
@@ -161,12 +162,12 @@ export default async function Dashboard() {
                 <p className="text-sm font-medium text-gray-500">Total Students</p>
                 <p className="mt-1 text-4xl font-bold text-blue-600">{totalStudents}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-2xl">
-                👥
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                <Users className="h-6 w-6 text-blue-600" />
               </div>
             </div>
             <Link href="/students" className="mt-3 block text-sm text-blue-600 hover:underline">
-              View all students →
+              View all students
             </Link>
           </div>
 
@@ -176,8 +177,8 @@ export default async function Dashboard() {
                 <p className="text-sm font-medium text-gray-500">Paid</p>
                 <p className="mt-1 text-4xl font-bold text-green-600">{paidCount}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-2xl">
-                💰
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                <DollarSign className="h-6 w-6 text-green-600" />
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2">
@@ -197,12 +198,12 @@ export default async function Dashboard() {
                 <p className="text-sm font-medium text-gray-500">Unpaid</p>
                 <p className="mt-1 text-4xl font-bold text-amber-600">{unpaidCount}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-2xl">
-                ⏳
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">
+                <Clock className="h-6 w-6 text-amber-600" />
               </div>
             </div>
             <p className="mt-3 text-sm text-amber-600">
-              {unpaidCount > 0 ? `${unpaidCount} students need payment` : "All paid! 🎉"}
+              {unpaidCount > 0 ? `${unpaidCount} students need payment` : "All paid!"}
             </p>
           </div>
 
@@ -212,8 +213,8 @@ export default async function Dashboard() {
                 <p className="text-sm font-medium text-gray-500">Today&apos;s Check-ins</p>
                 <p className="mt-1 text-4xl font-bold text-purple-600">{todayAttendance}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-2xl">
-                ✅
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
+                <CheckCircle2 className="h-6 w-6 text-purple-600" />
               </div>
             </div>
             <p className="mt-3 text-sm text-gray-500">
@@ -390,8 +391,8 @@ export default async function Dashboard() {
             />
           </div>
           <div className="mt-2 flex justify-between text-xs text-gray-500">
-            <span>💚 Paid</span>
-            <span>💛 Pending</span>
+            <span className="flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-green-500" /> Paid</span>
+            <span className="flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-amber-400" /> Pending</span>
           </div>
         </div>
 
@@ -401,8 +402,8 @@ export default async function Dashboard() {
             href="/reports"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-xl">
-              📊
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+              <BarChart3 className="h-6 w-6 text-blue-600" />
             </div>
             <div>
               <div className="font-medium text-gray-900">Reports</div>
@@ -414,8 +415,8 @@ export default async function Dashboard() {
             href="/attendance"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-green-300 hover:shadow-md transition-all"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-xl">
-              📋
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
+              <ClipboardList className="h-6 w-6 text-green-600" />
             </div>
             <div>
               <div className="font-medium text-gray-900">Attendance</div>
@@ -427,8 +428,8 @@ export default async function Dashboard() {
             href="/schedule"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-purple-300 hover:shadow-md transition-all"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 text-xl">
-              📅
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
+              <Calendar className="h-6 w-6 text-purple-600" />
             </div>
             <div>
               <div className="font-medium text-gray-900">Schedule</div>
@@ -440,8 +441,8 @@ export default async function Dashboard() {
             href="/admin"
             className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-amber-300 hover:shadow-md transition-all"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-xl">
-              ⚙️
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100">
+              <Settings className="h-6 w-6 text-amber-600" />
             </div>
             <div>
               <div className="font-medium text-gray-900">Admin</div>

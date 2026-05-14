@@ -8,6 +8,7 @@ import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import DeleteButton from "@/components/DeleteButton";
 import ImageUpload from "@/components/ImageUpload";
+import { ArrowLeft, Users, ShieldAlert, GraduationCap } from "lucide-react";
 
 async function updateStudent(id: number, formData: FormData) {
   "use server";
@@ -15,7 +16,7 @@ async function updateStudent(id: number, formData: FormData) {
 
   const student = await prisma.student.findUnique({
     where: { id },
-    select: { id: true, eventId: true, name: true },
+    select: { id: true, name: true },
   });
 
   if (!student) {
@@ -24,41 +25,27 @@ async function updateStudent(id: number, formData: FormData) {
 
   const name = formData.get("name")?.toString().trim();
   const category = formData.get("category")?.toString().trim();
-  const size = formData.get("size")?.toString().trim() || "M";
+  const size = formData.get("size")?.toString().trim() || "YM";
   const grade = formData.get("grade")?.toString().trim() || null;
   const dateOfBirthInput = formData.get("dateOfBirth")?.toString();
   const dateOfBirth = dateOfBirthInput ? new Date(dateOfBirthInput) : null;
-  
+
   const parentName = formData.get("parentName")?.toString().trim() || null;
   const parentPhone = formData.get("parentPhone")?.toString().trim() || null;
   const parentEmail = formData.get("parentEmail")?.toString().trim() || null;
-  
+
   const emergencyContact = formData.get("emergencyContact")?.toString().trim() || null;
   const emergencyPhone = formData.get("emergencyPhone")?.toString().trim() || null;
   const emergencyRelationship = formData.get("emergencyRelationship")?.toString().trim() || null;
-  
+
   const allergies = formData.get("allergies")?.toString().trim() || null;
   const medicalNotes = formData.get("medicalNotes")?.toString().trim() || null;
   const notes = formData.get("notes")?.toString().trim() || null;
   const profileImageUrl = formData.get("profileImageUrl")?.toString() || null;
 
-  if (!name || name.length === 0) {
-    throw new ValidationError("Student name is required");
-  }
-  if (name.length > 100) {
-    throw new ValidationError("Name must be 100 characters or less");
-  }
-  if (!category) {
-    throw new ValidationError("Category is required");
-  }
-
-  // Check for duplicate name (excluding current student)
-  const existing = await prisma.student.findFirst({
-    where: { eventId: student.eventId, name, NOT: { id } },
-  });
-  if (existing) {
-    throw new ValidationError(`Student "${name}" already exists for this event`);
-  }
+  if (!name || name.length === 0) throw new ValidationError("Student name is required");
+  if (name.length > 100) throw new ValidationError("Name must be 100 characters or less");
+  if (!category) throw new ValidationError("Category is required");
 
   await prisma.student.update({
     where: { id },
@@ -131,12 +118,11 @@ export default async function EditStudentPage({ params }: Props) {
 
   const student = await prisma.student.findUnique({
     where: { id },
-    include: { event: true },
   });
 
   if (!student) return notFound();
 
-  const categories = await getCategories(student.eventId);
+  const categories = await getCategories();
   const shirtSizes = ["YXS", "YS", "YM", "YL", "YXL", "AS", "AM", "AL", "AXL", "A2XL"];
 
   const updateAction = updateStudent.bind(null, id);
@@ -153,14 +139,14 @@ export default async function EditStudentPage({ params }: Props) {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Edit Student</h1>
           <p className="mt-1 text-sm text-gray-600">
-            {student.name} • {student.event?.year}
+            {student.name}
           </p>
         </div>
         <Link
           href={`/students/${id}`}
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back to profile
+          <ArrowLeft className="h-4 w-4" /> Back to profile
         </Link>
       </div>
 
@@ -267,19 +253,19 @@ export default async function EditStudentPage({ params }: Props) {
               href={`/students/${id}/parents`}
               className="flex items-center gap-2 rounded-md border border-blue-200 bg-white px-4 py-3 text-sm font-medium text-blue-700 hover:bg-blue-50"
             >
-              👨‍👩‍👧 Parents/Guardians
+              <Users className="h-4 w-4" /> Parents/Guardians
             </Link>
             <Link
               href={`/students/${id}/emergency`}
               className="flex items-center gap-2 rounded-md border border-red-200 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
             >
-              🚨 Emergency Contacts
+              <ShieldAlert className="h-4 w-4" /> Emergency Contacts
             </Link>
             <Link
               href={`/students/${id}/teachers`}
               className="flex items-center gap-2 rounded-md border border-green-200 bg-white px-4 py-3 text-sm font-medium text-green-700 hover:bg-green-50"
             >
-              👨‍🏫 Assigned Teachers
+              <GraduationCap className="h-4 w-4" /> Assigned Teachers
             </Link>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { auditLog } from "@/lib/audit-log";
 import { MAX_SITE_NAME_LENGTH, MAX_URL_LENGTH } from "@/lib/constants";
 import ColorPicker from "@/components/ColorPicker";
 import LogoUpload from "@/components/LogoUpload";
+import { Palette, Building2, FileEdit, Link2, Eye, Check } from "lucide-react";
 
 async function updateSettingsAction(formData: FormData) {
   "use server";
@@ -138,14 +139,14 @@ export default async function SettingsPage({
 
       {resolvedSearchParams.success && (
         <div className="rounded-md bg-green-50 p-4">
-          <p className="text-sm text-green-800">✓ Settings saved successfully!</p>
+          <p className="flex items-center gap-1 text-sm text-green-800"><Check className="h-4 w-4" /> Settings saved successfully!</p>
         </div>
       )}
 
       <form action={updateSettingsAction} className="space-y-8">
         {/* Basic Branding */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">🎨 Basic Branding</h3>
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Palette className="h-4 w-4" /> Basic Branding</h3>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label htmlFor="siteName" className="block text-sm font-medium text-gray-700">
@@ -215,7 +216,7 @@ export default async function SettingsPage({
 
         {/* Church Information */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">⛪ Church Information</h3>
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Building2 className="h-4 w-4" /> Church Information</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label htmlFor="churchName" className="block text-sm font-medium text-gray-700">
@@ -334,7 +335,7 @@ export default async function SettingsPage({
 
         {/* Content Customization */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">📝 Content Customization</h3>
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><FileEdit className="h-4 w-4" /> Content Customization</h3>
           <div className="space-y-4">
             <div>
               <label htmlFor="welcomeMessage" className="block text-sm font-medium text-gray-700">
@@ -374,7 +375,7 @@ export default async function SettingsPage({
 
         {/* Social Media */}
         <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">🔗 Social Media</h3>
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Link2 className="h-4 w-4" /> Social Media</h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label htmlFor="facebookUrl" className="block text-sm font-medium text-gray-700">
@@ -433,7 +434,7 @@ export default async function SettingsPage({
 
       {/* Live Preview */}
       <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">👁️ Live Preview</h3>
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Eye className="h-4 w-4" /> Live Preview</h3>
         
         {/* Header Preview */}
         <div className="rounded-md border border-gray-200 p-4 bg-gray-50 mb-4">

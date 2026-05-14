@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import PrintBadge from "./PrintBadge";
+import { ArrowLeft } from "lucide-react";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -18,7 +19,7 @@ export default async function BadgePage({ params }: Props) {
     prisma.student.findUnique({
       where: { id },
       include: {
-        event: true,
+        events: { include: { event: true }, orderBy: { enrolledAt: "desc" }, take: 1 },
         emergencyContacts: { orderBy: { priority: "asc" }, take: 1 },
         parents: { where: { isPrimary: true }, take: 1 },
       },
@@ -48,9 +49,9 @@ export default async function BadgePage({ params }: Props) {
         <div className="flex gap-2">
           <Link
             href={`/students/${id}`}
-            className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+            className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
           >
-            ← Back to Profile
+            <ArrowLeft className="h-4 w-4" /> Back to Profile
           </Link>
         </div>
       </div>
@@ -66,10 +67,10 @@ export default async function BadgePage({ params }: Props) {
           allergies: student.allergies,
           medicalNotes: student.medicalNotes,
         }}
-        event={{
-          year: student.event.year,
-          theme: student.event.theme,
-        }}
+        event={student.events[0] ? {
+          year: student.events[0].event.year,
+          theme: student.events[0].event.theme,
+        } : null}
         emergency={primaryEmergency ? {
           name: primaryEmergency.name,
           phone: primaryEmergency.phone,

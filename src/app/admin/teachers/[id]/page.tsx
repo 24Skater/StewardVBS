@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import ImageUpload from "@/components/ImageUpload";
+import { ArrowLeft } from "lucide-react";
 
 async function updateTeacher(teacherId: number, formData: FormData) {
   "use server";
@@ -78,9 +79,9 @@ export default async function EditTeacherPage({ params }: Props) {
         </div>
         <Link
           href="/admin/teachers"
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back
+          <ArrowLeft className="h-4 w-4" /> Back
         </Link>
       </div>
 

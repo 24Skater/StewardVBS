@@ -42,10 +42,10 @@ export default async function CheckInPage({ searchParams }: PageProps) {
   const { start, end } = getTodayRange();
   const categories = await getCategories(event.id);
 
-  // Load students + whether they have an attendance entry today
+  // Load students enrolled in this event + today's check-in status
   const students = await prisma.student.findMany({
     where: {
-      eventId: event.id,
+      events: { some: { eventId: event.id } },
       ...(q ? { name: { contains: q, mode: "insensitive" } } : {}),
       ...(category ? { category } : {}),
     },

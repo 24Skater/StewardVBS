@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CheckCircle2 } from "lucide-react";
 
 export default function InviteForm() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function InviteForm() {
       {success && (
         <div className="rounded-md bg-green-50 p-4 space-y-2">
           <p className="text-sm text-green-800">
-            ✅ Invitation sent to <strong>{success.email}</strong>
+            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4" /> Invitation sent to <strong>{success.email}</strong></span>
           </p>
           <div className="mt-2">
             <p className="text-xs text-green-700 mb-1">Invitation Link:</p>

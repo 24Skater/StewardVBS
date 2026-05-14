@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import ConfirmButton from "@/components/ConfirmButton";
+import { GraduationCap, ArrowLeft } from "lucide-react";
 
 async function assignTeacher(studentId: number, formData: FormData) {
   "use server";
@@ -90,7 +91,7 @@ export default async function TeachersPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">👨‍🏫 Assigned Teachers</h1>
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900"><GraduationCap className="h-4 w-4" /> Assigned Teachers</h1>
           <p className="mt-1 text-sm text-gray-600">
             Manage teacher assignments for {student.name}
           </p>
@@ -104,9 +105,9 @@ export default async function TeachersPage({ params }: Props) {
           </Link>
           <Link
             href={`/students/${id}`}
-            className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+            className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
           >
-            ← Back to Profile
+            <ArrowLeft className="h-4 w-4" /> Back to Profile
           </Link>
         </div>
       </div>

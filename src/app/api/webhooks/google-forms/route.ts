@@ -182,10 +182,7 @@ export async function POST(request: NextRequest) {
 
     // Check if student already exists (by name in the same event)
     const existingStudent = await prisma.student.findFirst({
-      where: {
-        eventId: activeEvent.id,
-        name: data.studentName.trim(),
-      },
+      where: { name: data.studentName.trim() },
     });
 
     if (existingStudent) {
@@ -203,35 +200,33 @@ export async function POST(request: NextRequest) {
     const category = await prisma.studentCategory.findFirst({
       where: {
         name: { equals: categoryName, mode: "insensitive" },
-        eventId: activeEvent.id,
+        OR: [{ eventId: activeEvent.id }, { eventId: null }],
       },
     });
 
-    // Create the student
+    // Create the student and enroll in active event
     const student = await prisma.student.create({
       data: {
         name: data.studentName.trim(),
-        size: data.size || "M",
+        size: data.size || "YM",
         category: categoryName,
         categoryId: category?.id,
-        eventId: activeEvent.id,
-        
-        // Optional fields
+
         dateOfBirth: parseDate(data.dateOfBirth),
         grade: sanitize(data.grade),
         allergies: sanitize(data.allergies),
         medicalNotes: sanitize(data.medicalNotes),
         notes: sanitize(data.notes),
-        
-        // Parent info (legacy single parent field)
+
         parentName: sanitize(data.parentName),
         parentPhone: sanitize(data.parentPhone),
         parentEmail: data.parentEmail || null,
-        
-        // Emergency contact (legacy single contact field)
+
         emergencyContact: sanitize(data.emergencyContactName),
         emergencyPhone: sanitize(data.emergencyContactPhone),
         emergencyRelationship: sanitize(data.emergencyContactRelationship),
+
+        events: { create: { eventId: activeEvent.id } },
       },
     });
 

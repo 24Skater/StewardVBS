@@ -3,6 +3,7 @@ import { requireRole } from "@/lib/auth";
 import { getActiveEvent } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
 import PrintButton from "@/components/PrintButton";
+import { Download, ArrowLeft } from "lucide-react";
 
 export default async function ScheduleReportPage() {
   await requireRole("STAFF");
@@ -80,16 +81,16 @@ export default async function ScheduleReportPage() {
           <a
             href={csvDataUri}
             download={`schedule_${event.year}.csv`}
-            className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            className="inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
           >
-            📥 Export CSV
+            <Download className="h-4 w-4" /> Export CSV
           </a>
           <PrintButton />
           <Link
             href="/reports"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            ← Back
+            <ArrowLeft className="h-4 w-4" /> Back
           </Link>
         </div>
       </div>

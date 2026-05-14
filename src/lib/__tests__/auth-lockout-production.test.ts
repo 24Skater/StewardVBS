@@ -10,11 +10,11 @@ describe('auth-lockout production guards (Redis unavailable)', () => {
 
   beforeEach(() => {
     originalNodeEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', configurable: true, writable: true })
   })
 
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv
+    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, configurable: true, writable: true })
   })
 
   it('recordLoginAttempt throws when recording a failure in production without Redis', async () => {

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
+import { ArrowLeft } from "lucide-react";
 
 async function createTeacher(formData: FormData) {
   "use server";
@@ -55,9 +56,9 @@ export default async function NewTeacherPage() {
         </div>
         <Link
           href="/admin/teachers"
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back
+          <ArrowLeft className="h-4 w-4" /> Back
         </Link>
       </div>
 
@@ -102,7 +103,7 @@ export default async function NewTeacherPage() {
 
           <div className="sm:col-span-2">
             <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-md">
-              📷 Profile photo can be uploaded after the teacher is created.
+              Profile photo can be uploaded after the teacher is created.
             </p>
           </div>
 

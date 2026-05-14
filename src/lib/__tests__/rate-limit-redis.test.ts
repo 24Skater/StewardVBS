@@ -46,12 +46,12 @@ describe('checkRateLimit production guard', () => {
 
   beforeEach(() => {
     originalNodeEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', configurable: true, writable: true })
     mockRedis.eval.mockRejectedValue(new Error('Redis connection refused'))
   })
 
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv
+    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, configurable: true, writable: true })
   })
 
   it('throws in production when Redis eval fails', async () => {

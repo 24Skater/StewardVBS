@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { getSettings, updateSettings, generateWebhookSecret } from "@/lib/settings";
 import { prisma } from "@/lib/prisma";
 import CopyButton from "./CopyButton";
+import { Link2, AlertTriangle, Settings, ClipboardList, ScrollText, Map, CheckCircle2 } from "lucide-react";
 
 async function toggleGoogleForms(formData: FormData) {
   "use server";
@@ -257,7 +258,7 @@ function testWebhook() {
 
       {resolvedParams.saved && (
         <div className="rounded-md bg-green-50 p-4">
-          <p className="text-sm text-green-800">✓ Settings saved successfully!</p>
+          <p className="flex items-center gap-1 text-sm text-green-800"><CheckCircle2 className="h-4 w-4" /> Settings saved successfully!</p>
         </div>
       )}
 
@@ -300,8 +301,8 @@ function testWebhook() {
         <>
           {/* Webhook Configuration */}
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              🔗 Webhook Configuration
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
+              <Link2 className="h-4 w-4" /> Webhook Configuration
             </h3>
             
             <div className="space-y-4">
@@ -345,8 +346,8 @@ function testWebhook() {
                       Regenerate Secret
                     </button>
                   </form>
-                  <p className="text-xs text-gray-500">
-                    ⚠️ Regenerating will require updating your Apps Script
+                  <p className="flex items-center gap-1 text-xs text-gray-500">
+                    <AlertTriangle className="h-4 w-4" /> Regenerating will require updating your Apps Script
                   </p>
                 </div>
               </div>
@@ -356,8 +357,8 @@ function testWebhook() {
           {/* Settings */}
           <form action={updateGoogleFormsSettings}>
             <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                ⚙️ Settings
+              <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
+                <Settings className="h-4 w-4" /> Settings
               </h3>
               
               <div className="space-y-4">
@@ -403,8 +404,8 @@ function testWebhook() {
 
           {/* Setup Instructions */}
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              📋 Setup Instructions
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
+              <ClipboardList className="h-4 w-4" /> Setup Instructions
             </h3>
             
             <div className="space-y-4">
@@ -449,8 +450,8 @@ function testWebhook() {
           {/* Apps Script Code */}
           <div className="rounded-lg border border-gray-200 bg-white p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                📜 Google Apps Script Code
+              <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                <ScrollText className="h-4 w-4" /> Google Apps Script Code
               </h3>
               <CopyButton text={appsScriptCode} label="Copy Script" />
             </div>
@@ -462,8 +463,8 @@ function testWebhook() {
 
           {/* Field Mapping Reference */}
           <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              🗺️ Form Field Mapping
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
+              <Map className="h-4 w-4" /> Form Field Mapping
             </h3>
             <p className="text-sm text-gray-600 mb-4">
               Name your Google Form fields to include these keywords for automatic mapping:

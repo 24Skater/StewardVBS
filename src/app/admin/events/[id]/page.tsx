@@ -139,7 +139,7 @@ export default async function EditEventPage({ params }: Props) {
     include: {
       _count: {
         select: {
-          students: true,
+          studentEvents: true,
           attendances: true,
           payments: true,
           sessions: true,
@@ -262,7 +262,7 @@ export default async function EditEventPage({ params }: Props) {
               <div>
                 <dt className="text-sm font-medium text-gray-500">Students</dt>
                 <dd className="mt-1 text-2xl font-semibold text-gray-900">
-                  {event._count.students}
+                  {event._count.studentEvents}
                 </dd>
               </div>
               <div>
