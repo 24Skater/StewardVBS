@@ -75,7 +75,7 @@ export default function Navigation() {
   }
 
   const canAccessStaffRoutes =
-    session.user.role === "ADMIN" || session.user.role === "STAFF";
+    session.user?.role === "ADMIN" || session.user?.role === "STAFF";
 
   return (
     <header className="border-b border-gray-200 bg-white shadow-sm">
@@ -164,7 +164,7 @@ export default function Navigation() {
                   </Link>
                 </>
               )}
-              {session.user.role === "ADMIN" && (
+              {session.user?.role === "ADMIN" && (
                 <Link
                   href="/admin"
                   className="text-sm font-medium"
@@ -179,8 +179,8 @@ export default function Navigation() {
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">
-              {session.user.email}
-              {session.user.role && (
+              {session.user?.email}
+              {session.user?.role && (
                 <span className="ml-2 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
                   {session.user.role}
                 </span>

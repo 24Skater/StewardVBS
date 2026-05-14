@@ -158,7 +158,7 @@ model Event {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  students         Student[]
+  studentEvents    StudentEvent[]
   attendances      Attendance[]
   payments         Payment[]
   sessions         ScheduleSession[]
@@ -169,45 +169,51 @@ model Student {
   id        Int      @id @default(autoincrement())
   name      String
   size      String
-  category  String   // Keep for backward compatibility
+  category  String
   categoryId Int?
   categoryRef StudentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId   Int
-  
-  // Profile Image (stored as base64 data URL)
-  profileImageUrl String?  // Legacy URL field
-  profileImage    String?  @db.Text // Base64 encoded image data
-  
-  // Additional student info
+
+  profileImageUrl String?
+  profileImage    String?  @db.Text
+
   dateOfBirth     DateTime?
   grade           String?
-  allergies       String?   // Medical/allergy notes
+  allergies       String?
   medicalNotes    String?
-  notes           String?   // General notes
-  
-  // Legacy single parent/emergency (kept for backward compatibility)
+  notes           String?
+
   parentName      String?
   parentPhone     String?
   parentEmail     String?
   emergencyContact      String?
   emergencyPhone        String?
   emergencyRelationship String?
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relationships
+  events            StudentEvent[]
   attendances       Attendance[]
   payments          Payment[]
   parents           StudentParent[]
   emergencyContacts StudentEmergencyContact[]
   teachers          StudentTeacher[]
 
-  @@unique([eventId, name])
-  @@index([eventId])
-  @@index([eventId, category])
+  @@index([name])
   @@index([categoryId])
+}
+
+model StudentEvent {
+  id         Int      @id @default(autoincrement())
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId  Int
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId    Int
+  enrolledAt DateTime @default(now())
+
+  @@unique([studentId, eventId])
+  @@index([studentId])
+  @@index([eventId])
 }
 
 // --- Parent/Guardian (supports multiple) ---

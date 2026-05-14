@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import ConfirmButton from "@/components/ConfirmButton";
+import { ArrowLeft, AlertTriangle, ShieldAlert, Phone, Smartphone } from "lucide-react";
 
 async function addEmergencyContact(studentId: number, formData: FormData) {
   "use server";
@@ -75,24 +76,24 @@ export default async function EmergencyContactsPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">🚨 Emergency Contacts</h1>
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900"><ShieldAlert className="h-4 w-4" /> Emergency Contacts</h1>
           <p className="mt-1 text-sm text-gray-600">
             Manage emergency contacts for {student.name}
           </p>
         </div>
         <Link
           href={`/students/${id}`}
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
         >
-          ← Back to Profile
+          <ArrowLeft className="h-4 w-4" /> Back to Profile
         </Link>
       </div>
 
       {/* Warning if no contacts */}
       {student.emergencyContacts.length === 0 && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-800 font-medium">
-            ⚠️ No emergency contacts added! Please add at least one emergency contact for this student.
+          <p className="flex items-center gap-1 text-sm text-red-800 font-medium">
+            <AlertTriangle className="h-4 w-4 flex-shrink-0" /> No emergency contacts added! Please add at least one emergency contact for this student.
           </p>
         </div>
       )}
@@ -116,9 +117,9 @@ export default async function EmergencyContactsPage({ params }: Props) {
                       )}
                     </div>
                     <div className="mt-1 text-sm text-gray-600 space-y-1">
-                      <div className="font-medium">📞 {contact.phone}</div>
+                      <div className="flex items-center gap-1 font-medium"><Phone className="h-4 w-4" /> {contact.phone}</div>
                       {contact.altPhone && (
-                        <div>📱 {contact.altPhone} (alternate)</div>
+                        <div className="flex items-center gap-1"><Smartphone className="h-4 w-4" /> {contact.altPhone} (alternate)</div>
                       )}
                     </div>
                   </div>

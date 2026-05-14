@@ -23,7 +23,7 @@ export default async function EventsPage() {
     orderBy: { year: "desc" },
     include: {
       _count: {
-        select: { students: true },
+        select: { studentEvents: true, attendances: true },
       },
     },
   });
@@ -96,7 +96,7 @@ export default async function EventsPage() {
                     )}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                    {event._count.students}
+                    {event._count.studentEvents}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">

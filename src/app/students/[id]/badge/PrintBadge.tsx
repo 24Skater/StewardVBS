@@ -1,5 +1,7 @@
 "use client";
 
+import { Printer, AlertTriangle, ShieldAlert, Phone } from "lucide-react";
+
 interface PrintBadgeProps {
   student: {
     name: string;
@@ -14,7 +16,7 @@ interface PrintBadgeProps {
   event: {
     year: number;
     theme: string | null;
-  };
+  } | null;
   emergency: {
     name: string;
     phone: string;
@@ -42,9 +44,9 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
       <div className="mb-6 print:hidden">
         <button
           onClick={handlePrint}
-          className="rounded-md bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 font-medium"
+          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 font-medium"
         >
-          🖨️ Print Badge
+          <Printer className="h-4 w-4" /> Print Badge
         </button>
       </div>
 
@@ -71,9 +73,11 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
                 {settings.tagline && (
                   <div className="text-xs opacity-80">{settings.tagline}</div>
                 )}
-                <div className="text-sm opacity-90 mt-1">
-                  {event.year} {event.theme && `• ${event.theme}`}
-                </div>
+                {event && (
+                  <div className="text-sm opacity-90 mt-1">
+                    {event.year} {event.theme && `• ${event.theme}`}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -126,8 +130,8 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
           {/* Medical Alert */}
           {hasAlerts && (
             <div className="bg-yellow-50 px-4 py-2 border-b border-yellow-200">
-              <div className="text-xs font-bold text-yellow-800 uppercase mb-1">
-                ⚠️ Medical Alert
+              <div className="flex items-center gap-1 text-xs font-bold text-yellow-800 uppercase mb-1">
+                <AlertTriangle className="h-3 w-3" /> Medical Alert
               </div>
               {student.allergies && (
                 <div className="text-xs text-yellow-900">
@@ -145,15 +149,15 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
           {/* Emergency Contact */}
           {emergency && (
             <div className="bg-red-50 px-4 py-3">
-              <div className="text-xs font-bold text-red-800 uppercase mb-1">
-                🚨 Emergency Contact
+              <div className="flex items-center gap-1 text-xs font-bold text-red-800 uppercase mb-1">
+                <ShieldAlert className="h-3 w-3" /> Emergency Contact
               </div>
               <div className="text-sm text-red-900 font-medium">
                 {emergency.name}
                 {emergency.relationship && ` (${emergency.relationship})`}
               </div>
-              <div className="text-sm text-red-900 font-bold">
-                📞 {emergency.phone}
+              <div className="flex items-center gap-1 text-sm text-red-900 font-bold">
+                <Phone className="h-3 w-3" /> {emergency.phone}
               </div>
             </div>
           )}

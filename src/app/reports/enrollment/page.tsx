@@ -3,6 +3,7 @@ import { requireRole } from "@/lib/auth";
 import { getActiveEvent } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
 import PrintButton from "@/components/PrintButton";
+import { Download, ArrowLeft, Check, X, AlertTriangle } from "lucide-react";
 
 export default async function EnrollmentReportPage() {
   await requireRole("STAFF");
@@ -24,7 +25,7 @@ export default async function EnrollmentReportPage() {
     event = await getActiveEvent();
     
     const rawStudents = await prisma.student.findMany({
-      where: { eventId: event.id },
+      where: { events: { some: { eventId: event.id } } },
       include: {
         payments: { where: { eventId: event.id }, take: 1 },
         parents: { take: 1 },
@@ -108,16 +109,16 @@ export default async function EnrollmentReportPage() {
           <a
             href={csvDataUri}
             download={`enrollment_${event.year}.csv`}
-            className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            className="inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
           >
-            📥 Export CSV
+            <Download className="h-4 w-4" /> Export CSV
           </a>
           <PrintButton />
           <Link
             href="/reports"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            ← Back
+            <ArrowLeft className="h-4 w-4" /> Back
           </Link>
         </div>
       </div>
@@ -145,7 +146,7 @@ export default async function EnrollmentReportPage() {
       {/* Missing Info Alert */}
       {(missingParent > 0 || missingEmergency > 0) && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 print:hidden">
-          <h3 className="text-sm font-semibold text-red-900 mb-2">⚠️ Missing Information</h3>
+          <h3 className="text-sm font-semibold text-red-900 mb-2 flex items-center gap-1"><AlertTriangle className="h-4 w-4" /> Missing Information</h3>
           <div className="text-sm text-red-800 space-y-1">
             {missingParent > 0 && (
               <p>{missingParent} student{missingParent > 1 ? "s" : ""} missing parent/guardian info</p>
@@ -231,23 +232,23 @@ export default async function EnrollmentReportPage() {
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
                   {student.hasPaid ? (
-                    <span className="text-green-600">✓</span>
+                    <span className="inline-flex justify-center text-green-600"><Check className="h-4 w-4" /></span>
                   ) : (
-                    <span className="text-red-600">✗</span>
+                    <span className="inline-flex justify-center text-red-600"><X className="h-4 w-4" /></span>
                   )}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
                   {student.hasParent ? (
-                    <span className="text-green-600">✓</span>
+                    <span className="inline-flex justify-center text-green-600"><Check className="h-4 w-4" /></span>
                   ) : (
-                    <span className="text-red-600">✗</span>
+                    <span className="inline-flex justify-center text-red-600"><X className="h-4 w-4" /></span>
                   )}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
                   {student.hasEmergency ? (
-                    <span className="text-green-600">✓</span>
+                    <span className="inline-flex justify-center text-green-600"><Check className="h-4 w-4" /></span>
                   ) : (
-                    <span className="text-red-600">✗</span>
+                    <span className="inline-flex justify-center text-red-600"><X className="h-4 w-4" /></span>
                   )}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-sm">

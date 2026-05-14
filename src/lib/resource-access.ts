@@ -7,24 +7,19 @@ import { prisma } from "./prisma";
 import { getActiveEvent } from "./event";
 import { ValidationError } from "./errors";
 
+// getActiveEvent is still used by verifyAttendanceAccess and verifySessionAccess below
+
 /**
- * Verify a student belongs to the active event
- * Throws ValidationError if student doesn't exist or belongs to different event
+ * Verify a student exists (students are now global, not event-scoped)
  */
 export async function verifyStudentAccess(studentId: number): Promise<void> {
-  const event = await getActiveEvent();
-
   const student = await prisma.student.findUnique({
     where: { id: studentId },
-    select: { id: true, eventId: true },
+    select: { id: true },
   });
 
   if (!student) {
     throw new ValidationError("Student not found");
-  }
-
-  if (student.eventId !== event.id) {
-    throw new ValidationError("Student does not belong to the active event");
   }
 }
 

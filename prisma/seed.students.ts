@@ -23,7 +23,7 @@ async function main() {
         name: s.name.trim(),
         size: s.size.trim(),
         category: s.category.trim(),
-        eventId: event2024.id,
+        events: { create: { eventId: event2024.id } },
       },
     });
   }

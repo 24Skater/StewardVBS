@@ -49,19 +49,12 @@ export type AppSettings = {
  */
 export async function getSettings(): Promise<AppSettings> {
   try {
-    let settings = await prisma.appSettings.findUnique({
+    return await prisma.appSettings.upsert({
       where: { id: "singleton" },
+      update: {},
+      create: { id: "singleton" },
     });
-
-    if (!settings) {
-      settings = await prisma.appSettings.create({
-        data: { id: "singleton" },
-      });
-    }
-
-    return settings;
   } catch (error: any) {
-    // Provide helpful error message for database connection issues
     if (error?.code === 'P1001' || error?.message?.includes("Can't reach database server")) {
       throw new Error(
         "Database connection failed. Please ensure:\n" +

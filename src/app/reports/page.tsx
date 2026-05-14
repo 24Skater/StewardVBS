@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireRole } from "@/lib/auth";
 import { getActiveEvent } from "@/lib/event";
 import { prisma } from "@/lib/prisma";
+import { Users, CheckCircle2, Calendar, ClipboardList, AlertTriangle, ChevronRight } from "lucide-react";
 
 export default async function ReportsPage() {
   await requireRole("STAFF");
@@ -12,7 +13,7 @@ export default async function ReportsPage() {
   try {
     event = await getActiveEvent();
     const [studentCount, categoryCount, teacherCount, attendanceCount] = await Promise.all([
-      prisma.student.count({ where: { eventId: event.id } }),
+      prisma.studentEvent.count({ where: { eventId: event.id } }),
       prisma.studentCategory.count({ where: { eventId: event.id } }),
       prisma.teacher.count({ where: { isActive: true } }),
       prisma.attendance.count({ where: { eventId: event.id } }),
@@ -32,7 +33,7 @@ export default async function ReportsPage() {
       id: "students",
       title: "Student List Report",
       description: "Export student roster with customizable fields. Filter by category, teacher, or export all.",
-      icon: "👥",
+      icon: <Users className="h-6 w-6" />,
       href: "/reports/students",
       color: "blue",
       stats: `${stats.students} students`,
@@ -41,7 +42,7 @@ export default async function ReportsPage() {
       id: "attendance",
       title: "Attendance Report",
       description: "View check-in status, who attended and who didn't. Filter by date or date range.",
-      icon: "✅",
+      icon: <CheckCircle2 className="h-6 w-6" />,
       href: "/reports/attendance",
       color: "green",
       stats: `${stats.attendance} check-ins`,
@@ -50,7 +51,7 @@ export default async function ReportsPage() {
       id: "schedule",
       title: "Schedule Report",
       description: "Export event schedules by group or for the entire event.",
-      icon: "📅",
+      icon: <Calendar className="h-6 w-6" />,
       href: "/reports/schedule",
       color: "purple",
       stats: event ? `${event.year} Event` : "No active event",
@@ -59,7 +60,7 @@ export default async function ReportsPage() {
       id: "enrollment",
       title: "Enrollment Report",
       description: "Track enrollment status, payment status, and registration completion.",
-      icon: "📋",
+      icon: <ClipboardList className="h-6 w-6" />,
       href: "/reports/enrollment",
       color: "amber",
       stats: `${stats.students} enrolled`,
@@ -77,8 +78,8 @@ export default async function ReportsPage() {
 
       {!event && (
         <div className="rounded-md bg-yellow-50 border border-yellow-200 p-4">
-          <p className="text-sm text-yellow-800">
-            ⚠️ No active event found. Please activate an event to generate reports.
+          <p className="text-sm text-yellow-800 flex items-center gap-1">
+            <AlertTriangle className="h-4 w-4 flex-shrink-0" /> No active event found. Please activate an event to generate reports.
           </p>
         </div>
       )}
@@ -100,14 +101,14 @@ export default async function ReportsPage() {
           >
             <div className="flex items-start gap-4">
               <div
-                className={`flex h-14 w-14 items-center justify-center rounded-xl text-2xl ${
+                className={`flex h-14 w-14 items-center justify-center rounded-xl ${
                   report.color === "blue"
-                    ? "bg-blue-100"
+                    ? "bg-blue-100 text-blue-600"
                     : report.color === "green"
-                    ? "bg-green-100"
+                    ? "bg-green-100 text-green-600"
                     : report.color === "purple"
-                    ? "bg-purple-100"
-                    : "bg-amber-100"
+                    ? "bg-purple-100 text-purple-600"
+                    : "bg-amber-100 text-amber-600"
                 }`}
               >
                 {report.icon}
@@ -119,8 +120,8 @@ export default async function ReportsPage() {
                 <p className="mt-1 text-sm text-gray-600">{report.description}</p>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-500">{report.stats}</span>
-                  <span className="text-sm font-medium text-blue-600 group-hover:translate-x-1 transition-transform">
-                    Generate →
+                  <span className="flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:translate-x-1 transition-transform">
+                    Generate <ChevronRight className="h-4 w-4" />
                   </span>
                 </div>
               </div>
