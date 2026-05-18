@@ -2,359 +2,374 @@
 
 # ✝️ VBS App
 
-### Vacation Bible School Management System
+**Free, self-hosted Vacation Bible School management for churches.**
 
-*Built for the Church, by a follower of Christ*
+<p>
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-deployment">Deployment</a> •
+  <a href="#-configuration">Configuration</a> •
+  <a href="#-contributing">Contributing</a>
+</p>
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)
-![Next.js](https://img.shields.io/badge/Next.js-15.5.0-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4.5-blue)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-blue)
-![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?logo=typescript)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-336791?logo=postgresql)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker)
+
+![Build](https://img.shields.io/github/actions/workflow/status/24Skater/vbs-app/ci.yml?label=CI)
 ![Contributors](https://img.shields.io/github/contributors/24Skater/vbs-app)
 ![Issues](https://img.shields.io/github/issues/24Skater/vbs-app)
-![Pull Requests](https://img.shields.io/github/issues-pr/24Skater/vbs-app)
-![Security](https://img.shields.io/badge/security-policy-yellow.svg)
-
----
-
-**A comprehensive, self-hosted application for managing Vacation Bible School events, students, attendance, and schedules.**
 
 </div>
 
 ---
 
-## ✝️ Why I Built This
-
 > *"Whatever you do, work at it with all your heart, as working for the Lord."* — Colossians 3:23
 
-I am a follower of **Jesus Christ** — my Lord and Savior who died on the cross for my sins and rose again three days later. I believe He is the only way to salvation and eternal life.
-
-**I built VBS App because I saw a need in the Church.**
-
-When I looked for software to help churches manage their Vacation Bible School programs, I found very few options — and most were either expensive, outdated, or didn't meet the real needs of church volunteers and staff. Churches shouldn't have to struggle with spreadsheets or pay high fees just to organize an event that shares the Gospel with children.
-
-**This is my offering to the Body of Christ.**
-
-VBS App is:
-- 🆓 **Free and open source** — No licensing fees, ever
-- ⛪ **Built for churches** — By someone who understands ministry
-- 🔒 **Self-hosted** — Your data stays with your church
-- 🛠️ **Modern & maintainable** — Built with current technology
-- 🤝 **Community-driven** — Contributions welcome from fellow believers
-
-My prayer is that this tool helps churches focus on what matters most: **sharing the love of Jesus with the next generation.**
-
-> *"Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these."* — Matthew 19:14
+Churches shouldn't have to wrestle with spreadsheets or pay high SaaS fees to run VBS. This is a full-featured, self-hosted alternative — free forever, open source, and built by someone who volunteers in ministry.
 
 ---
 
-## Features
+## Contents
 
-- **Student Management**: Register and manage students with categories, sizes, and payment tracking
-- **Quick Check-In**: Fast and efficient daily attendance tracking
-- **Schedule Management**: Create and manage event schedules with sessions, locations, and groups
-- **Attendance Records**: View and export attendance data
-- **Admin Panel**: Configure events, users, categories, and application settings
-- **Role-Based Access Control**: Admin, Staff, and Viewer roles
-- **Branding Customization**: Customize church name, logo, colors, and contact info
-- **Modern Landing Page**: Beautiful, responsive landing page with admin-configurable branding
-- **Google Forms Integration**: Self-service student registration via Google Forms
-- **Reports Module**: Export student lists, attendance, schedules, and enrollment reports
-- **Dashboard Analytics**: Visual charts for categories, teachers, age distribution, and payments
-- **First-Launch Setup**: Guided setup wizard for first-time installation
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [First-Time Setup](#-first-time-setup)
+- [Deployment](#-deployment)
+- [Configuration](#configuration)
+- [Architecture](#-architecture)
+- [User Roles](#-user-roles)
+- [Integrations](#-integrations)
+- [Security](#-security)
+- [Contributing](#-contributing)
+- [Roadmap](#-roadmap)
+- [License](#-license)
 
-## Tech Stack
+---
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js v5 (Auth.js) with email magic links
-- **Styling**: Tailwind CSS
-- **Validation**: Zod
-- **Deployment**: Docker & Docker Compose
+## ✨ Features
 
-## Prerequisites
+- 🎒 **Student Management** — Register students with categories, shirt sizes, and payment tracking
+- ✅ **Quick Check-In** — Fast daily attendance with search and one-tap confirmation
+- 📅 **Schedule Management** — Sessions, locations, and group assignments in one view
+- 📊 **Dashboard Analytics** — Charts for category breakdown, age distribution, and payments
+- 📋 **Reports & Exports** — Student lists, attendance records, and enrollment reports
+- 🔐 **Role-Based Access** — Admin, Staff, and Viewer roles with granular permissions
+- 🎨 **Branding Customization** — Church name, logo, colors, and contact info — all admin-configurable
+- 🔗 **Google Forms Integration** — Parents self-register via a Google Form; students appear automatically
+- 🧙 **First-Launch Wizard** — Guided setup so you're running in minutes, not hours
+- 🔒 **Security-First** — Rate limiting, account lockout, RBAC, IDOR protection, webhook secrets
+- 🏠 **Self-Hosted** — Your data stays on your server, always
 
-- Node.js 20+ and npm
-- Docker and Docker Compose (for database or full deployment)
-- PostgreSQL 16+ (if not using Docker)
+---
 
-## Quick Start (Development)
+## 🚀 Quick Start
 
-### 1. Clone the repository
+**Requirements:** Node.js 20+, Docker
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/24Skater/vbs-app
 cd vbs-app
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
 ```
 
-### 3. Set up environment variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/vbsdb?schema=public"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-here"  # Generate with: openssl rand -base64 32
-
-# Email (optional for development - magic links will be logged to console)
-EMAIL_FROM="noreply@example.com"
-EMAIL_SERVER_HOST="smtp.example.com"
-EMAIL_SERVER_PORT="587"
-EMAIL_SERVER_USER="your-email@example.com"
-EMAIL_SERVER_PASSWORD="your-password"
-EMAIL_SERVER_SECURE="false"
-```
-
-**Generate NEXTAUTH_SECRET:**
-- **Windows (PowerShell)**: `[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }))`
-- **Windows (Git Bash)**: `openssl rand -base64 32`
-- **Mac/Linux**: `openssl rand -base64 32`
-
-### 4. Start the database
+Copy the environment template and fill in your values:
 
 ```bash
-docker compose up -d
+cp .env.example .env
 ```
 
-This starts only the PostgreSQL database in Docker.
-
-### 5. Run database migrations
+Start the database, run migrations, and launch:
 
 ```bash
-npx prisma migrate dev
+docker compose up -d          # PostgreSQL only
+npx prisma migrate dev        # Apply schema
+npm run dev                   # http://localhost:3000
 ```
 
-### 6. Seed the database (optional)
+Navigate to `http://localhost:3000` — the setup wizard appears automatically on first launch.
+
+<details>
+<summary>Seed with sample data (optional)</summary>
 
 ```bash
 npx tsx prisma/seed.ts
 ```
 
-### 7. Start the development server
+This creates sample students, a VBS event, and an admin account you can use to explore the app.
+
+</details>
+
+<details>
+<summary>Generate NEXTAUTH_SECRET</summary>
+
+**macOS / Linux / Git Bash:**
+```bash
+openssl rand -base64 32
+```
+
+**Windows PowerShell:**
+```powershell
+[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }))
+```
+
+</details>
+
+---
+
+## 🧙 First-Time Setup
+
+The setup wizard appears automatically on first launch — no manual steps required.
+
+1. **Visit** `http://localhost:3000` → redirected to `/setup`
+2. **Create the admin account** with your email and password
+3. **Sign in** at `/auth/signin`
+4. **Configure branding** at `/admin/settings` — church name, logo, colors
+5. **Create your VBS event** at `/admin/events/new`
+6. **Mark the event active** so check-in and attendance tracking are enabled
+7. *(Optional)* **Enable Google Forms** at `/admin/integrations/google-forms` for self-service parent registration
+
+---
+
+## 🏗️ Deployment
+
+### Docker Compose — recommended
 
 ```bash
-npm run dev
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
 ```
 
-The app will be available at `http://localhost:3000` with **hot reloading** - changes will appear instantly without rebuilding!
+The app is available on port `3000`. Put Nginx, Traefik, or Cloudflare Tunnel in front for HTTPS.
 
-## Production Deployment
-
-### Using Docker Compose (Recommended)
-
-1. **Set up environment variables**
-
-   Create a `.env` file with all required variables (see Quick Start section).
-
-2. **Start the services**
-
-   ```bash
-   docker compose -f docker-compose.prod.yml up -d --build
-   ```
-
-3. **Run database migrations**
-
-   ```bash
-   docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
-   ```
-
-4. **Seed the database (optional)**
-
-   ```bash
-   docker compose -f docker-compose.prod.yml exec app npx tsx prisma/seed.ts
-   ```
-
-The app will be available at `http://localhost:3000` (or your configured port).
-
-### Manual Deployment
-
-1. **Install dependencies**
-
-   ```bash
-   npm ci
-   ```
-
-2. **Set up the database**
-
-   - Create a PostgreSQL database
-   - Update `DATABASE_URL` in `.env`
-   - Run migrations: `npx prisma migrate deploy`
-
-3. **Build the application**
-
-   ```bash
-   npm run build
-   ```
-
-4. **Start the production server**
-
-   ```bash
-   npm start
-   ```
-
-## User Roles
-
-- **ADMIN**: Full access to all features, including admin panel
-- **STAFF**: Can manage students, attendance, and schedules
-- **VIEWER**: Read-only access to view data
-
-## First-Time Setup
-
-VBS App includes a **setup wizard** that automatically appears on first launch:
-
-1. **Visit the app**: Go to `http://localhost:3000`
-2. **Create admin account**: You'll be redirected to `/setup` to create the first admin
-3. **Sign in**: Use your new credentials at `/auth/signin`
-4. **Configure branding**: Go to `/admin/settings` to customize:
-   - Church name, address, contact info
-   - Logo upload
-   - Primary/secondary colors
-   - Social media links
-   - Welcome message
-5. **Create an event**: Go to `/admin/events/new` to create your first VBS event
-6. **Set active event**: Mark the event as active in `/admin/events`
-7. **(Optional) Enable Google Forms**: Go to `/admin/integrations/google-forms` for self-service registration
-
-## Project Structure
-
-```
-vbs-app/
-├── prisma/
-│   ├── schema.prisma         # Database schema
-│   ├── migrations/           # Database migrations
-│   └── seed.ts               # Seed script
-├── src/
-│   ├── app/
-│   │   ├── admin/            # Admin panel pages
-│   │   │   ├── integrations/ # Google Forms, etc.
-│   │   │   ├── settings/     # Branding & settings
-│   │   │   └── ...
-│   │   ├── auth/             # Authentication pages
-│   │   ├── setup/            # First-launch setup wizard
-│   │   ├── students/         # Student management
-│   │   ├── reports/          # Reports module
-│   │   ├── dashboard/        # Dashboard with analytics
-│   │   └── api/              # API routes
-│   │       └── webhooks/     # Google Forms webhook
-│   ├── components/           # React components
-│   └── lib/                  # Utilities & configurations
-├── Docs/
-│   ├── GOOGLE_FORMS_INTEGRATION.md
-│   ├── PRODUCTION_ENV_EXAMPLE.md
-│   ├── PRODUCTION_ROADMAP.md
-│   └── ...
-├── docker-compose.yml        # Development (database only)
-├── docker-compose.prod.yml   # Production deployment
-├── docker-compose.traefik.yml # Production with auto-SSL
-├── Dockerfile                # Production Docker image
-└── README.md
-```
-
-## Database Management
-
-### Run migrations
+<details>
+<summary>Traefik with auto-SSL (Let's Encrypt)</summary>
 
 ```bash
-npx prisma migrate dev
+docker compose -f docker-compose.traefik.yml up -d --build
 ```
 
-### Open Prisma Studio
+Traefik handles certificate provisioning automatically. Set `TRAEFIK_EMAIL` and your domain in `.env`.
+
+</details>
+
+<details>
+<summary>Cloudflare Tunnel (zero open ports)</summary>
+
+Cloudflare Tunnel is the recommended option for home servers — no router port-forwarding required:
+
+1. Create a tunnel in the Cloudflare dashboard
+2. Point the tunnel to `http://localhost:3000`
+3. Free SSL is handled by Cloudflare
+
+See [`Docs/PRODUCTION_ENV_EXAMPLE.md`](Docs/PRODUCTION_ENV_EXAMPLE.md) for the full configuration.
+
+</details>
+
+<details>
+<summary>Manual / bare metal</summary>
 
 ```bash
-npx prisma studio
+npm ci
+npx prisma migrate deploy
+npm run build
+npm start
 ```
 
-### Reset database (development only)
+Use `pm2` or a systemd unit to keep the process running.
+
+</details>
+
+---
+
+## 🔧 Configuration
+
+All configuration is done via environment variables. Copy `.env.example` to `.env` and fill in your values.
+
+### Required
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string — `postgresql://user:pass@host:5432/db` |
+| `NEXTAUTH_URL` | Full URL where the app is hosted — `https://vbs.yourchurch.org` |
+| `NEXTAUTH_SECRET` | Random 32-byte base64 string (see [Quick Start](#-quick-start)) |
+
+### Email (required for magic-link auth)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `EMAIL_FROM` | — | Sender address — `noreply@yourchurch.org` |
+| `EMAIL_SERVER_HOST` | — | SMTP host (Gmail, SendGrid, SES, etc.) |
+| `EMAIL_SERVER_PORT` | `587` | SMTP port |
+| `EMAIL_SERVER_USER` | — | SMTP username |
+| `EMAIL_SERVER_PASSWORD` | — | SMTP password |
+| `EMAIL_SERVER_SECURE` | `false` | `true` for port 465 |
+
+> **Development tip:** If email is not configured, magic links are printed to the console instead of being sent.
+
+### OAuth (optional)
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_CLIENT_ID` | Google OAuth app client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth app client secret |
+| `MICROSOFT_CLIENT_ID` | Azure AD / Microsoft app client ID |
+| `MICROSOFT_CLIENT_SECRET` | Azure AD / Microsoft app client secret |
+
+### Google Forms Integration (optional)
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_FORMS_WEBHOOK_SECRET` | Shared secret validated on incoming form submissions |
+
+---
+
+## 🏛️ Architecture
+
+```
+┌─────────────────────┐     ┌──────────────────────┐     ┌──────────────────┐
+│   Browser / Client  │────▶│   Next.js App Server  │────▶│   PostgreSQL DB  │
+│  (React + Tailwind) │     │  (App Router + API)   │     │  (via Prisma)    │
+└─────────────────────┘     └──────────────────────┘     └──────────────────┘
+                                       │
+                              ┌────────┴────────┐
+                              │   NextAuth.js   │
+                              │  Magic Link /   │
+                              │  Google OAuth / │
+                              │  Microsoft /    │
+                              │  Credentials    │
+                              └─────────────────┘
+```
+
+```
+src/
+├── app/
+│   ├── admin/           # Admin panel (settings, events, users)
+│   │   ├── integrations/  # Google Forms & future integrations
+│   │   └── settings/      # Branding and app configuration
+│   ├── api/             # API routes + Google Forms webhook
+│   ├── attendance/      # Attendance records
+│   ├── checkin/         # Quick check-in interface
+│   ├── dashboard/       # Analytics and charts
+│   ├── reports/         # Export reports
+│   ├── schedule/        # Schedule management
+│   ├── setup/           # First-launch wizard
+│   └── students/        # Student management
+├── components/          # Shared React components
+└── lib/                 # Auth, Prisma client, utilities
+prisma/
+├── schema.prisma        # Database schema
+└── migrations/          # Migration history
+```
+
+---
+
+## 👤 User Roles
+
+| Role | What they can do |
+|------|-----------------|
+| **ADMIN** | Full access — admin panel, settings, user management, all data |
+| **STAFF** | Manage students, run check-in, view schedules and attendance |
+| **VIEWER** | Read-only — view students, attendance, and schedules |
+
+New users default to **STAFF**. Promote to ADMIN in `/admin/users`.
+
+OAuth users (Google / Microsoft) default to **VIEWER** until promoted by an admin.
+
+---
+
+## 🔗 Integrations
+
+### Google Forms
+
+Parents register students via a Google Form — no account needed on their end.
+
+1. Enable in **Admin → Integrations → Google Forms**
+2. Create a Google Form with the required student fields
+3. Paste the provided Apps Script into the form's script editor
+4. Students appear in VBS App automatically on submission
+
+See [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRATION.md) for step-by-step setup.
+
+### Authentication Providers
+
+| Provider | Setup Required |
+|----------|---------------|
+| Email magic link | SMTP config only |
+| Email + password | No additional setup |
+| Google OAuth | Google Cloud Console app |
+| Microsoft / Azure AD | Azure portal app registration |
+
+---
+
+## 🔐 Security
+
+VBS App is built with a defense-in-depth approach:
+
+- All inputs validated via **Zod schemas**
+- **SQL injection** protection via Prisma parameterized queries
+- **XSS** protection with output escaping
+- **CSRF** protection via NextAuth and Next.js Server Actions
+- **Rate limiting** on authentication and sensitive endpoints
+- **Account lockout** after repeated failed login attempts
+- **RBAC** enforced on every API route and server action
+- **IDOR protection** — users can only access their authorized data
+- **Webhook secret validation** for Google Forms integration
+- **Image upload validation** with size and type limits
+
+See [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLETE.md) for the full security documentation.
+
+#### Recommended Production Hardening
+
+- Use **Cloudflare Tunnel** — no open ports required
+- Enable **HTTPS only** via Traefik or Cloudflare
+- Set a strong `NEXTAUTH_SECRET` (32+ bytes, randomly generated)
+- Schedule regular **database backups**
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome — especially from those in ministry who understand the real needs of VBS volunteers.
 
 ```bash
-npx prisma migrate reset
+git clone https://github.com/24Skater/vbs-app
+cd vbs-app
+npm install
+npm run dev       # Start dev server
+npm test          # Run unit tests (Vitest)
+npm run test:e2e  # Run E2E tests (Playwright)
 ```
 
-## Email Configuration
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before submitting a pull request.
 
-For production, configure SMTP settings in your `.env` file. The app supports any SMTP provider (Gmail, SendGrid, AWS SES, etc.).
+For major changes, open an issue first to discuss the approach.
 
-In development mode, if email is not configured, magic links will be logged to the console instead of being sent via email.
+---
 
-## Security Considerations
+## 🗺️ Roadmap
 
-- All user inputs are validated using Zod schemas
-- SQL injection protection via Prisma ORM
-- XSS protection with HTML escaping
-- CSRF protection via NextAuth and Next.js Server Actions
-- Rate limiting on authentication endpoints
-- Security headers configured
-- Account lockout after failed login attempts
-- Role-based access control (RBAC)
-- IDOR protection on all resources
-- Webhook secret validation for Google Forms integration
-- Image upload validation and size limits
+| Status | Feature |
+|--------|---------|
+| ✅ | Google Forms self-service registration |
+| ✅ | Google & Microsoft OAuth |
+| ✅ | Dashboard analytics and charts |
+| ✅ | Advanced reporting and exports |
+| ✅ | Branding customization |
+| ⬜ | Email notifications (reminders, confirmations) |
+| ⬜ | Progressive Web App (PWA) / mobile app |
+| ⬜ | Multi-language support |
+| ⬜ | Planning Center integration |
+| ⬜ | Online payment processing |
 
-See `Docs/SECURITY_COMPLETE.md` for detailed security documentation.
+---
 
-### Recommended Deployment Security
+## 📄 License
 
-For production deployments, we recommend:
+[MIT](./LICENSE) — free to use, modify, and self-host.
 
-1. **Cloudflare Tunnel** - No open ports on your router
-2. **HTTPS only** - Auto-SSL via Traefik or Cloudflare
-3. **Strong passwords** - Enforce via the built-in password policy
-4. **Regular backups** - Database backups before updates
+> *"Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these."* — Matthew 19:14
 
-## Contributing
-
-Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to contribute to this project.
-
-Please note that this project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For issues, questions, or contributions, please open an issue on the GitHub repository.
-
-## Integrations
-
-### Google Forms (Self-Service Registration)
-
-Parents can register students via a Google Form that automatically syncs to VBS App.
-
-1. Enable in **Admin → Google Forms**
-2. Create a Google Form with student fields
-3. Add the provided Apps Script
-4. Students appear automatically in VBS App!
-
-See `Docs/GOOGLE_FORMS_INTEGRATION.md` for detailed setup instructions.
-
-### Deployment Options
-
-- **Cloudflare Tunnel** (Recommended) - Zero open ports, free SSL
-- **Traefik Reverse Proxy** - Auto SSL with Let's Encrypt
-- **Docker Compose** - Standard container deployment
-
-See `Docs/PRODUCTION_ENV_EXAMPLE.md` for configuration details.
-
-## Roadmap
-
-- [x] Google Forms integration
-- [x] Advanced reporting and analytics
-- [x] Dashboard with charts and stats
-- [ ] Email notifications
-- [ ] Mobile app / PWA
-- [ ] Multi-language support
-- [ ] Planning Center integration
-- [ ] Online payment processing
+Built with prayer and purpose for the Church. 🙏
