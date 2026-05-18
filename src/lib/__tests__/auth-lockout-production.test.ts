@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
 import {
   recordLoginAttempt,
   isAccountLocked,
@@ -6,15 +6,12 @@ import {
 } from '../auth-lockout'
 
 describe('auth-lockout production guards (Redis unavailable)', () => {
-  let originalNodeEnv: string | undefined
-
   beforeEach(() => {
-    originalNodeEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', configurable: true, writable: true })
+    vi.stubEnv('NODE_ENV', 'production')
   })
 
   afterEach(() => {
-    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, configurable: true, writable: true })
+    vi.unstubAllEnvs()
   })
 
   it('recordLoginAttempt throws when recording a failure in production without Redis', async () => {
