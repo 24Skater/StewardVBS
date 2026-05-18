@@ -49,7 +49,24 @@
       "PowerShell(Get-Content \"C:\\\\Users\\\\ramos\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-ramos-GitHub-vbs-app\\\\f4e62511-9233-4f48-a409-9d0e6caf8e19\\\\tasks\\\\bubjbdqkc.output\" -Wait -Tail 60)",
       "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing 2>&1)",
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess | ForEach-Object { Get-Process -Id $_ -ErrorAction SilentlyContinue } | Select-Object Id, Name, StartTime)",
-      "PowerShell(Get-Process -Id 49332, 17632 -ErrorAction SilentlyContinue)"
+      "PowerShell(Get-Process -Id 49332, 17632 -ErrorAction SilentlyContinue)",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:brainstorming:*)",
+      "Skill(superpowers:executing-plans)",
+      "Skill(superpowers:executing-plans:*)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:subagent-driven-development:*)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(curl -s http://localhost:3000/api/health/live)",
+      "Bash(curl -s http://localhost:3000/api/health/ready)",
+      "Bash(curl -s http://localhost:3000/api/setup)",
+      "Bash(npx playwright *)",
+      "Bash(curl -s http://localhost:3000/auth/signin)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/auth/forgot-password)",
+      "Bash(curl -s http://localhost:3000/auth/forgot-password)",
+      "Bash(curl -s -o /dev/null -w \"%{url_effective}\\\\n%{http_code}\" -L http://localhost:3000/dashboard)",
+      "Bash(curl -sv -o /dev/null http://localhost:3000/dashboard)",
+      "Bash(curl -s http://localhost:3000/dashboard)"
     ],
     "additionalDirectories": [
       "c:\\Users\\ramos\\GitHub\\vbs-app\\src\\app\\students\\[id]"
