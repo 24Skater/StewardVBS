@@ -42,16 +42,13 @@ describe('checkRateLimit with Redis', () => {
 })
 
 describe('checkRateLimit production guard', () => {
-  let originalNodeEnv: string | undefined
-
   beforeEach(() => {
-    originalNodeEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', configurable: true, writable: true })
+    vi.stubEnv('NODE_ENV', 'production')
     mockRedis.eval.mockRejectedValue(new Error('Redis connection refused'))
   })
 
   afterEach(() => {
-    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, configurable: true, writable: true })
+    vi.unstubAllEnvs()
   })
 
   it('throws in production when Redis eval fails', async () => {
