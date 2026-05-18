@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="VBS App" width="100%"/>
+<img src="Docs/banner.svg" alt="VBS App" width="100%"/>
 
 <br/>
 
@@ -53,7 +53,7 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS Ap
 
 **Dashboard — live stats, enrollment tracking, and recent activity**
 
-<img src="docs/screenshots/dashboard.png" alt="Dashboard" width="900"/>
+<img src="Docs/screenshots/dashboard.png" alt="Dashboard" width="900"/>
 
 </div>
 
@@ -63,21 +63,21 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS Ap
 <tr>
 <td align="center">
 <strong>Student roster</strong><br/>
-<img src="docs/screenshots/students.png" alt="Students" width="440"/>
+<img src="Docs/screenshots/students.png" alt="Students" width="440"/>
 </td>
 <td align="center">
 <strong>Reports &amp; exports</strong><br/>
-<img src="docs/screenshots/reports.png" alt="Reports" width="440"/>
+<img src="Docs/screenshots/reports.png" alt="Reports" width="440"/>
 </td>
 </tr>
 <tr>
 <td align="center">
 <strong>Daily check-in</strong><br/>
-<img src="docs/screenshots/checkin.png" alt="Check-In" width="440"/>
+<img src="Docs/screenshots/checkin.png" alt="Check-In" width="440"/>
 </td>
 <td align="center">
 <strong>Branding &amp; settings</strong><br/>
-<img src="docs/screenshots/admin-settings.png" alt="Admin Settings" width="440"/>
+<img src="Docs/screenshots/admin-settings.png" alt="Admin Settings" width="440"/>
 </td>
 </tr>
 </table>
@@ -89,51 +89,51 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS Ap
 <table>
   <tr>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/students.svg" width="48" height="48" alt="Students"/>
+      <img src="Docs/icons/students.svg" width="48" height="48" alt="Students"/>
       <br/><strong>Student Management</strong>
       <br/><sub>Register students with categories, shirt sizes, teacher assignments, and payment status. Full search and filter support.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/checkin.svg" width="48" height="48" alt="Check-In"/>
+      <img src="Docs/icons/checkin.svg" width="48" height="48" alt="Check-In"/>
       <br/><strong>Quick Check-In</strong>
       <br/><sub>Fast daily attendance tracking. Search by name, filter by category, and mark present with a single tap.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/analytics.svg" width="48" height="48" alt="Analytics"/>
+      <img src="Docs/icons/analytics.svg" width="48" height="48" alt="Analytics"/>
       <br/><strong>Dashboard Analytics</strong>
       <br/><sub>Visual charts for enrollment by category, age distribution, payment status, and teacher assignments.</sub>
     </td>
   </tr>
   <tr>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/reports.svg" width="48" height="48" alt="Reports"/>
+      <img src="Docs/icons/reports.svg" width="48" height="48" alt="Reports"/>
       <br/><strong>Reports &amp; Exports</strong>
       <br/><sub>Generate student rosters, attendance records, schedule exports, and enrollment summaries on demand.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/roles.svg" width="48" height="48" alt="Roles"/>
+      <img src="Docs/icons/roles.svg" width="48" height="48" alt="Roles"/>
       <br/><strong>Role-Based Access</strong>
       <br/><sub>Admin, Staff, and Viewer roles. Granular permissions enforced on every route and server action.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/selfhosted.svg" width="48" height="48" alt="Self-Hosted"/>
+      <img src="Docs/icons/selfhosted.svg" width="48" height="48" alt="Self-Hosted"/>
       <br/><strong>Fully Self-Hosted</strong>
       <br/><sub>Your data stays on your server. No third-party storage, no subscription fees, no vendor lock-in.</sub>
     </td>
   </tr>
   <tr>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/security.svg" width="48" height="48" alt="Security"/>
+      <img src="Docs/icons/security.svg" width="48" height="48" alt="Security"/>
       <br/><strong>Security-First</strong>
       <br/><sub>Rate limiting, account lockout, RBAC, IDOR protection, Zod validation, and webhook secret enforcement.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/forms.svg" width="48" height="48" alt="Google Forms"/>
+      <img src="Docs/icons/forms.svg" width="48" height="48" alt="Google Forms"/>
       <br/><strong>Google Forms Integration</strong>
       <br/><sub>Parents self-register via a Google Form. Students sync to VBS App automatically via Apps Script webhook.</sub>
     </td>
     <td align="center" valign="top" width="220">
-      <img src="docs/icons/analytics.svg" width="48" height="48" alt="Branding"/>
+      <img src="Docs/icons/analytics.svg" width="48" height="48" alt="Branding"/>
       <br/><strong>Church Branding</strong>
       <br/><sub>Customize the site name, logo, primary colors, contact info, and welcome message from the admin panel.</sub>
     </td>
