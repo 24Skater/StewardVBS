@@ -168,6 +168,11 @@ docker-data/
 *.dump
 logs/
 
+# ---- Playwright ----
+playwright-report/
+playwright/.auth/admin.json
+test-results/
+
 # ---- VS Code ----
 .vscode/
 
