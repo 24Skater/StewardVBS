@@ -1,26 +1,23 @@
 <div align="center">
 
-# ✝️ VBS App
+<img src="docs/banner.svg" alt="VBS App" width="100%"/>
 
-**Free, self-hosted Vacation Bible School management for churches.**
+<br/>
 
-<p>
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-deployment">Deployment</a> •
-  <a href="#-configuration">Configuration</a> •
-  <a href="#-contributing">Contributing</a>
-</p>
+[![Build](https://img.shields.io/github/actions/workflow/status/24Skater/vbs-app/ci.yml?style=flat-square&label=CI&color=2563eb)](https://github.com/24Skater/vbs-app/actions)
+[![License](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=nextdotjs)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ed?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com)
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?logo=typescript)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-336791?logo=postgresql)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker)
+<br/>
 
-![Build](https://img.shields.io/github/actions/workflow/status/24Skater/vbs-app/ci.yml?label=CI)
-![Contributors](https://img.shields.io/github/contributors/24Skater/vbs-app)
-![Issues](https://img.shields.io/github/issues/24Skater/vbs-app)
+[Quick Start](#quick-start) &nbsp;&middot;&nbsp;
+[Screenshots](#screenshots) &nbsp;&middot;&nbsp;
+[Features](#features) &nbsp;&middot;&nbsp;
+[Deploy](#deployment) &nbsp;&middot;&nbsp;
+[Contributing](#contributing)
 
 </div>
 
@@ -28,44 +25,124 @@
 
 > *"Whatever you do, work at it with all your heart, as working for the Lord."* — Colossians 3:23
 
-Churches shouldn't have to wrestle with spreadsheets or pay high SaaS fees to run VBS. This is a full-featured, self-hosted alternative — free forever, open source, and built by someone who volunteers in ministry.
+Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS App is a full-featured, self-hosted management platform — free forever, built by someone who volunteers in ministry. Register students, run daily check-in, generate reports, and configure your church's branding without writing a line of code.
 
 ---
 
 ## Contents
 
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [First-Time Setup](#-first-time-setup)
-- [Deployment](#-deployment)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [First-Time Setup](#first-time-setup)
+- [Deployment](#deployment)
 - [Configuration](#configuration)
-- [Architecture](#-architecture)
-- [User Roles](#-user-roles)
-- [Integrations](#-integrations)
-- [Security](#-security)
-- [Contributing](#-contributing)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+- [Architecture](#architecture)
+- [User Roles](#user-roles)
+- [Integrations](#integrations)
+- [Security](#security)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
+- [License](#license)
 
 ---
 
-## ✨ Features
+## Screenshots
 
-- 🎒 **Student Management** — Register students with categories, shirt sizes, and payment tracking
-- ✅ **Quick Check-In** — Fast daily attendance with search and one-tap confirmation
-- 📅 **Schedule Management** — Sessions, locations, and group assignments in one view
-- 📊 **Dashboard Analytics** — Charts for category breakdown, age distribution, and payments
-- 📋 **Reports & Exports** — Student lists, attendance records, and enrollment reports
-- 🔐 **Role-Based Access** — Admin, Staff, and Viewer roles with granular permissions
-- 🎨 **Branding Customization** — Church name, logo, colors, and contact info — all admin-configurable
-- 🔗 **Google Forms Integration** — Parents self-register via a Google Form; students appear automatically
-- 🧙 **First-Launch Wizard** — Guided setup so you're running in minutes, not hours
-- 🔒 **Security-First** — Rate limiting, account lockout, RBAC, IDOR protection, webhook secrets
-- 🏠 **Self-Hosted** — Your data stays on your server, always
+<div align="center">
+
+**Dashboard — live stats, enrollment tracking, and recent activity**
+
+<img src="docs/screenshots/dashboard.png" alt="Dashboard" width="900"/>
+
+</div>
+
+<br/>
+
+<table align="center">
+<tr>
+<td align="center">
+<strong>Student roster</strong><br/>
+<img src="docs/screenshots/students.png" alt="Students" width="440"/>
+</td>
+<td align="center">
+<strong>Reports &amp; exports</strong><br/>
+<img src="docs/screenshots/reports.png" alt="Reports" width="440"/>
+</td>
+</tr>
+<tr>
+<td align="center">
+<strong>Daily check-in</strong><br/>
+<img src="docs/screenshots/checkin.png" alt="Check-In" width="440"/>
+</td>
+<td align="center">
+<strong>Branding &amp; settings</strong><br/>
+<img src="docs/screenshots/admin-settings.png" alt="Admin Settings" width="440"/>
+</td>
+</tr>
+</table>
 
 ---
 
-## 🚀 Quick Start
+## Features
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/students.svg" width="48" height="48" alt="Students"/>
+      <br/><strong>Student Management</strong>
+      <br/><sub>Register students with categories, shirt sizes, teacher assignments, and payment status. Full search and filter support.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/checkin.svg" width="48" height="48" alt="Check-In"/>
+      <br/><strong>Quick Check-In</strong>
+      <br/><sub>Fast daily attendance tracking. Search by name, filter by category, and mark present with a single tap.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/analytics.svg" width="48" height="48" alt="Analytics"/>
+      <br/><strong>Dashboard Analytics</strong>
+      <br/><sub>Visual charts for enrollment by category, age distribution, payment status, and teacher assignments.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/reports.svg" width="48" height="48" alt="Reports"/>
+      <br/><strong>Reports &amp; Exports</strong>
+      <br/><sub>Generate student rosters, attendance records, schedule exports, and enrollment summaries on demand.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/roles.svg" width="48" height="48" alt="Roles"/>
+      <br/><strong>Role-Based Access</strong>
+      <br/><sub>Admin, Staff, and Viewer roles. Granular permissions enforced on every route and server action.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/selfhosted.svg" width="48" height="48" alt="Self-Hosted"/>
+      <br/><strong>Fully Self-Hosted</strong>
+      <br/><sub>Your data stays on your server. No third-party storage, no subscription fees, no vendor lock-in.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/security.svg" width="48" height="48" alt="Security"/>
+      <br/><strong>Security-First</strong>
+      <br/><sub>Rate limiting, account lockout, RBAC, IDOR protection, Zod validation, and webhook secret enforcement.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/forms.svg" width="48" height="48" alt="Google Forms"/>
+      <br/><strong>Google Forms Integration</strong>
+      <br/><sub>Parents self-register via a Google Form. Students sync to VBS App automatically via Apps Script webhook.</sub>
+    </td>
+    <td align="center" valign="top" width="220">
+      <img src="docs/icons/analytics.svg" width="48" height="48" alt="Branding"/>
+      <br/><strong>Church Branding</strong>
+      <br/><sub>Customize the site name, logo, primary colors, contact info, and welcome message from the admin panel.</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## Quick Start
 
 **Requirements:** Node.js 20+, Docker
 
@@ -73,98 +150,101 @@ Churches shouldn't have to wrestle with spreadsheets or pay high SaaS fees to ru
 git clone https://github.com/24Skater/vbs-app
 cd vbs-app
 npm install
+cp .env.example .env   # fill in DATABASE_URL, NEXTAUTH_URL, NEXTAUTH_SECRET
 ```
-
-Copy the environment template and fill in your values:
 
 ```bash
-cp .env.example .env
+docker compose up -d        # start PostgreSQL
+npx prisma migrate dev      # apply schema
+npm run dev                 # http://localhost:3000
 ```
 
-Start the database, run migrations, and launch:
-
-```bash
-docker compose up -d          # PostgreSQL only
-npx prisma migrate dev        # Apply schema
-npm run dev                   # http://localhost:3000
-```
-
-Navigate to `http://localhost:3000` — the setup wizard appears automatically on first launch.
+The setup wizard launches automatically on first visit.
 
 <details>
-<summary>Seed with sample data (optional)</summary>
+<summary>Seed with sample data</summary>
 
 ```bash
 npx tsx prisma/seed.ts
 ```
 
-This creates sample students, a VBS event, and an admin account you can use to explore the app.
+Creates 20+ sample students, a VBS event, and category assignments so you can explore the full UI immediately.
 
 </details>
 
 <details>
 <summary>Generate NEXTAUTH_SECRET</summary>
 
-**macOS / Linux / Git Bash:**
+**macOS / Linux / Git Bash**
 ```bash
 openssl rand -base64 32
 ```
 
-**Windows PowerShell:**
+**Windows PowerShell**
 ```powershell
 [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }))
 ```
 
 </details>
 
----
+<details>
+<summary>Run the test suite</summary>
 
-## 🧙 First-Time Setup
+```bash
+npm test              # unit tests (Vitest)
+npm run test:e2e      # end-to-end tests (Playwright)
+npm run test:coverage # coverage report
+```
 
-The setup wizard appears automatically on first launch — no manual steps required.
-
-1. **Visit** `http://localhost:3000` → redirected to `/setup`
-2. **Create the admin account** with your email and password
-3. **Sign in** at `/auth/signin`
-4. **Configure branding** at `/admin/settings` — church name, logo, colors
-5. **Create your VBS event** at `/admin/events/new`
-6. **Mark the event active** so check-in and attendance tracking are enabled
-7. *(Optional)* **Enable Google Forms** at `/admin/integrations/google-forms` for self-service parent registration
+</details>
 
 ---
 
-## 🏗️ Deployment
+## First-Time Setup
 
-### Docker Compose — recommended
+The setup wizard appears automatically on first launch — no manual database seeding or config file editing required.
+
+| Step | Where | What to do |
+|------|-------|------------|
+| 1 | `/setup` | Create the first admin account |
+| 2 | `/auth/signin` | Sign in with your new credentials |
+| 3 | `/admin/settings` | Set church name, logo, and brand colors |
+| 4 | `/admin/events/new` | Create your VBS event with dates and theme |
+| 5 | `/admin/events` | Mark the event active to enable check-in |
+| 6 | `/admin/integrations/google-forms` | *(Optional)* Enable parent self-registration |
+
+---
+
+## Deployment
+
+### Docker Compose
+
+The recommended path for any production deployment.
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
 ```
 
-The app is available on port `3000`. Put Nginx, Traefik, or Cloudflare Tunnel in front for HTTPS.
-
 <details>
-<summary>Traefik with auto-SSL (Let's Encrypt)</summary>
+<summary>Traefik with automatic SSL (Let's Encrypt)</summary>
 
 ```bash
 docker compose -f docker-compose.traefik.yml up -d --build
 ```
 
-Traefik handles certificate provisioning automatically. Set `TRAEFIK_EMAIL` and your domain in `.env`.
+Set `TRAEFIK_EMAIL` and your domain in `.env`. Traefik handles certificate provisioning automatically — no manual cert management.
 
 </details>
 
 <details>
-<summary>Cloudflare Tunnel (zero open ports)</summary>
+<summary>Cloudflare Tunnel — zero open ports (recommended for home servers)</summary>
 
-Cloudflare Tunnel is the recommended option for home servers — no router port-forwarding required:
-
-1. Create a tunnel in the Cloudflare dashboard
+1. Create a tunnel in the [Cloudflare Zero Trust dashboard](https://one.dash.cloudflare.com)
 2. Point the tunnel to `http://localhost:3000`
-3. Free SSL is handled by Cloudflare
+3. Free SSL and DDoS protection handled by Cloudflare automatically
 
-See [`Docs/PRODUCTION_ENV_EXAMPLE.md`](Docs/PRODUCTION_ENV_EXAMPLE.md) for the full configuration.
+No router port-forwarding required. See [`Docs/PRODUCTION_ENV_EXAMPLE.md`](Docs/PRODUCTION_ENV_EXAMPLE.md) for the full configuration reference.
 
 </details>
 
@@ -178,198 +258,208 @@ npm run build
 npm start
 ```
 
-Use `pm2` or a systemd unit to keep the process running.
+Use `pm2` or a `systemd` unit to keep the process running across reboots.
 
 </details>
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
-All configuration is done via environment variables. Copy `.env.example` to `.env` and fill in your values.
+All configuration is via environment variables. Start from `.env.example`.
 
 ### Required
 
 | Variable | Description |
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection string — `postgresql://user:pass@host:5432/db` |
-| `NEXTAUTH_URL` | Full URL where the app is hosted — `https://vbs.yourchurch.org` |
-| `NEXTAUTH_SECRET` | Random 32-byte base64 string (see [Quick Start](#-quick-start)) |
+| `NEXTAUTH_URL` | Full public URL of the app — `https://vbs.yourchurch.org` |
+| `NEXTAUTH_SECRET` | Randomly generated 32-byte base64 string |
 
-### Email (required for magic-link auth)
+### Email — required for magic-link sign-in
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `EMAIL_FROM` | — | Sender address — `noreply@yourchurch.org` |
-| `EMAIL_SERVER_HOST` | — | SMTP host (Gmail, SendGrid, SES, etc.) |
+| `EMAIL_SERVER_HOST` | — | SMTP host (Gmail, SendGrid, AWS SES, etc.) |
 | `EMAIL_SERVER_PORT` | `587` | SMTP port |
 | `EMAIL_SERVER_USER` | — | SMTP username |
 | `EMAIL_SERVER_PASSWORD` | — | SMTP password |
-| `EMAIL_SERVER_SECURE` | `false` | `true` for port 465 |
+| `EMAIL_SERVER_SECURE` | `false` | Set `true` for port 465 |
 
-> **Development tip:** If email is not configured, magic links are printed to the console instead of being sent.
+> **Development note:** When email is not configured, magic links are logged to the console rather than sent. No SMTP needed to develop locally.
 
-### OAuth (optional)
+### OAuth — optional
 
 | Variable | Description |
 |----------|-------------|
 | `GOOGLE_CLIENT_ID` | Google OAuth app client ID |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth app client secret |
-| `MICROSOFT_CLIENT_ID` | Azure AD / Microsoft app client ID |
-| `MICROSOFT_CLIENT_SECRET` | Azure AD / Microsoft app client secret |
+| `MICROSOFT_CLIENT_ID` | Azure AD / Microsoft Entra app client ID |
+| `MICROSOFT_CLIENT_SECRET` | Azure AD / Microsoft Entra app client secret |
 
-### Google Forms Integration (optional)
+### Google Forms — optional
 
 | Variable | Description |
 |----------|-------------|
-| `GOOGLE_FORMS_WEBHOOK_SECRET` | Shared secret validated on incoming form submissions |
+| `GOOGLE_FORMS_WEBHOOK_SECRET` | Shared secret validated on each incoming webhook request |
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
 ```
-┌─────────────────────┐     ┌──────────────────────┐     ┌──────────────────┐
-│   Browser / Client  │────▶│   Next.js App Server  │────▶│   PostgreSQL DB  │
-│  (React + Tailwind) │     │  (App Router + API)   │     │  (via Prisma)    │
-└─────────────────────┘     └──────────────────────┘     └──────────────────┘
-                                       │
-                              ┌────────┴────────┐
-                              │   NextAuth.js   │
-                              │  Magic Link /   │
-                              │  Google OAuth / │
-                              │  Microsoft /    │
-                              │  Credentials    │
-                              └─────────────────┘
+Browser (React + Tailwind CSS)
+        │
+        ▼
+Next.js 15 App Router ──── NextAuth.js v5
+        │                       │
+        │              ┌────────┴────────┐
+        │              │ Magic Link      │
+        │              │ Google OAuth    │
+        │              │ Microsoft OAuth │
+        │              │ Credentials     │
+        │              └─────────────────┘
+        │
+        ├── Server Actions & API Routes
+        │
+        ▼
+Prisma ORM ──── PostgreSQL 16
 ```
 
 ```
 src/
 ├── app/
-│   ├── admin/           # Admin panel (settings, events, users)
-│   │   ├── integrations/  # Google Forms & future integrations
-│   │   └── settings/      # Branding and app configuration
-│   ├── api/             # API routes + Google Forms webhook
-│   ├── attendance/      # Attendance records
-│   ├── checkin/         # Quick check-in interface
-│   ├── dashboard/       # Analytics and charts
-│   ├── reports/         # Export reports
-│   ├── schedule/        # Schedule management
-│   ├── setup/           # First-launch wizard
-│   └── students/        # Student management
-├── components/          # Shared React components
-└── lib/                 # Auth, Prisma client, utilities
+│   ├── admin/            Admin panel
+│   │   ├── events/       Event management
+│   │   ├── integrations/ Google Forms webhook config
+│   │   ├── settings/     Branding & church info
+│   │   └── users/        User & role management
+│   ├── api/              REST endpoints + webhook receiver
+│   ├── attendance/       Attendance record views
+│   ├── checkin/          Daily check-in interface
+│   ├── dashboard/        Analytics & stats
+│   ├── reports/          Export center
+│   ├── schedule/         Event schedule management
+│   ├── setup/            First-launch wizard
+│   └── students/         Student CRUD
+├── components/           Shared UI components
+└── lib/                  Auth config, Prisma client, utilities
 prisma/
-├── schema.prisma        # Database schema
-└── migrations/          # Migration history
+├── schema.prisma         Database schema
+└── migrations/           Migration history
 ```
 
 ---
 
-## 👤 User Roles
+## User Roles
 
-| Role | What they can do |
-|------|-----------------|
-| **ADMIN** | Full access — admin panel, settings, user management, all data |
-| **STAFF** | Manage students, run check-in, view schedules and attendance |
-| **VIEWER** | Read-only — view students, attendance, and schedules |
+| Role | Capabilities |
+|------|-------------|
+| **Admin** | Full access — admin panel, settings, events, user management, all data |
+| **Staff** | Manage students, run check-in, view schedules and attendance |
+| **Viewer** | Read-only — students, attendance records, schedules |
 
-New users default to **STAFF**. Promote to ADMIN in `/admin/users`.
+New registrations default to **Staff**. Promote users in `/admin/users`.
 
-OAuth users (Google / Microsoft) default to **VIEWER** until promoted by an admin.
+OAuth sign-ins (Google / Microsoft) default to **Viewer** until promoted by an Admin.
 
 ---
 
-## 🔗 Integrations
+## Integrations
 
-### Google Forms
+### Google Forms self-registration
 
-Parents register students via a Google Form — no account needed on their end.
+Parents register children through a Google Form — no VBS App account needed on their end.
 
 1. Enable in **Admin → Integrations → Google Forms**
 2. Create a Google Form with the required student fields
-3. Paste the provided Apps Script into the form's script editor
-4. Students appear in VBS App automatically on submission
+3. Open **Script Editor** in Google Forms and paste the provided Apps Script
+4. Students appear automatically in VBS App on each form submission
 
-See [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRATION.md) for step-by-step setup.
+Full walkthrough: [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRATION.md)
 
-### Authentication Providers
+### Sign-in providers
 
-| Provider | Setup Required |
-|----------|---------------|
-| Email magic link | SMTP config only |
+| Provider | What to configure |
+|----------|-------------------|
+| Email magic link | SMTP variables only |
 | Email + password | No additional setup |
-| Google OAuth | Google Cloud Console app |
-| Microsoft / Azure AD | Azure portal app registration |
+| Google OAuth | `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` |
+| Microsoft / Azure AD | `MICROSOFT_CLIENT_ID` + `MICROSOFT_CLIENT_SECRET` |
 
 ---
 
-## 🔐 Security
+## Security
 
-VBS App is built with a defense-in-depth approach:
+VBS App is built with multiple layers of defense:
 
-- All inputs validated via **Zod schemas**
-- **SQL injection** protection via Prisma parameterized queries
-- **XSS** protection with output escaping
-- **CSRF** protection via NextAuth and Next.js Server Actions
-- **Rate limiting** on authentication and sensitive endpoints
-- **Account lockout** after repeated failed login attempts
-- **RBAC** enforced on every API route and server action
-- **IDOR protection** — users can only access their authorized data
-- **Webhook secret validation** for Google Forms integration
-- **Image upload validation** with size and type limits
+- **Input validation** — all inputs validated via Zod schemas before processing
+- **SQL injection** — prevented by Prisma's parameterized queries
+- **XSS** — output escaped; no raw `dangerouslySetInnerHTML`
+- **CSRF** — protected via NextAuth and Next.js Server Actions
+- **Rate limiting** — enforced on authentication and sensitive endpoints
+- **Account lockout** — triggered after repeated failed login attempts
+- **RBAC** — enforced on every API route and server action, not just the UI
+- **IDOR protection** — users can only access resources they are authorized for
+- **Webhook validation** — Google Forms webhook requires a shared secret
+- **Upload validation** — image type and size limits enforced server-side
 
-See [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLETE.md) for the full security documentation.
+Full security documentation: [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLETE.md)
 
-#### Recommended Production Hardening
+**Recommended production hardening:**
 
-- Use **Cloudflare Tunnel** — no open ports required
-- Enable **HTTPS only** via Traefik or Cloudflare
-- Set a strong `NEXTAUTH_SECRET` (32+ bytes, randomly generated)
-- Schedule regular **database backups**
+```
+1. Cloudflare Tunnel      — no open ports on your network
+2. HTTPS everywhere       — via Traefik or Cloudflare (free)
+3. Strong NEXTAUTH_SECRET — 32+ random bytes, rotated on breach
+4. Regular DB backups     — before every update
+```
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome — especially from those in ministry who understand the real needs of VBS volunteers.
+Contributions are welcome — especially from those in ministry who understand the real-world needs of VBS volunteers and coordinators.
 
 ```bash
 git clone https://github.com/24Skater/vbs-app
-cd vbs-app
-npm install
-npm run dev       # Start dev server
-npm test          # Run unit tests (Vitest)
-npm run test:e2e  # Run E2E tests (Playwright)
+cd vbs-app && npm install
+npm run dev          # dev server with hot reload
+npm test             # unit tests
+npm run test:e2e     # Playwright end-to-end
 ```
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before submitting a pull request.
-
-For major changes, open an issue first to discuss the approach.
+Before opening a pull request, please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). For significant changes, open an issue first so the approach can be discussed.
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
-| Status | Feature |
-|--------|---------|
-| ✅ | Google Forms self-service registration |
-| ✅ | Google & Microsoft OAuth |
-| ✅ | Dashboard analytics and charts |
-| ✅ | Advanced reporting and exports |
-| ✅ | Branding customization |
-| ⬜ | Email notifications (reminders, confirmations) |
-| ⬜ | Progressive Web App (PWA) / mobile app |
-| ⬜ | Multi-language support |
-| ⬜ | Planning Center integration |
-| ⬜ | Online payment processing |
+| Status | Item |
+|--------|------|
+| Done | Student management with categories, sizes, payment tracking |
+| Done | Daily check-in and attendance records |
+| Done | Google Forms self-registration webhook |
+| Done | Google & Microsoft OAuth sign-in |
+| Done | Dashboard analytics and visual charts |
+| Done | Reports and export center |
+| Done | Church branding customization |
+| Done | First-launch setup wizard |
+| Planned | Email notifications — reminders, confirmations |
+| Planned | Progressive Web App (PWA) and mobile-optimized check-in |
+| Planned | Multi-language support |
+| Planned | Planning Center integration |
+| Planned | Online payment processing |
 
 ---
 
-## 📄 License
+## License
 
 [MIT](./LICENSE) — free to use, modify, and self-host.
 
-> *"Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these."* — Matthew 19:14
+> *"Let the little children come to me, and do not hinder them,*
+> *for the kingdom of heaven belongs to such as these."*
+> — Matthew 19:14
 
-Built with prayer and purpose for the Church. 🙏
+Built with prayer and purpose for the Church.

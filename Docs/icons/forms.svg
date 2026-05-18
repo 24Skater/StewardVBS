@@ -1,0 +1,6 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="12" fill="#f0fdf4"/>
+  <!-- Google-style G shape -->
+  <path d="M36 24h-12v4h7.2c-.7 3.6-3.8 6-7.2 6-4.4 0-8-3.6-8-8s3.6-8 8-8c2 0 3.8.7 5.2 1.9l2.8-2.8C29.8 14.9 27 14 24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10c5.5 0 10-4.5 10-10 0-.7-.1-1.3-.2-2H36z" fill="#16a34a"/>
+  <path d="M26 24l-2 2" stroke="white" stroke-width="1" stroke-linecap="round"/>
+</svg>
