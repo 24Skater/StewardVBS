@@ -1,12 +1,13 @@
+# QA/Staging environment — full stack, production build, isolated from prod
 services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-vbsdb}
+      POSTGRES_DB: ${POSTGRES_DB:-vbsdb_qa}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - qa_postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
       interval: 10s
@@ -18,7 +19,7 @@ services:
     image: redis:7-alpine
     command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes:
-      - redis_data:/data
+      - qa_redis:/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
@@ -31,16 +32,16 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-3001}:3000"
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-vbsdb}?schema=public
-      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-vbsdb_qa}?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3001}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      EMAIL_FROM: ${EMAIL_FROM}
-      EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST}
-      EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT}
-      EMAIL_SERVER_USER: ${EMAIL_SERVER_USER}
-      EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@example.com}
+      EMAIL_SERVER_HOST: ${EMAIL_SERVER_HOST:-}
+      EMAIL_SERVER_PORT: ${EMAIL_SERVER_PORT:-587}
+      EMAIL_SERVER_USER: ${EMAIL_SERVER_USER:-}
+      EMAIL_SERVER_PASSWORD: ${EMAIL_SERVER_PASSWORD:-}
       EMAIL_SERVER_SECURE: ${EMAIL_SERVER_SECURE:-false}
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       NODE_ENV: production
@@ -57,5 +58,5 @@ services:
       retries: 3
 
 volumes:
-  postgres_data:
-  redis_data:
+  qa_postgres:
+  qa_redis:

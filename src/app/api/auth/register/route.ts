@@ -5,6 +5,11 @@ import { z } from "zod";
 import { auditLog } from "@/lib/audit-log";
 import { validateInvitation, markInvitationUsed } from "@/lib/invitations";
 import { BCRYPT_ROUNDS } from "@/lib/constants";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
+
+const REGISTER_WINDOW_MS = 15 * 60 * 1000;
+const REGISTER_MAX_REQUESTS = 10;
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,6 +25,22 @@ const registerSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+    const identifier = `register:${getClientIdentifier(req)}`;
+    const rateLimit = await checkRateLimit(identifier, {
+      windowMs: REGISTER_WINDOW_MS,
+      maxRequests: REGISTER_MAX_REQUESTS,
+    });
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rateLimit.retryAfter ?? 60) },
+        }
+      );
+    }
+
     const body = await req.json();
     const result = registerSchema.safeParse(body);
 
@@ -102,7 +123,7 @@ export async function POST(req: Request) {
       message: "Account created successfully. You can now sign in.",
     });
   } catch (error) {
-    console.error("Registration error:", error);
+    logger.error({ err: error }, "Registration error");
     return NextResponse.json(
       { error: "Registration failed. Please try again." },
       { status: 500 }

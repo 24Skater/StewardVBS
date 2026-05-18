@@ -40,6 +40,7 @@ async function updateStudent(id: number, formData: FormData) {
 
   const allergies = formData.get("allergies")?.toString().trim() || null;
   const medicalNotes = formData.get("medicalNotes")?.toString().trim() || null;
+  const photoConsent = formData.get("photoConsent") === "on";
   const notes = formData.get("notes")?.toString().trim() || null;
   const profileImageUrl = formData.get("profileImageUrl")?.toString() || null;
 
@@ -64,6 +65,7 @@ async function updateStudent(id: number, formData: FormData) {
       emergencyRelationship,
       allergies,
       medicalNotes,
+      photoConsent,
       notes,
     },
   });
@@ -388,6 +390,20 @@ export default async function EditStudentPage({ params }: Props) {
                 defaultValue={student.medicalNotes || ""}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               />
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="photoConsent"
+                name="photoConsent"
+                defaultChecked={student.photoConsent}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="photoConsent" className="text-sm text-gray-700">
+                <span className="font-medium">Photo consent granted</span> — I give permission
+                for this student to be photographed during VBS activities.
+              </label>
             </div>
           </div>
         </div>

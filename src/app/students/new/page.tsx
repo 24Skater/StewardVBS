@@ -29,6 +29,7 @@ async function createStudent(formData: FormData) {
 
   const allergies = formData.get("allergies")?.toString().trim() || null;
   const medicalNotes = formData.get("medicalNotes")?.toString().trim() || null;
+  const photoConsent = formData.get("photoConsent") === "on";
   const notes = formData.get("notes")?.toString().trim() || null;
 
   if (!name || name.length === 0) throw new ValidationError("Student name is required");
@@ -50,6 +51,7 @@ async function createStudent(formData: FormData) {
       emergencyRelationship,
       allergies,
       medicalNotes,
+      photoConsent,
       notes,
     },
   });
@@ -294,6 +296,19 @@ export default async function NewStudentPage() {
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
                 placeholder="Any medical conditions, medications, or special needs we should be aware of"
               />
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="photoConsent"
+                name="photoConsent"
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="photoConsent" className="text-sm text-gray-700">
+                <span className="font-medium">Photo consent granted</span> — I give permission
+                for this student to be photographed during VBS activities.
+              </label>
             </div>
           </div>
         </div>

@@ -180,7 +180,9 @@ model Student {
   grade           String?
   allergies       String?
   medicalNotes    String?
+  photoConsent    Boolean   @default(false)
   notes           String?
+
 
   parentName      String?
   parentPhone     String?

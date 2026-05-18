@@ -224,16 +224,27 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       </button>
 
       {authMode === "password" && (
-        <p className="text-center text-sm text-gray-600">
-          Don&apos;t have an account?{" "}
-          <Link 
-            href="/auth/register" 
-            className="font-medium hover:opacity-80"
-            style={{ color: primaryColor }}
-          >
-            Create one
-          </Link>
-        </p>
+        <div className="flex flex-col gap-2 text-center text-sm text-gray-600">
+          <p>
+            <Link
+              href="/auth/forgot-password"
+              className="font-medium hover:opacity-80"
+              style={{ color: primaryColor }}
+            >
+              Forgot password?
+            </Link>
+          </p>
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/auth/register"
+              className="font-medium hover:opacity-80"
+              style={{ color: primaryColor }}
+            >
+              Create one
+            </Link>
+          </p>
+        </div>
       )}
 
       <OAuthButtons />

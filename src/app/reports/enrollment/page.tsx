@@ -173,9 +173,9 @@ export default async function EnrollmentReportPage() {
 
       {/* Print Header */}
       <div className="hidden print:block text-center mb-4">
-        <h1 className="text-xl font-bold">
+        <div className="text-xl font-bold">
           Enrollment Report - {event.year} {event.theme && `- ${event.theme}`}
-        </h1>
+        </div>
         <p className="text-sm text-gray-600">
           Total: {totalStudents} | Complete: {completeCount} | Paid: {paidCount} |
           Generated: {new Date().toLocaleDateString()}

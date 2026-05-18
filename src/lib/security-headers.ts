@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 
-export function addSecurityHeaders(response: NextResponse, nonce?: string): NextResponse {
+export function addSecurityHeaders(response: NextResponse, _nonce?: string): NextResponse {
   const isDev = process.env.NODE_ENV !== 'production'
 
-  const scriptSrc = nonce
-    ? `'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ''}`
-    : `'self'${isDev ? " 'unsafe-inline' 'unsafe-eval'" : ''}`
+  // 'unsafe-inline' is required: Next.js App Router prerendered pages include
+  // inline __next_f RSC scripts without nonce attributes. A nonce-only
+  // script-src blocks those scripts and causes React to render a blank page.
+  const scriptSrc = `'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`
 
   const csp = [
     "default-src 'self'",
