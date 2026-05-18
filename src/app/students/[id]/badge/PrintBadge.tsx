@@ -51,7 +51,7 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
       </div>
 
       {/* Badge Preview */}
-      <div className="flex justify-center">
+      <div id="badge-container" className="flex justify-center">
         <div
           className="w-[4in] bg-white border-2 rounded-lg overflow-hidden shadow-lg print:shadow-none print:border-2"
           style={{ borderColor: settings.primaryColor }}
