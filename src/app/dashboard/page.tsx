@@ -72,10 +72,11 @@ export default async function Dashboard() {
 
     // Calculate statistics
     const totalStudents = students.length;
-    const paidStudentIds = new Set(payments.map((p) => p.studentId));
+    const enrolledIds = new Set(students.map((s) => s.id));
+    const paidStudentIds = new Set(payments.filter((p) => enrolledIds.has(p.studentId)).map((p) => p.studentId));
     const paidCount = paidStudentIds.size;
-    const unpaidCount = totalStudents - paidCount;
-    const paymentPercentage = totalStudents > 0 ? Math.round((paidCount / totalStudents) * 100) : 0;
+    const unpaidCount = Math.max(0, totalStudents - paidCount);
+    const paymentPercentage = totalStudents > 0 ? Math.min(100, Math.round((paidCount / totalStudents) * 100)) : 0;
 
     // Category breakdown
     const categoryBreakdown = categories.map((cat) => ({

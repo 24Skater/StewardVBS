@@ -178,6 +178,9 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
       {/* Print Styles */}
       <style jsx global>{`
         @media print {
+          body {
+            background: white !important;
+          }
           body * {
             visibility: hidden;
           }
