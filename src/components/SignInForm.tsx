@@ -59,10 +59,15 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
     setSuccess(false);
     setLockoutMessage(null);
 
+    // Read directly from the DOM so password-manager autofill is captured
+    const form = e.currentTarget;
+    const emailValue = (form.elements.namedItem("email") as HTMLInputElement)?.value || email;
+    const passwordValue = (form.elements.namedItem("password") as HTMLInputElement)?.value || password;
+
     try {
       if (authMode === "magic-link") {
         const result = await signIn("email", {
-          email,
+          email: emailValue,
           redirect: false,
         });
 
@@ -78,8 +83,8 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       } else {
         // Password authentication
         const result = await signIn("credentials", {
-          email,
-          password,
+          email: emailValue,
+          password: passwordValue,
           redirect: false,
         });
 
@@ -87,9 +92,8 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
 
         if (result?.error) {
           setError("Invalid email or password");
-          // Re-check lockout status after failed attempt
-          if (email) {
-            await checkLockoutStatus(email);
+          if (emailValue) {
+            await checkLockoutStatus(emailValue);
           }
         } else if (result?.ok) {
           // Successful login - redirect to dashboard
