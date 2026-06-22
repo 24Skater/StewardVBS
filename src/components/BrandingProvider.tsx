@@ -4,8 +4,6 @@ import { createContext, useContext, ReactNode } from "react";
 
 export type BrandingSettings = {
   siteName: string;
-  primaryColor: string;
-  secondaryColor: string;
   logoUrl: string | null;
   churchName: string | null;
   churchAddress: string | null;
@@ -26,9 +24,7 @@ export type BrandingSettings = {
 };
 
 const defaultBranding: BrandingSettings = {
-  siteName: "VBS App",
-  primaryColor: "#2563eb",
-  secondaryColor: "#1e40af",
+  siteName: "Steward VBS",
   logoUrl: null,
   churchName: null,
   churchAddress: null,

@@ -55,7 +55,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
-      subject: 'Reset your VBS App password',
+      subject: 'Reset your Steward VBS password',
       text: `Click this link to reset your password (expires in 1 hour):\n\n${resetUrl}\n\nIf you did not request this, ignore this email.`,
       html: `<p>Click this link to reset your password (expires in 1 hour):</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>If you did not request this, ignore this email.</p>`,
     })

@@ -86,9 +86,9 @@ export default async function GoogleFormsIntegrationPage({
 
   // Apps Script code template
   const appsScriptCode = `/**
- * Google Apps Script for VBS App Integration
+ * Google Apps Script for Steward VBS Integration
  * 
- * This script sends form submissions to your VBS App webhook.
+ * This script sends form submissions to your Steward VBS webhook.
  * 
  * Setup Instructions:
  * 1. Open your Google Form
@@ -101,7 +101,7 @@ export default async function GoogleFormsIntegrationPage({
  */
 
 // ============ CONFIGURATION ============
-// Update these values from your VBS App admin settings
+// Update these values from your Steward VBS admin settings
 const WEBHOOK_URL = "${webhookUrl}";
 const WEBHOOK_SECRET = "${webhookSecret || "YOUR_SECRET_HERE"}";
 // ========================================
@@ -441,7 +441,7 @@ function testWebhook() {
                 <h4 className="font-medium text-green-900 mb-2">Step 4: Test It!</h4>
                 <p className="text-sm text-green-800">
                   Submit a test response to your Google Form. The student should appear 
-                  in your VBS App within a few seconds.
+                  in your Steward VBS within a few seconds.
                 </p>
               </div>
             </div>

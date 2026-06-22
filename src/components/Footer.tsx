@@ -47,10 +47,10 @@ export default function Footer() {
   // Minimal footer if no church info is configured
   if (!hasContent && !branding.footerText) {
     return (
-      <footer className="border-t border-gray-200 bg-white py-4">
+      <footer className="border-t border-[var(--st-border)] bg-[var(--st-surface)] py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs text-gray-500">
-            © {currentYear} {branding.siteName}. Powered by VBS App.
+          <p className="text-center text-xs text-[var(--st-muted)]">
+            © {currentYear} {branding.siteName}. Powered by Steward VBS.
           </p>
         </div>
       </footer>
@@ -179,7 +179,7 @@ export default function Footer() {
               {branding.footerText || `© ${currentYear} ${branding.churchName || branding.siteName}. All rights reserved.`}
             </p>
             <p className="text-xs text-gray-500">
-              Powered by <span className="text-gray-400">VBS App</span>
+              Powered by <span className="text-gray-400">Steward VBS</span>
             </p>
           </div>
         </div>

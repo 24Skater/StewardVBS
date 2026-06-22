@@ -5,9 +5,9 @@ import type { AppSettings } from "../settings";
 function makeSettings(overrides: Partial<AppSettings> = {}): AppSettings {
   return {
     id: "singleton",
-    siteName: "VBS App",
-    primaryColor: "#2563eb",
-    secondaryColor: "#1e40af",
+    siteName: "Steward VBS",
+    primaryColor: "#E8B847",
+    secondaryColor: "#C49A2E",
     logoUrl: null,
     churchName: null,
     churchAddress: null,

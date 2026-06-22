@@ -5,8 +5,8 @@ import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import { MAX_SITE_NAME_LENGTH, MAX_URL_LENGTH } from "@/lib/constants";
-import ColorPicker from "@/components/ColorPicker";
 import LogoUpload from "@/components/LogoUpload";
+import { Button, Alert, AlertDescription } from "@steward-apps/ui";
 import { Palette, Building2, FileEdit, Link2, Eye, Check } from "lucide-react";
 
 async function updateSettingsAction(formData: FormData) {
@@ -15,8 +15,6 @@ async function updateSettingsAction(formData: FormData) {
 
   // Basic Branding
   const siteName = formData.get("siteName")?.toString().trim();
-  const primaryColor = formData.get("primaryColor")?.toString().trim();
-  const secondaryColor = formData.get("secondaryColor")?.toString().trim();
   const logoUrl = formData.get("logoUrl")?.toString().trim() || null;
 
   // Church Information
@@ -47,17 +45,6 @@ async function updateSettingsAction(formData: FormData) {
     throw new ValidationError(`Site name must be ${MAX_SITE_NAME_LENGTH} characters or less`);
   }
 
-  if (!primaryColor) {
-    throw new ValidationError("Primary color is required");
-  }
-  if (!/^#[0-9A-Fa-f]{6}$/.test(primaryColor)) {
-    throw new ValidationError("Primary color must be a valid hex color (e.g., #FF0000)");
-  }
-
-  if (secondaryColor && !/^#[0-9A-Fa-f]{6}$/.test(secondaryColor)) {
-    throw new ValidationError("Secondary color must be a valid hex color");
-  }
-
   // Validate URLs
   const urlFields = [
     { value: logoUrl, name: "Logo URL" },
@@ -86,8 +73,6 @@ async function updateSettingsAction(formData: FormData) {
 
   await updateSettings({
     siteName,
-    primaryColor,
-    secondaryColor: secondaryColor || "#1e40af",
     logoUrl,
     churchName,
     churchAddress,
@@ -138,18 +123,18 @@ export default async function SettingsPage({
       </div>
 
       {resolvedSearchParams.success && (
-        <div className="rounded-md bg-green-50 p-4">
-          <p className="flex items-center gap-1 text-sm text-green-800"><Check className="h-4 w-4" /> Settings saved successfully!</p>
-        </div>
+        <Alert variant="success" showIcon>
+          <AlertDescription>Settings saved successfully!</AlertDescription>
+        </Alert>
       )}
 
       <form action={updateSettingsAction} className="space-y-8">
         {/* Basic Branding */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Palette className="h-4 w-4" /> Basic Branding</h3>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--st-fg)] mb-4"><Palette className="h-4 w-4" /> Basic Branding</h3>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="siteName" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="siteName" className="block text-sm font-medium text-[var(--st-fg)]">
                 Site Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -158,45 +143,29 @@ export default async function SettingsPage({
                 name="siteName"
                 required
                 defaultValue={settings.siteName}
-                placeholder="VBS App"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                placeholder="Steward VBS"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-[var(--st-muted)]">
                 Appears in navigation, page titles, and headers
               </p>
             </div>
 
-            <div>
-              <label htmlFor="primaryColor" className="block text-sm font-medium text-gray-700">
-                Primary Color <span className="text-red-500">*</span>
-              </label>
-              <ColorPicker name="primaryColor" defaultValue={settings.primaryColor} />
-              <p className="mt-1 text-xs text-gray-500">Main brand color for buttons and links</p>
-            </div>
-
-            <div>
-              <label htmlFor="secondaryColor" className="block text-sm font-medium text-gray-700">
-                Secondary Color
-              </label>
-              <ColorPicker name="secondaryColor" defaultValue={settings.secondaryColor} />
-              <p className="mt-1 text-xs text-gray-500">Accent color for gradients and highlights</p>
-            </div>
-
             <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--st-fg)] mb-2">
                 Logo
               </label>
               <LogoUpload
                 name="logoUrl"
                 currentImage={settings.logoUrl}
               />
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-[var(--st-muted)]">
                 Upload your church logo (PNG, JPG, or SVG recommended)
               </p>
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="tagline" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="tagline" className="block text-sm font-medium text-[var(--st-fg)]">
                 Tagline / Slogan
               </label>
               <input
@@ -205,9 +174,9 @@ export default async function SettingsPage({
                 name="tagline"
                 defaultValue={settings.tagline || ""}
                 placeholder="Growing in Faith Together"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-[var(--st-muted)]">
                 A short tagline shown below your logo
               </p>
             </div>
@@ -215,11 +184,11 @@ export default async function SettingsPage({
         </div>
 
         {/* Church Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Building2 className="h-4 w-4" /> Church Information</h3>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--st-fg)] mb-4"><Building2 className="h-4 w-4" /> Church Information</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="churchName" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchName" className="block text-sm font-medium text-[var(--st-fg)]">
                 Church Name
               </label>
               <input
@@ -228,12 +197,12 @@ export default async function SettingsPage({
                 name="churchName"
                 defaultValue={settings.churchName || ""}
                 placeholder="First Baptist Church"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="churchAddress" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchAddress" className="block text-sm font-medium text-[var(--st-fg)]">
                 Street Address
               </label>
               <input
@@ -242,12 +211,12 @@ export default async function SettingsPage({
                 name="churchAddress"
                 defaultValue={settings.churchAddress || ""}
                 placeholder="123 Main Street"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="churchCity" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchCity" className="block text-sm font-medium text-[var(--st-fg)]">
                 City
               </label>
               <input
@@ -256,13 +225,13 @@ export default async function SettingsPage({
                 name="churchCity"
                 defaultValue={settings.churchCity || ""}
                 placeholder="Springfield"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="churchState" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="churchState" className="block text-sm font-medium text-[var(--st-fg)]">
                   State
                 </label>
                 <input
@@ -271,11 +240,11 @@ export default async function SettingsPage({
                   name="churchState"
                   defaultValue={settings.churchState || ""}
                   placeholder="TX"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 />
               </div>
               <div>
-                <label htmlFor="churchZip" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="churchZip" className="block text-sm font-medium text-[var(--st-fg)]">
                   ZIP Code
                 </label>
                 <input
@@ -284,13 +253,13 @@ export default async function SettingsPage({
                   name="churchZip"
                   defaultValue={settings.churchZip || ""}
                   placeholder="75001"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="churchPhone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchPhone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Phone Number
               </label>
               <input
@@ -299,12 +268,12 @@ export default async function SettingsPage({
                 name="churchPhone"
                 defaultValue={settings.churchPhone || ""}
                 placeholder="(555) 123-4567"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="churchEmail" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchEmail" className="block text-sm font-medium text-[var(--st-fg)]">
                 Email Address
               </label>
               <input
@@ -313,12 +282,12 @@ export default async function SettingsPage({
                 name="churchEmail"
                 defaultValue={settings.churchEmail || ""}
                 placeholder="info@church.org"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="churchWebsite" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="churchWebsite" className="block text-sm font-medium text-[var(--st-fg)]">
                 Website URL
               </label>
               <input
@@ -327,18 +296,18 @@ export default async function SettingsPage({
                 name="churchWebsite"
                 defaultValue={settings.churchWebsite || ""}
                 placeholder="https://www.yourchurch.org"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
           </div>
         </div>
 
         {/* Content Customization */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><FileEdit className="h-4 w-4" /> Content Customization</h3>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--st-fg)] mb-4"><FileEdit className="h-4 w-4" /> Content Customization</h3>
           <div className="space-y-4">
             <div>
-              <label htmlFor="welcomeMessage" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="welcomeMessage" className="block text-sm font-medium text-[var(--st-fg)]">
                 Welcome Message
               </label>
               <textarea
@@ -347,15 +316,15 @@ export default async function SettingsPage({
                 rows={3}
                 defaultValue={settings.welcomeMessage || ""}
                 placeholder="Welcome to our Vacation Bible School! We're excited to have you join us for a week of fun, learning, and faith."
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-[var(--st-muted)]">
                 Displayed on the landing page and sign-in page
               </p>
             </div>
 
             <div>
-              <label htmlFor="footerText" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="footerText" className="block text-sm font-medium text-[var(--st-fg)]">
                 Footer Text
               </label>
               <textarea
@@ -364,9 +333,9 @@ export default async function SettingsPage({
                 rows={2}
                 defaultValue={settings.footerText || ""}
                 placeholder="© 2025 First Baptist Church. All rights reserved."
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-[var(--st-muted)]">
                 Custom text shown in the app footer
               </p>
             </div>
@@ -374,11 +343,11 @@ export default async function SettingsPage({
         </div>
 
         {/* Social Media */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Link2 className="h-4 w-4" /> Social Media</h3>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--st-fg)] mb-4"><Link2 className="h-4 w-4" /> Social Media</h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label htmlFor="facebookUrl" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="facebookUrl" className="block text-sm font-medium text-[var(--st-fg)]">
                 Facebook
               </label>
               <input
@@ -387,12 +356,12 @@ export default async function SettingsPage({
                 name="facebookUrl"
                 defaultValue={settings.facebookUrl || ""}
                 placeholder="https://facebook.com/yourchurch"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="instagramUrl" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="instagramUrl" className="block text-sm font-medium text-[var(--st-fg)]">
                 Instagram
               </label>
               <input
@@ -401,12 +370,12 @@ export default async function SettingsPage({
                 name="instagramUrl"
                 defaultValue={settings.instagramUrl || ""}
                 placeholder="https://instagram.com/yourchurch"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="youtubeUrl" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="youtubeUrl" className="block text-sm font-medium text-[var(--st-fg)]">
                 YouTube
               </label>
               <input
@@ -415,7 +384,7 @@ export default async function SettingsPage({
                 name="youtubeUrl"
                 defaultValue={settings.youtubeUrl || ""}
                 placeholder="https://youtube.com/@yourchurch"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
           </div>
@@ -423,62 +392,48 @@ export default async function SettingsPage({
 
         {/* Submit */}
         <div className="flex gap-4">
-          <button
-            type="submit"
-            className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
-          >
+          <Button type="submit" variant="primary">
             Save All Settings
-          </button>
+          </Button>
         </div>
       </form>
 
       {/* Live Preview */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4"><Eye className="h-4 w-4" /> Live Preview</h3>
-        
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h3 className="flex items-center gap-2 text-lg font-semibold text-[var(--st-fg)] mb-4"><Eye className="h-4 w-4" /> Live Preview</h3>
+
         {/* Header Preview */}
-        <div className="rounded-md border border-gray-200 p-4 bg-gray-50 mb-4">
-          <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide">Navigation Header</p>
-          <div className="flex items-center gap-3 bg-white p-3 rounded shadow-sm">
+        <div className="rounded-md border border-[var(--st-border)] p-4 bg-[var(--st-bg)] mb-4">
+          <p className="text-xs text-[var(--st-muted)] mb-2 uppercase tracking-wide">Navigation Header</p>
+          <div className="flex items-center gap-3 bg-[var(--st-surface)] p-3 rounded shadow-sm">
             {settings.logoUrl && (
               <img src={settings.logoUrl} alt="Logo" className="h-10 w-auto" />
             )}
             <div>
-              <span className="text-lg font-semibold" style={{ color: settings.primaryColor }}>
+              <span className="text-lg font-semibold text-[var(--st-primary)]">
                 {settings.siteName}
               </span>
               {settings.tagline && (
-                <p className="text-xs text-gray-500">{settings.tagline}</p>
+                <p className="text-xs text-[var(--st-muted)]">{settings.tagline}</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Button Preview */}
-        <div className="rounded-md border border-gray-200 p-4 bg-gray-50 mb-4">
-          <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide">Button Styles</p>
+        <div className="rounded-md border border-[var(--st-border)] p-4 bg-[var(--st-bg)] mb-4">
+          <p className="text-xs text-[var(--st-muted)] mb-2 uppercase tracking-wide">Button Styles</p>
           <div className="flex gap-3">
-            <button
-              type="button"
-              className="rounded-md px-4 py-2 text-sm font-medium text-white"
-              style={{ backgroundColor: settings.primaryColor }}
-            >
-              Primary Button
-            </button>
-            <button
-              type="button"
-              className="rounded-md px-4 py-2 text-sm font-medium text-white"
-              style={{ backgroundColor: settings.secondaryColor }}
-            >
-              Secondary Button
-            </button>
+            <Button type="button" variant="primary">Primary Button</Button>
+            <Button type="button" variant="secondary">Secondary Button</Button>
+            <Button type="button" variant="destructive">Destructive</Button>
           </div>
         </div>
 
         {/* Footer Preview */}
-        <div className="rounded-md border border-gray-200 p-4 bg-gray-50">
-          <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide">Footer Preview</p>
-          <div className="bg-gray-800 text-white p-4 rounded text-sm">
+        <div className="rounded-md border border-[var(--st-border)] p-4 bg-[var(--st-bg)]">
+          <p className="text-xs text-[var(--st-muted)] mb-2 uppercase tracking-wide">Footer Preview</p>
+          <div className="bg-[var(--st-sidebar-bg)] text-white p-4 rounded text-sm">
             <div className="flex items-center gap-3 mb-2">
               {settings.logoUrl && (
                 <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto brightness-0 invert" />

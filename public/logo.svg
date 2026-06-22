@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Cross beam -->
+  <rect x="28" y="8" width="8" height="36" rx="3" fill="#E8B847"/>
+  <!-- Cross arm -->
+  <rect x="16" y="18" width="32" height="8" rx="3" fill="#E8B847"/>
+  <!-- Open book at base -->
+  <path d="M14 46 C14 44 18 42 32 42 C46 42 50 44 50 46 L50 56 C50 58 46 57 32 57 C18 57 14 58 14 56 Z" fill="#C49A2E" opacity="0.3"/>
+  <path d="M32 42 L32 57" stroke="#C49A2E" stroke-width="1.5" stroke-dasharray="2 2"/>
+  <path d="M14 46 C14 44 18 42 32 42 L32 57 C18 57 14 58 14 56 Z" fill="#E8B847" opacity="0.6"/>
+  <path d="M50 46 C50 44 46 42 32 42 L32 57 C46 57 50 58 50 56 Z" fill="#C49A2E" opacity="0.6"/>
+</svg>

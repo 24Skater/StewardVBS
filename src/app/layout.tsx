@@ -12,11 +12,13 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: settings.siteName,
       description: settings.tagline || "Vacation Bible School Management",
+      icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
     };
   } catch {
     return {
-      title: "VBS App",
+      title: "Steward VBS",
       description: "Vacation Bible School admin & check-in",
+      icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
     };
   }
 }
@@ -31,8 +33,6 @@ export default async function RootLayout({
     const settings = await getSettings();
     branding = {
       siteName: settings.siteName,
-      primaryColor: settings.primaryColor,
-      secondaryColor: settings.secondaryColor,
       logoUrl: settings.logoUrl,
       churchName: settings.churchName,
       churchAddress: settings.churchAddress,
@@ -53,9 +53,7 @@ export default async function RootLayout({
     };
   } catch {
     branding = {
-      siteName: "VBS App",
-      primaryColor: "#2563eb",
-      secondaryColor: "#1e40af",
+      siteName: "Steward VBS",
       logoUrl: null,
       churchName: null,
       churchAddress: null,
@@ -77,12 +75,12 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang="en" data-theme="vbs">
       <body className="flex min-h-screen flex-col">
         <SessionProvider>
           <BrandingProvider settings={branding}>
             <Navigation />
-            <main className="flex-1 bg-gray-50">
+            <main className="flex-1 bg-[var(--st-bg)]">
               <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 {children}
               </div>

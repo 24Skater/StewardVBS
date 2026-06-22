@@ -60,9 +60,9 @@ export default async function Home() {
   const hasSocialLinks = settings.facebookUrl || settings.instagramUrl || settings.youtubeUrl;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white -mx-4 sm:-mx-6 lg:-mx-8">
+    <div className="min-h-screen bg-gradient-to-b from-[var(--st-bg)] to-[var(--st-surface)] -mx-4 sm:-mx-6 lg:-mx-8">
       {/* Navigation Bar */}
-      <nav className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="border-b border-[var(--st-border)] bg-[var(--st-surface)]/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
@@ -74,30 +74,25 @@ export default async function Home() {
                 />
               )}
               <div>
-                <span
-                  className="text-lg font-semibold"
-                  style={{ color: settings.primaryColor }}
-                >
+                <span className="text-lg font-semibold text-[var(--st-primary)]">
                   {settings.siteName}
                 </span>
                 {settings.tagline && (
-                  <p className="text-xs text-gray-500 -mt-0.5">{settings.tagline}</p>
+                  <p className="text-xs text-[var(--st-muted)] -mt-0.5">{settings.tagline}</p>
                 )}
               </div>
             </div>
             {session?.user ? (
               <Link
                 href="/dashboard"
-                className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                style={{ backgroundColor: settings.primaryColor, color: 'white' }}
+                className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[var(--st-primary)] text-white"
               >
                 Dashboard
               </Link>
             ) : (
               <Link
                 href="/auth/signin"
-                className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                style={{ backgroundColor: settings.primaryColor, color: 'white' }}
+                className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[var(--st-primary)] text-white"
               >
                 Sign In
               </Link>
@@ -107,7 +102,7 @@ export default async function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden bg-[var(--st-surface)]">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
           <div className="text-center">
             {/* Logo and Site Name */}
@@ -123,33 +118,30 @@ export default async function Home() {
             
             {/* Church Name and Site Name */}
             {settings.churchName && (
-              <p className="text-lg text-gray-600 mb-2">{settings.churchName} presents</p>
+              <p className="text-lg text-[var(--st-muted)] mb-2">{settings.churchName} presents</p>
             )}
-            <h1
-              className="text-5xl font-extrabold tracking-tight sm:text-6xl"
-              style={{ color: settings.primaryColor }}
-            >
+            <h1 className="text-5xl font-extrabold tracking-tight sm:text-6xl text-[var(--st-primary)]">
               {settings.siteName}
             </h1>
             {settings.tagline && (
-              <p className="mt-3 text-xl text-gray-600">{settings.tagline}</p>
+              <p className="mt-3 text-xl text-[var(--st-muted)]">{settings.tagline}</p>
             )}
 
             {/* Welcome Message */}
             {settings.welcomeMessage && (
-              <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-500">
+              <p className="mt-6 max-w-2xl mx-auto text-lg text-[var(--st-muted)]">
                 {settings.welcomeMessage}
               </p>
             )}
 
             {/* Event Info */}
             {eventInfo && (
-              <div className="mt-8 inline-block rounded-lg bg-gray-50 px-6 py-4 shadow-sm">
-                <p className="text-xl font-semibold text-gray-800">
+              <div className="mt-8 inline-block rounded-lg bg-[var(--st-bg)] px-6 py-4 shadow-sm">
+                <p className="text-xl font-semibold text-[var(--st-fg)]">
                   {eventInfo.year} {eventInfo.theme && `• ${eventInfo.theme}`}
                 </p>
                 {eventInfo.startDate && eventInfo.endDate && (
-                  <p className="text-lg text-gray-500 mt-1">
+                  <p className="text-lg text-[var(--st-muted)] mt-1">
                     {new Date(eventInfo.startDate).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
@@ -173,46 +165,31 @@ export default async function Home() {
                   href={settings.googleFormsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                  style={{ backgroundColor: settings.primaryColor, color: 'white' }}
+                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[var(--st-primary)] text-white"
                 >
                   Register Now →
                 </a>
               )}
-              
+
               {session?.user ? (
                 <Link
                   href="/dashboard"
-                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                  style={{ 
-                    backgroundColor: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? 'transparent' 
-                      : settings.primaryColor, 
-                    color: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? settings.primaryColor 
-                      : 'white',
-                    border: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? `2px solid ${settings.primaryColor}` 
-                      : 'none'
-                  }}
+                  className={
+                    settings.googleFormsEnabled && settings.googleFormsUrl
+                      ? "rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 border-2 border-[var(--st-primary)] text-[var(--st-primary)] bg-transparent"
+                      : "rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[var(--st-primary)] text-white"
+                  }
                 >
                   Go to Dashboard
                 </Link>
               ) : (
                 <Link
                   href="/auth/signin"
-                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                  style={{ 
-                    backgroundColor: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? 'transparent' 
-                      : settings.primaryColor, 
-                    color: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? settings.primaryColor 
-                      : 'white',
-                    border: settings.googleFormsEnabled && settings.googleFormsUrl 
-                      ? `2px solid ${settings.primaryColor}` 
-                      : 'none'
-                  }}
+                  className={
+                    settings.googleFormsEnabled && settings.googleFormsUrl
+                      ? "rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 border-2 border-[var(--st-primary)] text-[var(--st-primary)] bg-transparent"
+                      : "rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 bg-[var(--st-primary)] text-white"
+                  }
                 >
                   Staff Sign In
                 </Link>
@@ -226,10 +203,10 @@ export default async function Home() {
       <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--st-fg)] sm:text-4xl">
               Everything you need to manage your VBS
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-4 text-lg text-[var(--st-muted)]">
               A comprehensive solution for tracking students, attendance, and schedules
             </p>
           </div>
@@ -238,14 +215,10 @@ export default async function Home() {
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               {/* Feature 1 */}
               <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div
-                    className="h-10 w-10 flex items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${settings.primaryColor}20` }}
-                  >
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-[var(--st-fg)]">
+                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-[var(--st-primary)]/10">
                     <svg
-                      className="h-6 w-6"
-                      style={{ color: settings.primaryColor }}
+                      className="h-6 w-6 text-[var(--st-primary)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
@@ -260,7 +233,7 @@ export default async function Home() {
                   </div>
                   Student Management
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-[var(--st-muted)]">
                   <p className="flex-auto">
                     Easily register and manage students with categories, sizes, and payment tracking.
                   </p>
@@ -269,14 +242,10 @@ export default async function Home() {
 
               {/* Feature 2 */}
               <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div
-                    className="h-10 w-10 flex items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${settings.primaryColor}20` }}
-                  >
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-[var(--st-fg)]">
+                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-[var(--st-primary)]/10">
                     <svg
-                      className="h-6 w-6"
-                      style={{ color: settings.primaryColor }}
+                      className="h-6 w-6 text-[var(--st-primary)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
@@ -291,7 +260,7 @@ export default async function Home() {
                   </div>
                   Quick Check-In
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-[var(--st-muted)]">
                   <p className="flex-auto">
                     Fast and efficient check-in system for daily attendance tracking.
                   </p>
@@ -300,14 +269,10 @@ export default async function Home() {
 
               {/* Feature 3 */}
               <div className="flex flex-col">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <div
-                    className="h-10 w-10 flex items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${settings.primaryColor}20` }}
-                  >
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-[var(--st-fg)]">
+                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-[var(--st-primary)]/10">
                     <svg
-                      className="h-6 w-6"
-                      style={{ color: settings.primaryColor }}
+                      className="h-6 w-6 text-[var(--st-primary)]"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth="1.5"
@@ -322,7 +287,7 @@ export default async function Home() {
                   </div>
                   Schedule Management
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-[var(--st-muted)]">
                   <p className="flex-auto">
                     Create and manage event schedules with sessions, locations, and groups.
                   </p>
@@ -335,20 +300,19 @@ export default async function Home() {
 
       {/* Stats Section (if event exists) */}
       {eventInfo && session?.user && (
-        <section className="bg-gray-50 py-16 sm:py-24">
+        <section className="bg-[var(--st-bg)] py-16 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight text-[var(--st-fg)] sm:text-4xl">
                 Get Started
               </h2>
-              <p className="mt-4 text-lg text-gray-600">
+              <p className="mt-4 text-lg text-[var(--st-muted)]">
                 Access your dashboard to manage students, track attendance, and view reports
               </p>
               <div className="mt-10">
                 <Link
                   href="/dashboard"
-                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90"
-                  style={{ backgroundColor: settings.primaryColor, color: 'white' }}
+                  className="rounded-md px-6 py-3 text-base font-semibold shadow-sm hover:opacity-90 bg-[var(--st-primary)] text-white"
                 >
                   View Dashboard
                 </Link>
@@ -473,7 +437,7 @@ export default async function Home() {
                 {settings.footerText || `© ${new Date().getFullYear()} ${settings.churchName || settings.siteName}. All rights reserved.`}
               </p>
               <p className="text-xs text-gray-500">
-                Powered by <span className="text-gray-400">VBS App</span>
+                Powered by <span className="text-gray-400">Steward VBS</span>
               </p>
             </div>
           </div>

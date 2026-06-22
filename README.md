@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="Docs/banner.svg" alt="VBS App" width="100%"/>
+<img src="public/hero-illustration.svg" alt="Steward VBS" width="100%"/>
 
 <br/>
 
@@ -25,7 +25,7 @@
 
 > *"Whatever you do, work at it with all your heart, as working for the Lord."* — Colossians 3:23
 
-Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS App is a full-featured, self-hosted management platform — free forever, built by someone who volunteers in ministry. Register students, run daily check-in, generate reports, and configure your church's branding without writing a line of code.
+Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. Steward VBS is a full-featured, self-hosted management platform — free forever, built by someone who volunteers in ministry. Register students, run daily check-in, generate reports, and configure your church's branding without writing a line of code.
 
 ---
 
@@ -130,7 +130,7 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. VBS Ap
     <td align="center" valign="top" width="220">
       <img src="Docs/icons/forms.svg" width="48" height="48" alt="Google Forms"/>
       <br/><strong>Google Forms Integration</strong>
-      <br/><sub>Parents self-register via a Google Form. Students sync to VBS App automatically via Apps Script webhook.</sub>
+      <br/><sub>Parents self-register via a Google Form. Students sync to Steward VBS automatically via Apps Script webhook.</sub>
     </td>
     <td align="center" valign="top" width="220">
       <img src="Docs/icons/analytics.svg" width="48" height="48" alt="Branding"/>
@@ -370,12 +370,12 @@ OAuth sign-ins (Google / Microsoft) default to **Viewer** until promoted by an A
 
 ### Google Forms self-registration
 
-Parents register children through a Google Form — no VBS App account needed on their end.
+Parents register children through a Google Form — no Steward VBS account needed on their end.
 
 1. Enable in **Admin → Integrations → Google Forms**
 2. Create a Google Form with the required student fields
 3. Open **Script Editor** in Google Forms and paste the provided Apps Script
-4. Students appear automatically in VBS App on each form submission
+4. Students appear automatically in Steward VBS on each form submission
 
 Full walkthrough: [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRATION.md)
 
@@ -392,7 +392,7 @@ Full walkthrough: [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRA
 
 ## Security
 
-VBS App is built with multiple layers of defense:
+Steward VBS is built with multiple layers of defense:
 
 - **Input validation** — all inputs validated via Zod schemas before processing
 - **SQL injection** — prevented by Prisma's parameterized queries

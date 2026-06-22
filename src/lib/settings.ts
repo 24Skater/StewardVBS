@@ -78,9 +78,9 @@ export async function updateSettings(
     update: data,
     create: {
       id: "singleton",
-      siteName: data.siteName ?? "VBS App",
-      primaryColor: data.primaryColor ?? "#2563eb",
-      secondaryColor: data.secondaryColor ?? "#1e40af",
+      siteName: data.siteName ?? "Steward VBS",
+      primaryColor: data.primaryColor ?? "#E8B847",
+      secondaryColor: data.secondaryColor ?? "#C49A2E",
       logoUrl: data.logoUrl ?? null,
       churchName: data.churchName ?? null,
       churchAddress: data.churchAddress ?? null,
