@@ -57,3 +57,29 @@ describe('checkRateLimit production guard', () => {
     ).rejects.toThrow('Redis is required in production')
   })
 })
+
+describe('checkRateLimit non-production Redis fallback', () => {
+  beforeEach(() => {
+    vi.stubEnv('NODE_ENV', 'test')
+    mockRedis.eval.mockRejectedValue(new Error('Redis unavailable'))
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('falls back to in-memory when Redis fails outside production', async () => {
+    const id = `fallback-${Date.now()}-${Math.random()}`
+    const result = await checkRateLimit(id, opts)
+    expect(result.success).toBe(true)
+    expect(result.remaining).toBe(9)
+  })
+
+  it('in-memory fallback blocks when over limit', async () => {
+    const id = `fallback-block-${Date.now()}-${Math.random()}`
+    for (let i = 0; i < 11; i++) await checkRateLimit(id, opts)
+    const result = await checkRateLimit(id, opts)
+    expect(result.success).toBe(false)
+    expect(result.remaining).toBe(0)
+  })
+})

@@ -87,3 +87,35 @@ describe('auth-lockout with Redis', () => {
     })
   })
 })
+
+describe('auth-lockout Redis command failure fallback (non-production)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.stubEnv('NODE_ENV', 'test')
+    mockRedis.lrange.mockRejectedValue(new Error('Redis command failed'))
+    mockRedis.lpush.mockRejectedValue(new Error('Redis command failed'))
+    mockRedis.del.mockRejectedValue(new Error('Redis command failed'))
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('isAccountLocked falls back to in-memory when Redis lrange fails', async () => {
+    const result = await isAccountLocked('fallback-test@example.com')
+    expect(result).toBe(false)
+  })
+
+  it('getLockoutRemaining falls back to in-memory when Redis lrange fails', async () => {
+    const result = await getLockoutRemaining('fallback-test@example.com')
+    expect(result).toBeNull()
+  })
+
+  it('recordLoginAttempt falls back to in-memory on Redis lpush failure', async () => {
+    await expect(recordLoginAttempt('fallback-test@example.com', false)).resolves.toBeUndefined()
+  })
+
+  it('recordLoginAttempt falls back to in-memory on Redis del failure for success', async () => {
+    await expect(recordLoginAttempt('fallback-test@example.com', true)).resolves.toBeUndefined()
+  })
+})
