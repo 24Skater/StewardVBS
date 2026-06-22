@@ -46,6 +46,10 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
   }
 
   // Record failure
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout requires Redis in production')
+  }
+
   const windowSec = Math.ceil(LOCKOUT_WINDOW_MS / 1000)
   if (redis) {
     try {
@@ -53,7 +57,9 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
       await redis.expire(key, windowSec)
       return
     } catch {
-      // Redis command failed — fall through to in-memory
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout requires Redis in production')
+      }
     }
   }
 
@@ -66,6 +72,10 @@ async function _getRecentFailureCount(email: string): Promise<number> {
   const redis = await _tryGetRedis()
   const cutoff = Date.now() - LOCKOUT_WINDOW_MS
 
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
+  }
+
   if (redis) {
     try {
       const raw = await redis.lrange(`lockout:${email}`, 0, -1)
@@ -74,7 +84,9 @@ async function _getRecentFailureCount(email: string): Promise<number> {
         return !parsed.success && parsed.ts > cutoff
       }).length
     } catch {
-      // Redis command failed — fall through to in-memory
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout check requires Redis in production')
+      }
     }
   }
 
@@ -85,6 +97,10 @@ async function _getLastFailureTs(email: string): Promise<number | null> {
   const redis = await _tryGetRedis()
   const cutoff = Date.now() - LOCKOUT_WINDOW_MS
 
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
+  }
+
   if (redis) {
     try {
       const raw = await redis.lrange(`lockout:${email}`, 0, -1)
@@ -94,7 +110,9 @@ async function _getLastFailureTs(email: string): Promise<number | null> {
         .map((e) => e.ts)
       return failureTimes.length ? Math.max(...failureTimes) : null
     } catch {
-      // Redis command failed — fall through to in-memory
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout check requires Redis in production')
+      }
     }
   }
 
