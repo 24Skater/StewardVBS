@@ -12,7 +12,7 @@ export default async function AttendanceReportPage() {
 
   try {
     event = await getActiveEvent();
-    
+
     // Get categories
     categories = await prisma.studentCategory.findMany({
       where: { eventId: event.id },
@@ -31,7 +31,7 @@ export default async function AttendanceReportPage() {
   } catch {
     return (
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900">Attendance Report</h1>
+        <h1 className="text-2xl font-bold text-[var(--st-fg)]">Attendance Report</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             No active event found. Please activate an event first.
@@ -44,8 +44,8 @@ export default async function AttendanceReportPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Attendance Report</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-[var(--st-fg)]">Attendance Report</h1>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">
           Track check-ins and attendance for {event.year} {event.theme && `- ${event.theme}`}
         </p>
       </div>
@@ -59,4 +59,3 @@ export default async function AttendanceReportPage() {
     </div>
   );
 }
-

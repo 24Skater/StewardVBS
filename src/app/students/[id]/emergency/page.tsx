@@ -76,14 +76,14 @@ export default async function EmergencyContactsPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900"><ShieldAlert className="h-4 w-4" /> Emergency Contacts</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-[var(--st-fg)]"><ShieldAlert className="h-4 w-4" /> Emergency Contacts</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage emergency contacts for {student.name}
           </p>
         </div>
         <Link
           href={`/students/${id}`}
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Profile
         </Link>
@@ -104,19 +104,19 @@ export default async function EmergencyContactsPage({ params }: Props) {
           <h2 className="text-lg font-semibold text-red-900 mb-4">Current Emergency Contacts</h2>
           <div className="space-y-4">
             {student.emergencyContacts.map((contact, index) => (
-              <div key={contact.id} className="flex items-start justify-between p-4 bg-white rounded-lg border border-red-100">
+              <div key={contact.id} className="flex items-start justify-between p-4 bg-[var(--st-surface)] rounded-lg border border-red-100">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-700 font-bold text-lg">
                     {index + 1}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900">{contact.name}</span>
+                      <span className="font-medium text-[var(--st-fg)]">{contact.name}</span>
                       {contact.relationship && (
-                        <span className="text-sm text-gray-500">({contact.relationship})</span>
+                        <span className="text-sm text-[var(--st-muted)]">({contact.relationship})</span>
                       )}
                     </div>
-                    <div className="mt-1 text-sm text-gray-600 space-y-1">
+                    <div className="mt-1 text-sm text-[var(--st-muted)] space-y-1">
                       <div className="flex items-center gap-1 font-medium"><Phone className="h-4 w-4" /> {contact.phone}</div>
                       {contact.altPhone && (
                         <div className="flex items-center gap-1"><Smartphone className="h-4 w-4" /> {contact.altPhone} (alternate)</div>
@@ -137,12 +137,12 @@ export default async function EmergencyContactsPage({ params }: Props) {
       )}
 
       {/* Add Contact Form */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Add Emergency Contact</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Add Emergency Contact</h2>
         <form action={addContactAction} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
                 Contact Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -150,18 +150,18 @@ export default async function EmergencyContactsPage({ params }: Props) {
                 id="name"
                 name="name"
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="relationship" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="relationship" className="block text-sm font-medium text-[var(--st-fg)]">
                 Relationship
               </label>
               <select
                 id="relationship"
                 name="relationship"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 <option value="">Select...</option>
                 <option value="Aunt">Aunt</option>
@@ -175,7 +175,7 @@ export default async function EmergencyContactsPage({ params }: Props) {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Phone Number <span className="text-red-500">*</span>
               </label>
               <input
@@ -183,33 +183,33 @@ export default async function EmergencyContactsPage({ params }: Props) {
                 id="phone"
                 name="phone"
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 placeholder="(555) 123-4567"
               />
             </div>
 
             <div>
-              <label htmlFor="altPhone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="altPhone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Alternate Phone
               </label>
               <input
                 type="tel"
                 id="altPhone"
                 name="altPhone"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 placeholder="(555) 123-4567"
               />
             </div>
 
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="priority" className="block text-sm font-medium text-[var(--st-fg)]">
                 Priority
               </label>
               <select
                 id="priority"
                 name="priority"
                 defaultValue="1"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 <option value="1">1 - Primary (call first)</option>
                 <option value="2">2 - Secondary</option>

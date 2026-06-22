@@ -94,9 +94,9 @@ model AppSettings {
   id             String   @id @default("singleton")
   
   // Basic Branding
-  siteName       String   @default("VBS App")
-  primaryColor   String   @default("#2563eb")
-  secondaryColor String   @default("#1e40af")
+  siteName       String   @default("Steward · VBS")
+  primaryColor   String   @default("#E8B847")
+  secondaryColor String   @default("#C49A2E")
   logoUrl        String?
   
   // Church Information

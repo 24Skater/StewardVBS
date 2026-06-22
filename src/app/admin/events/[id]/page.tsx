@@ -156,15 +156,15 @@ export default async function EditEventPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Edit Event</h2>
-        <p className="mt-1 text-sm text-gray-600">Update event details.</p>
+        <h2 className="text-2xl font-bold text-[var(--st-fg)]">Edit Event</h2>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">Update event details.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <form action={updateAction} className="space-y-6 rounded-lg border border-gray-200 bg-white p-6">
+          <form action={updateAction} className="space-y-6 rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
             <div>
-              <label htmlFor="year" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="year" className="block text-sm font-medium text-[var(--st-fg)]">
                 Year <span className="text-red-500">*</span>
               </label>
               <input
@@ -175,12 +175,12 @@ export default async function EditEventPage({ params }: Props) {
                 defaultValue={event.year}
                 min="2000"
                 max="2100"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="theme" className="block text-sm font-medium text-[var(--st-fg)]">
                 Theme
               </label>
               <input
@@ -189,13 +189,13 @@ export default async function EditEventPage({ params }: Props) {
                 name="theme"
                 defaultValue={event.theme || ""}
                 placeholder="e.g., True North, Adventure Island"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="startDate" className="block text-sm font-medium text-[var(--st-fg)]">
                   Start Date
                 </label>
                 <input
@@ -205,12 +205,12 @@ export default async function EditEventPage({ params }: Props) {
                   defaultValue={
                     event.startDate ? event.startDate.toISOString().split("T")[0] : ""
                   }
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 />
               </div>
 
               <div>
-                <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="endDate" className="block text-sm font-medium text-[var(--st-fg)]">
                   End Date
                 </label>
                 <input
@@ -220,7 +220,7 @@ export default async function EditEventPage({ params }: Props) {
                   defaultValue={
                     event.endDate ? event.endDate.toISOString().split("T")[0] : ""
                   }
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 />
               </div>
             </div>
@@ -231,9 +231,9 @@ export default async function EditEventPage({ params }: Props) {
                 name="setActive"
                 type="checkbox"
                 defaultChecked={event.isActive}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
               />
-              <label htmlFor="setActive" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="setActive" className="ml-2 block text-sm text-[var(--st-fg)]">
                 Set as active event
               </label>
             </div>
@@ -241,13 +241,13 @@ export default async function EditEventPage({ params }: Props) {
             <div className="flex gap-4">
               <button
                 type="submit"
-                className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
               >
                 Save Changes
               </button>
               <a
                 href="/admin/events"
-                className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
               >
                 Cancel
               </a>
@@ -256,30 +256,30 @@ export default async function EditEventPage({ params }: Props) {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Event Statistics</h3>
+          <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+            <h3 className="text-lg font-semibold text-[var(--st-fg)]">Event Statistics</h3>
             <dl className="mt-4 space-y-3">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Students</dt>
-                <dd className="mt-1 text-2xl font-semibold text-gray-900">
+                <dt className="text-sm font-medium text-[var(--st-muted)]">Students</dt>
+                <dd className="mt-1 text-2xl font-semibold text-[var(--st-fg)]">
                   {event._count.studentEvents}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Attendance Records</dt>
-                <dd className="mt-1 text-2xl font-semibold text-gray-900">
+                <dt className="text-sm font-medium text-[var(--st-muted)]">Attendance Records</dt>
+                <dd className="mt-1 text-2xl font-semibold text-[var(--st-fg)]">
                   {event._count.attendances}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Payments</dt>
-                <dd className="mt-1 text-2xl font-semibold text-gray-900">
+                <dt className="text-sm font-medium text-[var(--st-muted)]">Payments</dt>
+                <dd className="mt-1 text-2xl font-semibold text-[var(--st-fg)]">
                   {event._count.payments}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Sessions</dt>
-                <dd className="mt-1 text-2xl font-semibold text-gray-900">
+                <dt className="text-sm font-medium text-[var(--st-muted)]">Sessions</dt>
+                <dd className="mt-1 text-2xl font-semibold text-[var(--st-fg)]">
                   {event._count.sessions}
                 </dd>
               </div>

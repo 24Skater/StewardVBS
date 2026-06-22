@@ -70,8 +70,8 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Reports</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Reports</h1>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">
           Generate and export reports for your VBS event
         </p>
       </div>
@@ -114,13 +114,13 @@ export default async function ReportsPage() {
                 {report.icon}
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600">
+                <h3 className="text-lg font-semibold text-[var(--st-fg)] group-hover:text-[var(--st-primary)]">
                   {report.title}
                 </h3>
-                <p className="mt-1 text-sm text-gray-600">{report.description}</p>
+                <p className="mt-1 text-sm text-[var(--st-muted)]">{report.description}</p>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs font-medium text-gray-500">{report.stats}</span>
-                  <span className="flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:translate-x-1 transition-transform">
+                  <span className="text-xs font-medium text-[var(--st-muted)]">{report.stats}</span>
+                  <span className="flex items-center gap-1 text-sm font-medium text-[var(--st-primary)] group-hover:translate-x-1 transition-transform">
                     Generate <ChevronRight className="h-4 w-4" />
                   </span>
                 </div>
@@ -132,24 +132,24 @@ export default async function ReportsPage() {
 
       {/* Quick Stats */}
       {event && (
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats - {event.year}</h2>
+        <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Quick Stats - {event.year}</h2>
           <div className="grid gap-4 sm:grid-cols-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-3xl font-bold text-blue-600">{stats.students}</div>
-              <div className="text-sm text-gray-500">Total Students</div>
+            <div className="text-center p-4 bg-[var(--st-bg)] rounded-lg">
+              <div className="text-3xl font-bold text-[var(--st-primary)]">{stats.students}</div>
+              <div className="text-sm text-[var(--st-muted)]">Total Students</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-[var(--st-bg)] rounded-lg">
               <div className="text-3xl font-bold text-green-600">{stats.categories}</div>
-              <div className="text-sm text-gray-500">Categories</div>
+              <div className="text-sm text-[var(--st-muted)]">Categories</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-[var(--st-bg)] rounded-lg">
               <div className="text-3xl font-bold text-purple-600">{stats.teachers}</div>
-              <div className="text-sm text-gray-500">Teachers</div>
+              <div className="text-sm text-[var(--st-muted)]">Teachers</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-[var(--st-bg)] rounded-lg">
               <div className="text-3xl font-bold text-amber-600">{stats.attendance}</div>
-              <div className="text-sm text-gray-500">Check-ins</div>
+              <div className="text-sm text-[var(--st-muted)]">Check-ins</div>
             </div>
           </div>
         </div>
@@ -157,4 +157,3 @@ export default async function ReportsPage() {
     </div>
   );
 }
-

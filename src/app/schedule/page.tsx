@@ -6,6 +6,7 @@ import { toDateTimeLocal } from "@/lib/date-utils";
 import Link from "next/link";
 import CategorySelect from "@/components/CategorySelect";
 import { createSession, deleteSession } from "./actions";
+import { Button } from "@steward-apps/ui";
 
 /* ───────────────── Page ───────────────── */
 
@@ -18,7 +19,7 @@ export default async function SchedulePage() {
   } catch (error) {
     return (
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Schedule</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Schedule</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             {error instanceof Error
@@ -37,15 +38,15 @@ export default async function SchedulePage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Schedule</h1>
-      <p className="text-sm text-gray-600">
+      <h1 className="text-3xl font-bold text-[var(--st-fg)]">Schedule</h1>
+      <p className="text-sm text-[var(--st-muted)]">
         Event {event.year} {event.theme ? `• ${event.theme}` : ""}
       </p>
 
       {/* Add session form */}
       <form
         action={createSession}
-        className="rounded-xl border border-gray-200 bg-white p-4 space-y-3"
+        className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-4 space-y-3"
       >
         <h2 className="text-lg font-semibold">Add Session</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -53,32 +54,43 @@ export default async function SchedulePage() {
             name="title"
             required
             placeholder="Session title"
-            className="rounded-md border px-3 py-2"
+            className="rounded-md border border-[var(--st-border)] px-3 py-2 bg-[var(--st-bg)] text-[var(--st-fg)]"
           />
-          <input name="start" type="datetime-local" required className="rounded-md border px-3 py-2" />
-          <input name="end" type="datetime-local" required className="rounded-md border px-3 py-2" />
-          <input name="location" placeholder="Location" className="rounded-md border px-3 py-2" />
+          <input
+            name="start"
+            type="datetime-local"
+            required
+            className="rounded-md border border-[var(--st-border)] px-3 py-2 bg-[var(--st-bg)] text-[var(--st-fg)]"
+          />
+          <input
+            name="end"
+            type="datetime-local"
+            required
+            className="rounded-md border border-[var(--st-border)] px-3 py-2 bg-[var(--st-bg)] text-[var(--st-fg)]"
+          />
+          <input
+            name="location"
+            placeholder="Location"
+            className="rounded-md border border-[var(--st-border)] px-3 py-2 bg-[var(--st-bg)] text-[var(--st-fg)]"
+          />
           <CategorySelect />
           <textarea
             name="notes"
             rows={2}
             placeholder="Notes"
-            className="sm:col-span-2 lg:col-span-3 rounded-md border px-3 py-2"
+            className="sm:col-span-2 lg:col-span-3 rounded-md border border-[var(--st-border)] px-3 py-2 bg-[var(--st-bg)] text-[var(--st-fg)]"
           />
         </div>
-        <button
-          type="submit"
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
+        <Button type="submit" variant="primary">
           Add
-        </button>
+        </Button>
       </form>
 
       {/* List existing sessions */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+      <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] overflow-hidden">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr className="text-left text-sm text-gray-600">
+          <thead className="bg-[var(--st-bg)]">
+            <tr className="text-left text-sm text-[var(--st-muted)]">
               <th className="px-4 py-2">Title</th>
               <th className="px-4 py-2">Time</th>
               <th className="px-4 py-2">Location</th>
@@ -104,19 +116,16 @@ export default async function SchedulePage() {
                 <td className="px-4 py-2 text-right">
                   <form action={deleteSession}>
                     <input type="hidden" name="id" value={s.id} />
-                    <button
-                      type="submit"
-                      className="rounded-md bg-rose-600 px-3 py-1.5 text-white hover:bg-rose-700"
-                    >
+                    <Button type="submit" variant="destructive" size="sm">
                       Delete
-                    </button>
+                    </Button>
                   </form>
                 </td>
               </tr>
             ))}
             {sessions.length === 0 && (
               <tr>
-                <td className="px-4 py-6 text-gray-500" colSpan={6}>
+                <td className="px-4 py-6 text-[var(--st-muted)]" colSpan={6}>
                   No sessions yet.
                 </td>
               </tr>

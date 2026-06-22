@@ -24,7 +24,6 @@ interface PrintBadgeProps {
   } | null;
   settings: {
     siteName: string;
-    primaryColor: string;
     logoUrl: string | null;
     churchName: string | null;
     tagline: string | null;
@@ -44,7 +43,7 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
       <div className="mb-6 print:hidden">
         <button
           onClick={handlePrint}
-          className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 font-medium"
+          className="inline-flex items-center gap-2 rounded-md bg-[var(--st-primary)] px-6 py-3 text-white hover:opacity-90 font-medium"
         >
           <Printer className="h-4 w-4" /> Print Badge
         </button>
@@ -53,14 +52,10 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
       {/* Badge Preview */}
       <div id="badge-container" className="flex justify-center">
         <div
-          className="w-[4in] bg-white border-2 rounded-lg overflow-hidden shadow-lg print:shadow-none print:border-2"
-          style={{ borderColor: settings.primaryColor }}
+          className="w-[4in] bg-white border-2 border-[var(--st-primary)] rounded-lg overflow-hidden shadow-lg print:shadow-none print:border-2"
         >
           {/* Header */}
-          <div
-            className="px-4 py-3 text-white text-center"
-            style={{ backgroundColor: settings.primaryColor }}
-          >
+          <div className="px-4 py-3 text-white text-center bg-[var(--st-primary)]">
             <div className="flex items-center justify-center gap-2">
               {settings.logoUrl && (
                 <img src={settings.logoUrl} alt="" className="h-10 w-auto brightness-0 invert" />
@@ -107,10 +102,7 @@ export default function PrintBadge({ student, event, emergency, settings }: Prin
           <div className="grid grid-cols-2 border-b">
             <div className="p-3 border-r text-center">
               <div className="text-xs text-gray-500 uppercase">Group</div>
-              <div
-                className="font-bold text-lg"
-                style={{ color: settings.primaryColor }}
-              >
+              <div className="font-bold text-lg text-[var(--st-primary)]">
                 {student.category}
               </div>
             </div>

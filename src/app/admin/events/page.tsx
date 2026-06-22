@@ -39,49 +39,49 @@ export default async function EventsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Events</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-[var(--st-fg)]">Events</h2>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage VBS events. Only one event can be active at a time.
           </p>
         </div>
         <Link
           href="/admin/events/new"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
         >
           Create Event
         </Link>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
+        <table className="min-w-full divide-y divide-[var(--st-border)]">
+          <thead className="bg-[var(--st-bg)]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Year
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Theme
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Students
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
             {events.map((event) => {
               const isActive = activeEvent?.id === event.id;
               return (
                 <tr key={event.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--st-fg)]">
                     {event.year}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                     {event.theme || "—"}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm">
@@ -90,12 +90,12 @@ export default async function EventsPage() {
                         Active
                       </span>
                     ) : (
-                      <span className="inline-flex rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800">
+                      <span className="inline-flex rounded-full bg-[var(--st-bg)] px-2 py-1 text-xs font-semibold text-gray-800">
                         Inactive
                       </span>
                     )}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                     {event._count.studentEvents}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
@@ -104,7 +104,7 @@ export default async function EventsPage() {
                         <form action={setActiveEvent.bind(null, event.id)}>
                           <button
                             type="submit"
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-[var(--st-primary)] hover:text-blue-900"
                           >
                             Set Active
                           </button>
@@ -112,7 +112,7 @@ export default async function EventsPage() {
                       )}
                       <Link
                         href={`/admin/events/${event.id}`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-[var(--st-primary)] hover:text-blue-900"
                       >
                         Edit
                       </Link>
@@ -123,7 +123,7 @@ export default async function EventsPage() {
             })}
             {events.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
+                <td colSpan={5} className="px-6 py-8 text-center text-sm text-[var(--st-muted)]">
                   No events yet. Create your first event to get started.
                 </td>
               </tr>

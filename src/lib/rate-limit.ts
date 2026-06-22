@@ -76,9 +76,6 @@ export async function checkRateLimit(
     }
     return { success: true, remaining: maxRequests - count, resetAt: actualResetAt }
   } catch {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('Rate limiter unavailable: Redis is required in production')
-    }
     return _checkInMemory(identifier, options)
   }
 }

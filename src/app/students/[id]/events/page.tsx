@@ -53,32 +53,32 @@ export default async function StudentEventsPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Event Enrollment</h1>
-          <p className="mt-1 text-sm text-gray-600">{student.name}</p>
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Event Enrollment</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">{student.name}</p>
         </div>
         <Link
           href={`/students/${id}`}
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
         >
           <ArrowLeft className="h-4 w-4" /> Back to profile
         </Link>
       </div>
 
       {allEvents.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center">
-          <p className="text-sm text-gray-500 mb-3">No events have been created yet.</p>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-8 text-center">
+          <p className="text-sm text-[var(--st-muted)] mb-3">No events have been created yet.</p>
           <Link
             href="/admin/events/new"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
           >
             Create First Event
           </Link>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
           <table className="min-w-full">
-            <thead className="bg-gray-50">
-              <tr className="text-left text-sm text-gray-600">
+            <thead className="bg-[var(--st-bg)]">
+              <tr className="text-left text-sm text-[var(--st-muted)]">
                 <th className="px-4 py-3 font-medium">Event</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Total Attendances</th>
@@ -92,12 +92,12 @@ export default async function StudentEventsPage({ params }: Props) {
                 return (
                   <tr key={event.id} className={enrolled ? "bg-blue-50" : ""}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-[var(--st-fg)]">
                         {event.year}
-                        {event.theme && <span className="ml-2 text-gray-500">– {event.theme}</span>}
+                        {event.theme && <span className="ml-2 text-[var(--st-muted)]">– {event.theme}</span>}
                       </div>
                       {event.startDate && (
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-[var(--st-muted)]">
                           {new Date(event.startDate).toLocaleDateString()} – {event.endDate ? new Date(event.endDate).toLocaleDateString() : "?"}
                         </div>
                       )}
@@ -106,10 +106,10 @@ export default async function StudentEventsPage({ params }: Props) {
                       {event.isActive ? (
                         <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Active</span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">Past</span>
+                        <span className="inline-flex items-center rounded-full bg-[var(--st-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--st-muted)]">Past</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-[var(--st-muted)]">
                       {event._count.attendances} check-ins
                     </td>
                     <td className="px-4 py-3">
@@ -119,7 +119,7 @@ export default async function StudentEventsPage({ params }: Props) {
                           className={`rounded-md px-3 py-1.5 text-sm font-medium ${
                             enrolled
                               ? "bg-red-100 text-red-700 hover:bg-red-200"
-                              : "bg-blue-600 text-white hover:bg-blue-700"
+                              : "bg-[var(--st-primary)] text-white hover:bg-[var(--st-primary)]/90"
                           }`}
                         >
                           {enrolled ? "Remove" : "Enroll"}

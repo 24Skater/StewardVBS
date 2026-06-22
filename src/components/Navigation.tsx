@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useBranding } from "./BrandingProvider";
+import { Button, Badge } from "@steward-apps/ui";
 
 export default function Navigation() {
   const { data: session, status } = useSession();
@@ -20,7 +20,7 @@ export default function Navigation() {
 
   if (status === "loading") {
     return (
-      <header className="border-b border-gray-200 bg-white shadow-sm">
+      <header className="border-b border-[var(--st-border)] bg-[var(--st-surface)] shadow-sm">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             {branding.logoUrl && (
@@ -30,14 +30,11 @@ export default function Navigation() {
                 className="h-8 w-auto"
               />
             )}
-            <span
-              className="text-lg font-semibold"
-              style={{ color: branding.primaryColor }}
-            >
+            <span className="text-lg font-semibold text-[var(--st-primary)]">
               {branding.siteName}
             </span>
           </div>
-          <div className="text-sm text-gray-500">Loading...</div>
+          <div className="text-sm text-[var(--st-muted)]">Loading...</div>
         </nav>
       </header>
     );
@@ -45,7 +42,7 @@ export default function Navigation() {
 
   if (!session) {
     return (
-      <header className="border-b border-gray-200 bg-white shadow-sm">
+      <header className="border-b border-[var(--st-border)] bg-[var(--st-surface)] shadow-sm">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3">
             {branding.logoUrl && (
@@ -55,20 +52,13 @@ export default function Navigation() {
                 className="h-8 w-auto"
               />
             )}
-            <span
-              className="text-lg font-semibold"
-              style={{ color: branding.primaryColor }}
-            >
+            <span className="text-lg font-semibold text-[var(--st-primary)]">
               {branding.siteName}
             </span>
           </Link>
-          <Link
-            href="/auth/signin"
-            className="rounded-md px-4 py-2 text-sm text-white hover:opacity-90"
-            style={{ backgroundColor: branding.primaryColor }}
-          >
-            Sign In
-          </Link>
+          <Button asChild variant="primary" size="sm">
+            <Link href="/auth/signin">Sign In</Link>
+          </Button>
         </nav>
       </header>
     );
@@ -78,7 +68,7 @@ export default function Navigation() {
     session.user?.role === "ADMIN" || session.user?.role === "STAFF";
 
   return (
-    <header className="border-b border-gray-200 bg-white shadow-sm">
+    <header className="border-b border-[var(--st-border)] bg-[var(--st-surface)] shadow-sm">
       <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
@@ -94,24 +84,22 @@ export default function Navigation() {
                 />
               )}
               <div>
-                <span
-                  className="text-lg font-semibold"
-                  style={{ color: branding.primaryColor }}
-                >
+                <span className="text-lg font-semibold text-[var(--st-primary)]">
                   {branding.siteName}
                 </span>
                 {branding.tagline && (
-                  <p className="text-xs text-gray-500 -mt-0.5">{branding.tagline}</p>
+                  <p className="text-xs text-[var(--st-muted)] -mt-0.5">{branding.tagline}</p>
                 )}
               </div>
             </Link>
             <div className="flex space-x-4">
               <Link
                 href="/dashboard"
-                className="text-sm font-medium"
-                style={{
-                  color: isActive("/dashboard") ? branding.primaryColor : "#4b5563",
-                }}
+                className={`text-sm font-medium ${
+                  isActive("/dashboard")
+                    ? "text-[var(--st-primary)]"
+                    : "text-[var(--st-muted)]"
+                }`}
               >
                 Dashboard
               </Link>
@@ -119,46 +107,51 @@ export default function Navigation() {
                 <>
                   <Link
                     href="/students"
-                    className="text-sm font-medium"
-                    style={{
-                      color: isActive("/students") ? branding.primaryColor : "#4b5563",
-                    }}
+                    className={`text-sm font-medium ${
+                      isActive("/students")
+                        ? "text-[var(--st-primary)]"
+                        : "text-[var(--st-muted)]"
+                    }`}
                   >
                     Students
                   </Link>
                   <Link
                     href="/checkin"
-                    className="text-sm font-medium"
-                    style={{
-                      color: isActive("/checkin") ? branding.primaryColor : "#4b5563",
-                    }}
+                    className={`text-sm font-medium ${
+                      isActive("/checkin")
+                        ? "text-[var(--st-primary)]"
+                        : "text-[var(--st-muted)]"
+                    }`}
                   >
                     Check-In
                   </Link>
                   <Link
                     href="/attendance"
-                    className="text-sm font-medium"
-                    style={{
-                      color: isActive("/attendance") ? branding.primaryColor : "#4b5563",
-                    }}
+                    className={`text-sm font-medium ${
+                      isActive("/attendance")
+                        ? "text-[var(--st-primary)]"
+                        : "text-[var(--st-muted)]"
+                    }`}
                   >
                     Attendance
                   </Link>
                   <Link
                     href="/schedule"
-                    className="text-sm font-medium"
-                    style={{
-                      color: isActive("/schedule") ? branding.primaryColor : "#4b5563",
-                    }}
+                    className={`text-sm font-medium ${
+                      isActive("/schedule")
+                        ? "text-[var(--st-primary)]"
+                        : "text-[var(--st-muted)]"
+                    }`}
                   >
                     Schedule
                   </Link>
                   <Link
                     href="/reports"
-                    className="text-sm font-medium"
-                    style={{
-                      color: pathname?.startsWith("/reports") ? branding.primaryColor : "#4b5563",
-                    }}
+                    className={`text-sm font-medium ${
+                      pathname?.startsWith("/reports")
+                        ? "text-[var(--st-primary)]"
+                        : "text-[var(--st-muted)]"
+                    }`}
                   >
                     Reports
                   </Link>
@@ -167,10 +160,11 @@ export default function Navigation() {
               {session.user?.role === "ADMIN" && (
                 <Link
                   href="/admin"
-                  className="text-sm font-medium"
-                  style={{
-                    color: pathname?.startsWith("/admin") ? branding.primaryColor : "#4b5563",
-                  }}
+                  className={`text-sm font-medium ${
+                    pathname?.startsWith("/admin")
+                      ? "text-[var(--st-primary)]"
+                      : "text-[var(--st-muted)]"
+                  }`}
                 >
                   Admin
                 </Link>
@@ -178,20 +172,21 @@ export default function Navigation() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-[var(--st-fg)]">
               {session.user?.email}
               {session.user?.role && (
-                <span className="ml-2 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
+                <Badge variant="secondary" className="ml-2">
                   {session.user.role}
-                </span>
+                </Badge>
               )}
             </span>
-            <button
+            <Button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700 hover:bg-gray-200"
+              variant="outline"
+              size="sm"
             >
               Sign Out
-            </button>
+            </Button>
           </div>
         </div>
       </nav>

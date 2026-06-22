@@ -32,7 +32,7 @@ export default async function ScheduleReportPage() {
   } catch {
     return (
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900">Schedule Report</h1>
+        <h1 className="text-2xl font-bold text-[var(--st-fg)]">Schedule Report</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             No active event found. Please activate an event first.
@@ -72,8 +72,8 @@ export default async function ScheduleReportPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Schedule Report</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Schedule Report</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Event schedule for {event.year} {event.theme && `- ${event.theme}`}
           </p>
         </div>
@@ -88,7 +88,7 @@ export default async function ScheduleReportPage() {
           <PrintButton />
           <Link
             href="/reports"
-            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="inline-flex items-center gap-1 rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
@@ -102,7 +102,7 @@ export default async function ScheduleReportPage() {
           </p>
           <Link
             href="/schedule"
-            className="mt-2 inline-block text-sm text-blue-600 hover:text-blue-800"
+            className="mt-2 inline-block text-sm text-[var(--st-primary)] hover:text-blue-800"
           >
             Go to Schedule Manager →
           </Link>
@@ -111,17 +111,17 @@ export default async function ScheduleReportPage() {
         <>
           {/* Summary */}
           <div className="grid gap-4 sm:grid-cols-3 print:hidden">
-            <div className="rounded-lg border border-gray-200 bg-white p-4 text-center">
+            <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-4 text-center">
               <div className="text-3xl font-bold text-purple-600">{sessions.length}</div>
-              <div className="text-sm text-gray-500">Total Sessions</div>
+              <div className="text-sm text-[var(--st-muted)]">Total Sessions</div>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4 text-center">
-              <div className="text-3xl font-bold text-blue-600">{Object.keys(sessionsByDate).length}</div>
-              <div className="text-sm text-gray-500">Days</div>
+            <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-4 text-center">
+              <div className="text-3xl font-bold text-[var(--st-primary)]">{Object.keys(sessionsByDate).length}</div>
+              <div className="text-sm text-[var(--st-muted)]">Days</div>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-4 text-center">
+            <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-4 text-center">
               <div className="text-3xl font-bold text-green-600">{categories.length || 1}</div>
-              <div className="text-sm text-gray-500">Groups</div>
+              <div className="text-sm text-[var(--st-muted)]">Groups</div>
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export default async function ScheduleReportPage() {
             <h1 className="text-xl font-bold">
               Schedule - {event.year} {event.theme && `- ${event.theme}`}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--st-muted)]">
               {sessions.length} sessions | Generated: {new Date().toLocaleDateString()}
             </p>
           </div>
@@ -140,7 +140,7 @@ export default async function ScheduleReportPage() {
             {Object.entries(sessionsByDate)
               .sort(([a], [b]) => a.localeCompare(b))
               .map(([dateKey, daySessions]) => (
-                <div key={dateKey} className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+                <div key={dateKey} className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] overflow-hidden">
                   <div className="bg-purple-50 px-6 py-3 border-b border-purple-100">
                     <h2 className="text-lg font-semibold text-purple-900">
                       {new Date(dateKey).toLocaleDateString("en-US", {
@@ -151,27 +151,27 @@ export default async function ScheduleReportPage() {
                       })}
                     </h2>
                   </div>
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-[var(--st-border)]">
+                    <thead className="bg-[var(--st-bg)]">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                           Time
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                           Session
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                           Location
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                           Group
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
+                    <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
                       {daySessions.map((session) => (
-                        <tr key={session.id} className="hover:bg-gray-50">
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
+                        <tr key={session.id} className="hover:bg-[var(--st-bg)]">
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-fg)]">
                             {session.start.toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -182,10 +182,10 @@ export default async function ScheduleReportPage() {
                               minute: "2-digit",
                             })}
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                          <td className="px-6 py-4 text-sm font-medium text-[var(--st-fg)]">
                             {session.title}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-sm text-[var(--st-muted)]">
                             {session.location || "—"}
                           </td>
                           <td className="px-6 py-4 text-sm">
@@ -194,7 +194,7 @@ export default async function ScheduleReportPage() {
                                 {session.group}
                               </span>
                             ) : (
-                              <span className="text-gray-400">All Groups</span>
+                              <span className="text-[var(--st-muted)]">All Groups</span>
                             )}
                           </td>
                         </tr>

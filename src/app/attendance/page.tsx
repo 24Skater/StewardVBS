@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getActiveEvent } from "@/lib/event";
 import { requireRole } from "@/lib/auth";
@@ -7,6 +6,7 @@ import { getCategories } from "@/lib/categories";
 import { getDayRange } from "@/lib/date-utils";
 import AttendanceControls from "../../components/AttendanceControls";
 import { undoAttendance } from "./actions";
+import { Button } from "@steward-apps/ui";
 
 /* ------------------------------ Helpers ------------------------------ */
 function rangeForDate(iso?: string) {
@@ -38,7 +38,7 @@ export default async function AttendancePage({ searchParams }: PageProps) {
   } catch (error) {
     return (
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Attendance</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Attendance</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             {error instanceof Error
@@ -87,10 +87,10 @@ export default async function AttendancePage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Attendance</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Attendance</h1>
         <Link
           href={exportHref}
-          className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:opacity-80"
         >
           Export CSV
         </Link>
@@ -107,10 +107,10 @@ export default async function AttendancePage({ searchParams }: PageProps) {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr className="text-left text-sm text-gray-600">
+          <thead className="bg-[var(--st-bg)]">
+            <tr className="text-left text-sm text-[var(--st-muted)]">
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Category</th>
               <th className="px-4 py-2">Size</th>
@@ -138,13 +138,14 @@ export default async function AttendancePage({ searchParams }: PageProps) {
                   <form action={undoAttendance}>
                     <input type="hidden" name="id" value={r.id} />
                     <input type="hidden" name="date" value={resolvedSearchParams.date ?? ""} />
-                    <button
+                    <Button
                       type="submit"
-                      className="rounded-md bg-amber-600 px-3 py-1.5 text-white hover:bg-amber-700"
+                      variant="destructive"
+                      size="sm"
                       title="Remove this check-in"
                     >
                       Undo
-                    </button>
+                    </Button>
                   </form>
                 </td>
               </tr>
@@ -152,7 +153,7 @@ export default async function AttendancePage({ searchParams }: PageProps) {
 
             {records.length === 0 && (
               <tr>
-                <td className="px-4 py-6 text-gray-500" colSpan={5}>
+                <td className="px-4 py-6 text-[var(--st-muted)]" colSpan={5}>
                   No attendance records with current filters.
                 </td>
               </tr>
@@ -166,8 +167,8 @@ export default async function AttendancePage({ searchParams }: PageProps) {
 
 function Stat({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <div className="text-sm text-gray-500">{title}</div>
+    <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-4">
+      <div className="text-sm text-[var(--st-muted)]">{title}</div>
       <div className="text-2xl font-semibold">{value}</div>
     </div>
   );

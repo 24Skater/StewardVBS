@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
+import { Button } from "@steward-apps/ui";
 
 type Props = {
   categories: Array<{ name: string }>;
@@ -35,20 +36,20 @@ export default function CheckinControls({ categories }: Props) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
       <div className="flex-1">
-        <label className="block text-sm text-gray-600">Search name</label>
+        <label className="block text-sm text-[var(--st-muted)]">Search name</label>
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Type to search…"
           autoFocus
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-3 text-lg"
+          className="mt-1 w-full rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] text-[var(--st-fg)] px-3 py-3 text-lg"
         />
       </div>
 
       <div>
-        <label className="block text-sm text-gray-600">Category</label>
+        <label className="block text-sm text-[var(--st-muted)]">Category</label>
         <select
-          className="mt-1 w-48 rounded-md border border-gray-300 px-3 py-3"
+          className="mt-1 w-48 rounded-md border border-[var(--st-border)] bg-[var(--st-bg)] text-[var(--st-fg)] px-3 py-3"
           defaultValue={category}
           onChange={(e) => update({ category: e.target.value })}
         >
@@ -61,16 +62,16 @@ export default function CheckinControls({ categories }: Props) {
         </select>
       </div>
 
-      <button
+      <Button
+        variant="outline"
         onClick={() => {
           setQ("");
           update({ q: "", category: "" });
         }}
         disabled={pending}
-        className="h-[46px] rounded-md bg-gray-100 px-4 text-sm hover:bg-gray-200"
       >
         Reset
-      </button>
+      </Button>
     </div>
   );
 }

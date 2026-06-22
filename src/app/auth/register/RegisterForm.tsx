@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@steward-apps/ui";
+import { Input } from "@steward-apps/ui";
 
 interface RegisterFormProps {
   inviteToken?: string;
   invitedEmail?: string;
   invitedRole?: string;
-  primaryColor?: string;
 }
 
 export default function RegisterForm({
   inviteToken,
   invitedEmail,
   invitedRole,
-  primaryColor = "#2563eb",
 }: RegisterFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -89,16 +89,16 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="name"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-[var(--st-fg)]"
         >
           Name (optional)
         </label>
-        <input
+        <Input
           id="name"
           name="name"
           type="text"
           autoComplete="name"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+          className="mt-1"
           placeholder="Your name"
         />
       </div>
@@ -106,11 +106,11 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-[var(--st-fg)]"
         >
           Email address
         </label>
-        <input
+        <Input
           id="email"
           name="email"
           type="email"
@@ -118,18 +118,16 @@ export default function RegisterForm({
           required
           defaultValue={invitedEmail || ""}
           readOnly={!!invitedEmail}
-          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 ${
-            fieldErrors.email
-              ? "border-red-300 focus:border-red-500"
-              : "border-gray-300 focus:border-blue-500"
-          } ${invitedEmail ? "bg-gray-50" : ""}`}
+          className={`mt-1 ${invitedEmail ? "bg-[var(--st-surface)]" : ""} ${
+            fieldErrors.email ? "border-red-300 focus:border-red-500" : ""
+          }`}
           placeholder="you@example.com"
         />
         {fieldErrors.email && (
           <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
         )}
         {invitedEmail && (
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-[var(--st-muted)]">
             This email is set by your invitation
           </p>
         )}
@@ -138,28 +136,26 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-[var(--st-fg)]"
         >
           Password
         </label>
-        <input
+        <Input
           id="password"
           name="password"
           type="password"
           autoComplete="new-password"
           required
           minLength={8}
-          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 ${
-            fieldErrors.password
-              ? "border-red-300 focus:border-red-500"
-              : "border-gray-300 focus:border-blue-500"
+          className={`mt-1 ${
+            fieldErrors.password ? "border-red-300 focus:border-red-500" : ""
           }`}
           placeholder="••••••••"
         />
         {fieldErrors.password && (
           <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
         )}
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-[var(--st-muted)]">
           At least 8 characters with uppercase, lowercase, and a number
         </p>
       </div>
@@ -167,20 +163,20 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="confirmPassword"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-[var(--st-fg)]"
         >
           Confirm Password
         </label>
-        <input
+        <Input
           id="confirmPassword"
           name="confirmPassword"
           type="password"
           autoComplete="new-password"
           required
-          className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none focus:ring-blue-500 ${
+          className={`mt-1 ${
             fieldErrors.confirmPassword
               ? "border-red-300 focus:border-red-500"
-              : "border-gray-300 focus:border-blue-500"
+              : ""
           }`}
           placeholder="••••••••"
         />
@@ -191,15 +187,14 @@ export default function RegisterForm({
         )}
       </div>
 
-      <button
+      <Button
         type="submit"
+        variant="primary"
+        className="w-full"
         disabled={isLoading}
-        className="w-full rounded-md px-4 py-2 text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        style={{ backgroundColor: primaryColor }}
       >
         {isLoading ? "Creating account..." : "Create account"}
-      </button>
+      </Button>
     </form>
   );
 }
-

@@ -8,11 +8,7 @@ import OAuthButtons from "./OAuthButtons";
 
 type AuthMode = "magic-link" | "password";
 
-interface SignInFormProps {
-  primaryColor?: string;
-}
-
-export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps) {
+export default function SignInForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -142,26 +138,26 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       )}
 
       {/* Auth Mode Toggle */}
-      <div className="flex rounded-md border border-gray-300 p-1">
+      <div className="flex rounded-md border border-[var(--st-border)] p-1">
         <button
           type="button"
           onClick={() => setAuthMode("magic-link")}
-          className="flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors"
-          style={{
-            backgroundColor: authMode === "magic-link" ? primaryColor : "transparent",
-            color: authMode === "magic-link" ? "white" : "#4b5563",
-          }}
+          className={`flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors ${
+            authMode === "magic-link"
+              ? "bg-[var(--st-primary)] text-white"
+              : "bg-transparent text-[var(--st-muted)]"
+          }`}
         >
           Magic Link
         </button>
         <button
           type="button"
           onClick={() => setAuthMode("password")}
-          className="flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors"
-          style={{
-            backgroundColor: authMode === "password" ? primaryColor : "transparent",
-            color: authMode === "password" ? "white" : "#4b5563",
-          }}
+          className={`flex-1 rounded px-3 py-1.5 text-sm font-medium transition-colors ${
+            authMode === "password"
+              ? "bg-[var(--st-primary)] text-white"
+              : "bg-transparent text-[var(--st-muted)]"
+          }`}
         >
           Password
         </button>
@@ -170,7 +166,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-[var(--st-fg)]"
         >
           Email address
         </label>
@@ -182,10 +178,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:outline-none"
-          style={{ 
-            "--tw-ring-color": primaryColor,
-          } as React.CSSProperties}
+          className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--st-primary)]"
           placeholder="you@example.com"
         />
       </div>
@@ -194,7 +187,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-[var(--st-fg)]"
           >
             Password
           </label>
@@ -206,7 +199,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:outline-none"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--st-primary)]"
             placeholder="••••••••"
           />
         </div>
@@ -215,8 +208,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-md px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        style={{ backgroundColor: primaryColor }}
+        className="w-full rounded-md bg-[var(--st-primary)] px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[var(--st-primary)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoading
           ? authMode === "magic-link"
@@ -228,12 +220,11 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
       </button>
 
       {authMode === "password" && (
-        <div className="flex flex-col gap-2 text-center text-sm text-gray-600">
+        <div className="flex flex-col gap-2 text-center text-sm text-[var(--st-muted)]">
           <p>
             <Link
               href="/auth/forgot-password"
-              className="font-medium hover:opacity-80"
-              style={{ color: primaryColor }}
+              className="font-medium text-[var(--st-primary)] hover:opacity-80"
             >
               Forgot password?
             </Link>
@@ -242,8 +233,7 @@ export default function SignInForm({ primaryColor = "#2563eb" }: SignInFormProps
             Don&apos;t have an account?{" "}
             <Link
               href="/auth/register"
-              className="font-medium hover:opacity-80"
-              style={{ color: primaryColor }}
+              className="font-medium text-[var(--st-primary)] hover:opacity-80"
             >
               Create one
             </Link>
