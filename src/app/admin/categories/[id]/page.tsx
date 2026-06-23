@@ -144,16 +144,16 @@ export default async function EditCategoryPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Edit Category</h2>
-        <p className="mt-1 text-sm text-gray-600">Update category details.</p>
+        <h2 className="text-2xl font-bold text-[var(--st-fg)]">Edit Category</h2>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">Update category details.</p>
       </div>
 
       <form
         action={updateAction}
-        className="space-y-6 rounded-lg border border-gray-200 bg-white p-6"
+        className="space-y-6 rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6"
       >
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
             Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -162,12 +162,12 @@ export default async function EditCategoryPage({ params }: Props) {
             name="name"
             required
             defaultValue={category.name}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
           />
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="description" className="block text-sm font-medium text-[var(--st-fg)]">
             Description
           </label>
           <textarea
@@ -175,20 +175,20 @@ export default async function EditCategoryPage({ params }: Props) {
             name="description"
             rows={3}
             defaultValue={category.description || ""}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
           />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="color" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="color" className="block text-sm font-medium text-[var(--st-fg)]">
               Color (Hex)
             </label>
             <ColorPicker name="color" defaultValue={category.color || ""} />
           </div>
 
           <div>
-            <label htmlFor="order" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="order" className="block text-sm font-medium text-[var(--st-fg)]">
               Display Order
             </label>
             <input
@@ -197,20 +197,20 @@ export default async function EditCategoryPage({ params }: Props) {
               name="order"
               defaultValue={category.order}
               min="0"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="eventId" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="eventId" className="block text-sm font-medium text-[var(--st-fg)]">
             Event (Optional)
           </label>
           <select
             id="eventId"
             name="eventId"
             defaultValue={category.eventId?.toString() || ""}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
           >
             <option value="">Global (all events)</option>
             {events.map((event) => (
@@ -224,13 +224,13 @@ export default async function EditCategoryPage({ params }: Props) {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
           >
             Save Changes
           </button>
           <a
             href="/admin/categories"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Cancel
           </a>

@@ -33,8 +33,8 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
-      <div className="w-full max-w-md space-y-6 rounded-xl bg-white p-8 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--st-bg)]">
+      <div className="w-full max-w-md space-y-6 rounded-xl bg-[var(--st-surface)] p-8 shadow-lg border border-[var(--st-border)]">
         {/* Logo and Branding */}
         <div className="text-center">
           {settings.logoUrl && (
@@ -46,13 +46,10 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
               />
             </div>
           )}
-          <h1
-            className="text-3xl font-bold"
-            style={{ color: settings.primaryColor }}
-          >
+          <h1 className="text-3xl font-bold text-[var(--st-primary)]">
             {settings.siteName}
           </h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-[var(--st-muted)]">
             {invitation
               ? "You've been invited to join"
               : "Create your account"}
@@ -60,8 +57,8 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
         </div>
 
         {invitation && (
-          <div className="rounded-md bg-blue-50 p-4">
-            <p className="text-sm text-blue-800">
+          <div className="rounded-md bg-[var(--st-surface)] border border-[var(--st-border)] p-4">
+            <p className="text-sm text-[var(--st-fg)]">
               You&apos;ve been invited by{" "}
               <strong>{invitation.inviter.name || invitation.inviter.email}</strong>{" "}
               to join as <strong>{invitation.role}</strong>.
@@ -73,15 +70,13 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
           inviteToken={params.token}
           invitedEmail={invitation?.email}
           invitedRole={invitation?.role}
-          primaryColor={settings.primaryColor}
         />
-        
-        <p className="text-center text-sm text-gray-600">
+
+        <p className="text-center text-sm text-[var(--st-muted)]">
           Already have an account?{" "}
-          <Link 
-            href="/auth/signin" 
-            className="font-medium hover:opacity-80"
-            style={{ color: settings.primaryColor }}
+          <Link
+            href="/auth/signin"
+            className="font-medium text-[var(--st-link)] hover:opacity-80"
           >
             Sign in
           </Link>

@@ -56,15 +56,15 @@ export default async function CategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Student Categories</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-[var(--st-fg)]">Student Categories</h2>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage student categories. Global categories apply to all events, while event-specific
             categories only apply to that event.
           </p>
         </div>
         <Link
           href="/admin/categories/new"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
         >
           Add Category
         </Link>
@@ -72,59 +72,59 @@ export default async function CategoriesPage() {
 
       {/* Global Categories */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">Global Categories</h3>
-        <p className="mt-1 text-sm text-gray-500">
+        <h3 className="text-lg font-semibold text-[var(--st-fg)]">Global Categories</h3>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">
           These categories are available for all events.
         </p>
-        <div className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="mt-4 overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
+          <table className="min-w-full divide-y divide-[var(--st-border)]">
+            <thead className="bg-[var(--st-bg)]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                   Description
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                   Color
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                   Order
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
               {globalCategories.map((category) => (
                 <tr key={category.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--st-fg)]">
                     {category.name}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
+                  <td className="px-6 py-4 text-sm text-[var(--st-muted)]">
                     {category.description || "—"}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm">
                     {category.color && (
                       <div className="flex items-center gap-2">
                         <div
-                          className="h-6 w-6 rounded border border-gray-300"
+                          className="h-6 w-6 rounded border border-[var(--st-border)]"
                           style={{ backgroundColor: category.color }}
                         />
-                        <span className="text-gray-600">{category.color}</span>
+                        <span className="text-[var(--st-muted)]">{category.color}</span>
                       </div>
                     )}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                     {category.order}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/admin/categories/${category.id}`}
-                        className="text-blue-600 hover:text-blue-900"
+                        className="text-[var(--st-primary)] hover:text-blue-900"
                       >
                         Edit
                       </Link>
@@ -140,7 +140,7 @@ export default async function CategoriesPage() {
               ))}
               {globalCategories.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-sm text-[var(--st-muted)]">
                     No global categories. Create one to get started.
                   </td>
                 </tr>
@@ -153,47 +153,47 @@ export default async function CategoriesPage() {
       {/* Event-Specific Categories */}
       {eventCategories.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Event-Specific Categories</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <h3 className="text-lg font-semibold text-[var(--st-fg)]">Event-Specific Categories</h3>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             These categories are only available for specific events.
           </p>
-          <div className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="mt-4 overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
+            <table className="min-w-full divide-y divide-[var(--st-border)]">
+              <thead className="bg-[var(--st-bg)]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Event
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Description
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
                 {eventCategories.map((category) => {
                   const event = eventMap.get(category.eventId!);
                   return (
                     <tr key={category.id}>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[var(--st-fg)]">
                         {category.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                         {event ? `${event.year} ${event.theme ? `• ${event.theme}` : ""}` : "—"}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-[var(--st-muted)]">
                         {category.description || "—"}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/admin/categories/${category.id}`}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-[var(--st-primary)] hover:text-blue-900"
                           >
                             Edit
                           </Link>

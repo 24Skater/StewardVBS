@@ -6,6 +6,7 @@ import { getTodayRange } from "@/lib/date-utils";
 import CheckinControls from "@/components/CheckinControls";
 import { escapeHtml } from "@/lib/xss-protection";
 import { checkInById } from "./actions";
+import { Button } from "@steward-apps/ui";
 
 type PageProps = {
   searchParams: Promise<{
@@ -27,7 +28,7 @@ export default async function CheckInPage({ searchParams }: PageProps) {
   } catch (error) {
     return (
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Check-In</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Check-In</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             {error instanceof Error
@@ -75,7 +76,7 @@ export default async function CheckInPage({ searchParams }: PageProps) {
       <CheckinControls categories={categories} />
 
       {!hasFilter && (
-        <div className="rounded-md bg-blue-50 border border-blue-200 p-4 text-sm text-blue-800">
+        <div className="rounded-md bg-[var(--st-primary)]/10 border border-[var(--st-border)] p-4 text-sm text-[var(--st-fg)]">
           Search by name (2+ characters) or select a category to load students.
         </div>
       )}
@@ -91,7 +92,7 @@ export default async function CheckInPage({ searchParams }: PageProps) {
               key={s.id}
               action={action}
               className={`flex items-center justify-between rounded-xl border p-4 ${
-                present ? "bg-green-50 border-green-200" : "bg-white"
+                present ? "bg-green-50 border-green-200" : "bg-[var(--st-surface)]"
               }`}
             >
               <div className="min-w-0 flex-1 pr-3">
@@ -110,7 +111,7 @@ export default async function CheckInPage({ searchParams }: PageProps) {
                     </span>
                   )}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-[var(--st-muted)]">
                   {escapeHtml(s.category)} • {escapeHtml(s.size)}
                 </div>
                 {hasAlert && (
@@ -120,24 +121,32 @@ export default async function CheckInPage({ searchParams }: PageProps) {
                 )}
               </div>
 
-              <button
-                type="submit"
-                className={
-                  present
-                    ? "shrink-0 rounded-md bg-gray-200 px-4 py-2 text-gray-700 cursor-default"
-                    : "shrink-0 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                }
-                disabled={present}
-                title={present ? "Already checked in today" : "Check in now"}
-              >
-                {present ? "Present" : "Check In"}
-              </button>
+              {present ? (
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  size="sm"
+                  disabled
+                  title="Already checked in today"
+                >
+                  Present
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="sm"
+                  title="Check in now"
+                >
+                  Check In
+                </Button>
+              )}
             </form>
           );
         })}
 
         {hasFilter && students.length === 0 && (
-          <div className="text-gray-500">No students match your search.</div>
+          <div className="text-[var(--st-muted)]">No students match your search.</div>
         )}
       </div>
     </div>

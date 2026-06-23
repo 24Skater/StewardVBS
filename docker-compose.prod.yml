@@ -27,9 +27,7 @@ services:
       retries: 5
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: vbs-app:latest
     ports:
       - "${PORT:-3000}:3000"
     environment:

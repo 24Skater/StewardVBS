@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@steward-apps/ui";
 
-interface SetupFormProps {
-  primaryColor: string;
-}
+interface SetupFormProps {}
 
-export default function SetupForm({ primaryColor }: SetupFormProps) {
+export default function SetupForm({}: SetupFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +72,7 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
       )}
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
           Full Name
         </label>
         <input
@@ -83,12 +82,12 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
           required
           autoComplete="name"
           placeholder="John Smith"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--st-primary)]"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="block text-sm font-medium text-[var(--st-fg)]">
           Email Address
         </label>
         <input
@@ -98,12 +97,12 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
           required
           autoComplete="email"
           placeholder="admin@yourchurch.org"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--st-primary)]"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="password" className="block text-sm font-medium text-[var(--st-fg)]">
           Password
         </label>
         <input
@@ -113,15 +112,15 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
           required
           autoComplete="new-password"
           placeholder="••••••••"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--st-primary)]"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-[var(--st-muted)]">
           At least 8 characters
         </p>
       </div>
 
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-[var(--st-fg)]">
           Confirm Password
         </label>
         <input
@@ -131,16 +130,11 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
           required
           autoComplete="new-password"
           placeholder="••••••••"
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--st-primary)]"
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full rounded-md px-4 py-3 text-white font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
-        style={{ backgroundColor: primaryColor }}
-      >
+      <Button type="submit" variant="primary" className="w-full" disabled={isLoading}>
         {isLoading ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
@@ -164,7 +158,7 @@ export default function SetupForm({ primaryColor }: SetupFormProps) {
         ) : (
           "Create Admin Account"
         )}
-      </button>
+      </Button>
     </form>
   );
 }

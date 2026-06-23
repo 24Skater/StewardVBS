@@ -28,8 +28,8 @@ export default async function SignInPage({
   const settings = await getSettings();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
-      <div className="w-full max-w-md space-y-6 rounded-xl bg-white p-8 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--st-bg)]">
+      <div className="w-full max-w-md space-y-6 rounded-xl bg-[var(--st-surface)] p-8 shadow-lg">
         {/* Setup Complete Message */}
         {setupComplete && (
           <div className="rounded-md bg-green-50 border border-green-200 p-4">
@@ -59,40 +59,37 @@ export default async function SignInPage({
               />
             </div>
           )}
-          <h1
-            className="text-3xl font-bold"
-            style={{ color: settings.primaryColor }}
-          >
+          <h1 className="text-3xl font-bold text-[var(--st-primary)]">
             {settings.siteName}
           </h1>
           {settings.tagline && (
-            <p className="mt-1 text-sm text-gray-500">{settings.tagline}</p>
+            <p className="mt-1 text-sm text-[var(--st-muted)]">{settings.tagline}</p>
           )}
           {settings.churchName && (
-            <p className="mt-2 text-sm text-gray-600">{settings.churchName}</p>
+            <p className="mt-2 text-sm text-[var(--st-fg)]">{settings.churchName}</p>
           )}
-          <p className="mt-4 text-sm text-gray-600">
+          <p className="mt-4 text-sm text-[var(--st-muted)]">
             Sign in to your account
           </p>
         </div>
 
         {/* Welcome Message */}
         {settings.welcomeMessage && (
-          <div className="rounded-lg bg-gray-50 p-4 text-center">
-            <p className="text-sm text-gray-600">{settings.welcomeMessage}</p>
+          <div className="rounded-lg bg-[var(--st-bg)] p-4 text-center">
+            <p className="text-sm text-[var(--st-muted)]">{settings.welcomeMessage}</p>
           </div>
         )}
 
         {/* Sign In Form */}
-        <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
-          <SignInForm primaryColor={settings.primaryColor} />
+        <Suspense fallback={<div className="text-center text-[var(--st-muted)]">Loading...</div>}>
+          <SignInForm />
         </Suspense>
 
         {/* Back to Home */}
         <div className="text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+            className="inline-flex items-center gap-1 text-sm text-[var(--st-muted)] hover:text-[var(--st-fg)]"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Home
           </Link>

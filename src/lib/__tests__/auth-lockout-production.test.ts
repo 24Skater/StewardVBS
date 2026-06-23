@@ -1,4 +1,9 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest'
+
+vi.mock('../redis', () => ({
+  getRedis: () => { throw new Error('Redis not available') },
+}))
+
 import {
   recordLoginAttempt,
   isAccountLocked,

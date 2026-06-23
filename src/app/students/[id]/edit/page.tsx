@@ -9,6 +9,7 @@ import { auditLog } from "@/lib/audit-log";
 import DeleteButton from "@/components/DeleteButton";
 import ImageUpload from "@/components/ImageUpload";
 import { ArrowLeft, Users, ShieldAlert, GraduationCap } from "lucide-react";
+import { Button, Input } from "@steward-apps/ui";
 
 async function updateStudent(id: number, formData: FormData) {
   "use server";
@@ -139,40 +140,39 @@ export default async function EditStudentPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Student</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Edit Student</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             {student.name}
           </p>
         </div>
-        <Link
-          href={`/students/${id}`}
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to profile
+        <Link href={`/students/${id}`}>
+          <Button variant="secondary" size="sm">
+            <ArrowLeft className="h-4 w-4" /> Back to profile
+          </Button>
         </Link>
       </div>
 
       <form action={updateAction} className="space-y-8">
         {/* Basic Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Basic Information</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
                 Full Name <span className="text-red-500">*</span>
               </label>
-              <input
+              <Input
                 type="text"
                 id="name"
                 name="name"
                 required
                 defaultValue={student.name}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="category" className="block text-sm font-medium text-[var(--st-fg)]">
                 Category/Group <span className="text-red-500">*</span>
               </label>
               <select
@@ -180,7 +180,7 @@ export default async function EditStudentPage({ params }: Props) {
                 name="category"
                 required
                 defaultValue={student.category}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
@@ -192,14 +192,14 @@ export default async function EditStudentPage({ params }: Props) {
             </div>
 
             <div>
-              <label htmlFor="size" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="size" className="block text-sm font-medium text-[var(--st-fg)]">
                 Shirt Size
               </label>
               <select
                 id="size"
                 name="size"
                 defaultValue={student.size}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 {shirtSizes.map((s) => (
                   <option key={s} value={s}>
@@ -210,37 +210,36 @@ export default async function EditStudentPage({ params }: Props) {
             </div>
 
             <div>
-              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-[var(--st-fg)]">
                 Date of Birth
               </label>
-              <input
+              <Input
                 type="date"
                 id="dateOfBirth"
                 name="dateOfBirth"
                 defaultValue={dobValue}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div>
-              <label htmlFor="grade" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="grade" className="block text-sm font-medium text-[var(--st-fg)]">
                 Grade/Year
               </label>
-              <input
+              <Input
                 type="text"
                 id="grade"
                 name="grade"
                 defaultValue={student.grade || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
-
           </div>
         </div>
 
         {/* Profile Photo */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Photo</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Profile Photo</h2>
           <ImageUpload
             name="profileImageUrl"
             currentImage={student.profileImageUrl}
@@ -248,12 +247,12 @@ export default async function EditStudentPage({ params }: Props) {
         </div>
 
         {/* Quick Links for Related Management */}
-        <div className="rounded-lg border border-blue-100 bg-blue-50 p-6">
-          <h2 className="text-lg font-semibold text-blue-900 mb-4">Manage Related Information</h2>
+        <div className="rounded-lg border border-[var(--st-primary)]/20 bg-[var(--st-primary)]/10 p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Manage Related Information</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             <Link
               href={`/students/${id}/parents`}
-              className="flex items-center gap-2 rounded-md border border-blue-200 bg-white px-4 py-3 text-sm font-medium text-blue-700 hover:bg-blue-50"
+              className="flex items-center gap-2 rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-3 text-sm font-medium text-[var(--st-primary)] hover:bg-[var(--st-bg)]"
             >
               <Users className="h-4 w-4" /> Parents/Guardians
             </Link>
@@ -273,45 +272,45 @@ export default async function EditStudentPage({ params }: Props) {
         </div>
 
         {/* Parent/Guardian Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Parent/Guardian Information</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Parent/Guardian Information</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="parentName" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentName" className="block text-sm font-medium text-[var(--st-fg)]">
                 Parent/Guardian Name
               </label>
-              <input
+              <Input
                 type="text"
                 id="parentName"
                 name="parentName"
                 defaultValue={student.parentName || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div>
-              <label htmlFor="parentPhone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentPhone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Phone Number
               </label>
-              <input
+              <Input
                 type="tel"
                 id="parentPhone"
                 name="parentPhone"
                 defaultValue={student.parentPhone || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="parentEmail" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentEmail" className="block text-sm font-medium text-[var(--st-fg)]">
                 Email Address
               </label>
-              <input
+              <Input
                 type="email"
                 id="parentEmail"
                 name="parentEmail"
                 defaultValue={student.parentEmail || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
           </div>
@@ -325,12 +324,12 @@ export default async function EditStudentPage({ params }: Props) {
               <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-700">
                 Contact Name
               </label>
-              <input
+              <Input
                 type="text"
                 id="emergencyContact"
                 name="emergencyContact"
                 defaultValue={student.emergencyContact || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
@@ -338,12 +337,12 @@ export default async function EditStudentPage({ params }: Props) {
               <label htmlFor="emergencyPhone" className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
-              <input
+              <Input
                 type="tel"
                 id="emergencyPhone"
                 name="emergencyPhone"
                 defaultValue={student.emergencyPhone || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
@@ -351,12 +350,12 @@ export default async function EditStudentPage({ params }: Props) {
               <label htmlFor="emergencyRelationship" className="block text-sm font-medium text-gray-700">
                 Relationship
               </label>
-              <input
+              <Input
                 type="text"
                 id="emergencyRelationship"
                 name="emergencyRelationship"
                 defaultValue={student.emergencyRelationship || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
           </div>
@@ -375,7 +374,7 @@ export default async function EditStudentPage({ params }: Props) {
                 name="allergies"
                 rows={2}
                 defaultValue={student.allergies || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
@@ -388,7 +387,7 @@ export default async function EditStudentPage({ params }: Props) {
                 name="medicalNotes"
                 rows={2}
                 defaultValue={student.medicalNotes || ""}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
@@ -398,9 +397,9 @@ export default async function EditStudentPage({ params }: Props) {
                 id="photoConsent"
                 name="photoConsent"
                 defaultChecked={student.photoConsent}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
               />
-              <label htmlFor="photoConsent" className="text-sm text-gray-700">
+              <label htmlFor="photoConsent" className="text-sm text-[var(--st-fg)]">
                 <span className="font-medium">Photo consent granted</span> — I give permission
                 for this student to be photographed during VBS activities.
               </label>
@@ -409,10 +408,10 @@ export default async function EditStudentPage({ params }: Props) {
         </div>
 
         {/* Additional Notes */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Notes</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Additional Notes</h2>
           <div>
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="notes" className="block text-sm font-medium text-[var(--st-fg)]">
               Notes
             </label>
             <textarea
@@ -420,24 +419,16 @@ export default async function EditStudentPage({ params }: Props) {
               name="notes"
               rows={3}
               defaultValue={student.notes || ""}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
         </div>
 
         {/* Submit */}
         <div className="flex gap-4">
-          <button
-            type="submit"
-            className="rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Save Changes
-          </button>
-          <Link
-            href={`/students/${id}`}
-            className="rounded-md border border-gray-300 bg-white px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
+          <Button type="submit" variant="primary">Save Changes</Button>
+          <Link href={`/students/${id}`}>
+            <Button variant="outline">Cancel</Button>
           </Link>
         </div>
       </form>
@@ -458,4 +449,3 @@ export default async function EditStudentPage({ params }: Props) {
     </div>
   );
 }
-

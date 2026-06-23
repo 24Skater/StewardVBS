@@ -1,5 +1,14 @@
-import { describe, it, expect } from "vitest";
-import { formatChurchAddress, generateWebhookSecret } from "../settings";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+
+const { mockUpsert } = vi.hoisted(() => ({ mockUpsert: vi.fn() }));
+
+vi.mock("../prisma", () => ({
+  prisma: {
+    appSettings: { upsert: mockUpsert },
+  },
+}));
+
+import { formatChurchAddress, generateWebhookSecret, getSettings, updateSettings } from "../settings";
 import type { AppSettings } from "../settings";
 
 function makeSettings(overrides: Partial<AppSettings> = {}): AppSettings {
@@ -89,5 +98,72 @@ describe("generateWebhookSecret", () => {
     const a = generateWebhookSecret();
     const b = generateWebhookSecret();
     expect(a).not.toBe(b);
+  });
+});
+
+describe("getSettings", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("returns settings from Prisma on success", async () => {
+    const fake = makeSettings();
+    mockUpsert.mockResolvedValue(fake);
+    const result = await getSettings();
+    expect(result.siteName).toBe("Steward VBS");
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: "singleton" } })
+    );
+  });
+
+  it("throws a friendly error when Prisma returns P1001", async () => {
+    const err = Object.assign(new Error("connection refused"), { code: "P1001" });
+    mockUpsert.mockRejectedValue(err);
+    await expect(getSettings()).rejects.toThrow("Database connection failed");
+  });
+
+  it("throws a friendly error when message includes cant-reach-database", async () => {
+    const err = new Error("Can't reach database server at `localhost:5432`");
+    mockUpsert.mockRejectedValue(err);
+    await expect(getSettings()).rejects.toThrow("Database connection failed");
+  });
+
+  it("rethrows other Prisma errors unchanged", async () => {
+    const err = new Error("unique constraint violated");
+    mockUpsert.mockRejectedValue(err);
+    await expect(getSettings()).rejects.toThrow("unique constraint violated");
+  });
+});
+
+describe("updateSettings", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("calls prisma upsert and returns the result", async () => {
+    const fake = makeSettings({ siteName: "My VBS" });
+    mockUpsert.mockResolvedValue(fake);
+    const result = await updateSettings({ siteName: "My VBS" });
+    expect(result.siteName).toBe("My VBS");
+    expect(mockUpsert).toHaveBeenCalled();
+  });
+
+  it("uses defaults in the create block when fields are omitted", async () => {
+    const fake = makeSettings();
+    mockUpsert.mockResolvedValue(fake);
+    await updateSettings({});
+    const call = mockUpsert.mock.calls[0][0];
+    expect(call.create.siteName).toBe("Steward VBS");
+    expect(call.create.primaryColor).toBe("#E8B847");
+    expect(call.create.googleFormsEnabled).toBe(false);
+  });
+
+  it("passes provided values through in the create block", async () => {
+    const fake = makeSettings({ siteName: "Override VBS" });
+    mockUpsert.mockResolvedValue(fake);
+    await updateSettings({ siteName: "Override VBS", primaryColor: "#123456" });
+    const call = mockUpsert.mock.calls[0][0];
+    expect(call.create.siteName).toBe("Override VBS");
+    expect(call.create.primaryColor).toBe("#123456");
   });
 });

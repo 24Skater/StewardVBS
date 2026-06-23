@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getActiveEvent } from "@/lib/event";
 import { requireAuth } from "@/lib/auth";
 import { Users, DollarSign, Clock, CheckCircle2, BarChart3, ClipboardList, Calendar, Settings } from "lucide-react";
+import { Button } from "@steward-apps/ui";
 
 export default async function Dashboard() {
   await requireAuth();
@@ -134,48 +135,42 @@ export default async function Dashboard() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="mt-1 text-sm text-gray-600">
+            <h1 className="text-3xl font-bold text-[var(--st-fg)]">Dashboard</h1>
+            <p className="mt-1 text-sm text-[var(--st-muted)]">
               {event.year} {event.theme && `• ${event.theme}`}
             </p>
           </div>
           <div className="flex gap-2">
-            <Link
-              href="/students/new"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              + Add Student
-            </Link>
-            <Link
-              href="/checkin"
-              className="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
-            >
-              Check-In
-            </Link>
+            <Button asChild variant="primary" size="sm">
+              <Link href="/students/new">+ Add Student</Link>
+            </Button>
+            <Button asChild variant="secondary" size="sm">
+              <Link href="/checkin">Check-In</Link>
+            </Button>
           </div>
         </div>
 
         {/* Main Stats */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-blue-50 to-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-gradient-to-br from-[var(--st-primary)]/10 to-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Total Students</p>
-                <p className="mt-1 text-4xl font-bold text-blue-600">{totalStudents}</p>
+                <p className="text-sm font-medium text-[var(--st-muted)]">Total Students</p>
+                <p className="mt-1 text-4xl font-bold text-[var(--st-primary)]">{totalStudents}</p>
               </div>
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
-                <Users className="h-6 w-6 text-blue-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--st-primary)]/10">
+                <Users className="h-6 w-6 text-[var(--st-primary)]" />
               </div>
             </div>
-            <Link href="/students" className="mt-3 block text-sm text-blue-600 hover:underline">
+            <Link href="/students" className="mt-3 block text-sm text-[var(--st-primary)] hover:underline">
               View all students
             </Link>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-green-50 to-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-gradient-to-br from-green-50 to-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Paid</p>
+                <p className="text-sm font-medium text-[var(--st-muted)]">Paid</p>
                 <p className="mt-1 text-4xl font-bold text-green-600">{paidCount}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
@@ -183,20 +178,20 @@ export default async function Dashboard() {
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2">
-              <div className="h-2 flex-1 rounded-full bg-gray-200">
+              <div className="h-2 flex-1 rounded-full bg-[var(--st-border)]">
                 <div
                   className="h-2 rounded-full bg-green-500"
                   style={{ width: `${paymentPercentage}%` }}
                 />
               </div>
-              <span className="text-sm text-gray-500">{paymentPercentage}%</span>
+              <span className="text-sm text-[var(--st-muted)]">{paymentPercentage}%</span>
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-amber-50 to-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-gradient-to-br from-amber-50 to-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Unpaid</p>
+                <p className="text-sm font-medium text-[var(--st-muted)]">Unpaid</p>
                 <p className="mt-1 text-4xl font-bold text-amber-600">{unpaidCount}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">
@@ -208,17 +203,17 @@ export default async function Dashboard() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-purple-50 to-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-gradient-to-br from-purple-50 to-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-500">Today&apos;s Check-ins</p>
+                <p className="text-sm font-medium text-[var(--st-muted)]">Today&apos;s Check-ins</p>
                 <p className="mt-1 text-4xl font-bold text-purple-600">{todayAttendance}</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
                 <CheckCircle2 className="h-6 w-6 text-purple-600" />
               </div>
             </div>
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-[var(--st-muted)]">
               {totalAttendance} total check-ins this event
             </p>
           </div>
@@ -227,18 +222,18 @@ export default async function Dashboard() {
         {/* Charts Row */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Students by Category */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Students by Category</h2>
-              <Link href="/reports/students" className="text-sm text-blue-600 hover:underline">
+              <h2 className="text-lg font-semibold text-[var(--st-fg)]">Students by Category</h2>
+              <Link href="/reports/students" className="text-sm text-[var(--st-primary)] hover:underline">
                 View Report
               </Link>
             </div>
             <div className="space-y-3">
               {categoryBreakdown.map((cat) => (
                 <div key={cat.name} className="flex items-center gap-3">
-                  <div className="w-24 text-sm text-gray-600 truncate">{cat.name}</div>
-                  <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="w-24 text-sm text-[var(--st-muted)] truncate">{cat.name}</div>
+                  <div className="flex-1 h-6 bg-[var(--st-bg)] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{
@@ -247,30 +242,30 @@ export default async function Dashboard() {
                       }}
                     />
                   </div>
-                  <div className="w-8 text-sm font-medium text-gray-900 text-right">
+                  <div className="w-8 text-sm font-medium text-[var(--st-fg)] text-right">
                     {cat.count}
                   </div>
                 </div>
               ))}
               {categoryBreakdown.length === 0 && (
-                <p className="text-sm text-gray-500 text-center py-4">No categories yet</p>
+                <p className="text-sm text-[var(--st-muted)] text-center py-4">No categories yet</p>
               )}
             </div>
           </div>
 
           {/* Students by Teacher */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Students by Teacher</h2>
-              <Link href="/admin/teachers" className="text-sm text-blue-600 hover:underline">
+              <h2 className="text-lg font-semibold text-[var(--st-fg)]">Students by Teacher</h2>
+              <Link href="/admin/teachers" className="text-sm text-[var(--st-primary)] hover:underline">
                 Manage Teachers
               </Link>
             </div>
             <div className="space-y-3">
               {teacherBreakdown.map((teacher) => (
                 <div key={teacher.name} className="flex items-center gap-3">
-                  <div className="w-24 text-sm text-gray-600 truncate">{teacher.name}</div>
-                  <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="w-24 text-sm text-[var(--st-muted)] truncate">{teacher.name}</div>
+                  <div className="flex-1 h-6 bg-[var(--st-bg)] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-indigo-500 rounded-full transition-all duration-500"
                       style={{
@@ -278,15 +273,15 @@ export default async function Dashboard() {
                       }}
                     />
                   </div>
-                  <div className="w-8 text-sm font-medium text-gray-900 text-right">
+                  <div className="w-8 text-sm font-medium text-[var(--st-fg)] text-right">
                     {teacher.count}
                   </div>
                 </div>
               ))}
               {teacherBreakdown.length === 0 && (
-                <p className="text-sm text-gray-500 text-center py-4">
+                <p className="text-sm text-[var(--st-muted)] text-center py-4">
                   No teachers assigned yet.{" "}
-                  <Link href="/admin/teachers/new" className="text-blue-600 hover:underline">
+                  <Link href="/admin/teachers/new" className="text-[var(--st-primary)] hover:underline">
                     Add teachers
                   </Link>
                 </p>
@@ -298,12 +293,12 @@ export default async function Dashboard() {
         {/* Age Distribution & Recent Students */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Age Distribution */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Age Distribution</h2>
+          <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+            <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Age Distribution</h2>
             <div className="flex items-end justify-between h-40 gap-2">
               {ageBreakdown.map((age) => (
                 <div key={age.range} className="flex-1 flex flex-col items-center">
-                  <div className="text-xs font-medium text-gray-900 mb-1">{age.count}</div>
+                  <div className="text-xs font-medium text-[var(--st-fg)] mb-1">{age.count}</div>
                   <div
                     className="w-full bg-gradient-to-t from-teal-500 to-teal-400 rounded-t-md transition-all duration-500"
                     style={{
@@ -311,22 +306,22 @@ export default async function Dashboard() {
                       minHeight: age.count > 0 ? "8px" : "0",
                     }}
                   />
-                  <div className="text-xs text-gray-500 mt-2 whitespace-nowrap">{age.range}</div>
+                  <div className="text-xs text-[var(--st-muted)] mt-2 whitespace-nowrap">{age.range}</div>
                 </div>
               ))}
             </div>
             {ageBreakdown.length === 0 && (
-              <p className="text-sm text-gray-500 text-center py-8">
+              <p className="text-sm text-[var(--st-muted)] text-center py-8">
                 No age data available
               </p>
             )}
           </div>
 
           {/* Recently Enrolled */}
-          <div className="rounded-xl border border-gray-200 bg-white p-6">
+          <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Recently Enrolled</h2>
-              <Link href="/students" className="text-sm text-blue-600 hover:underline">
+              <h2 className="text-lg font-semibold text-[var(--st-fg)]">Recently Enrolled</h2>
+              <Link href="/students" className="text-sm text-[var(--st-primary)] hover:underline">
                 View All
               </Link>
             </div>
@@ -335,26 +330,26 @@ export default async function Dashboard() {
                 <Link
                   key={student.id}
                   href={`/students/${student.id}`}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-[var(--st-bg)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 font-medium">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--st-primary)]/10 text-[var(--st-primary)] font-medium">
                       {student.name.charAt(0)}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">{student.name}</div>
-                      <div className="text-xs text-gray-500">{student.category}</div>
+                      <div className="font-medium text-[var(--st-fg)]">{student.name}</div>
+                      <div className="text-xs text-[var(--st-muted)]">{student.category}</div>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-[var(--st-muted)]">
                     {formatTimeAgo(student.createdAt)}
                   </div>
                 </Link>
               ))}
               {recentStudents.length === 0 && (
-                <p className="text-sm text-gray-500 text-center py-4">
+                <p className="text-sm text-[var(--st-muted)] text-center py-4">
                   No students enrolled yet.{" "}
-                  <Link href="/students/new" className="text-blue-600 hover:underline">
+                  <Link href="/students/new" className="text-[var(--st-primary)] hover:underline">
                     Add your first student
                   </Link>
                 </p>
@@ -364,12 +359,12 @@ export default async function Dashboard() {
         </div>
 
         {/* Payment Breakdown */}
-        <div className="rounded-xl border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Overview</h2>
+        <div className="rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Payment Overview</h2>
           <div className="grid gap-6 sm:grid-cols-3">
-            <div className="text-center p-4 rounded-lg bg-gray-50">
-              <div className="text-3xl font-bold text-gray-900">{totalStudents}</div>
-              <div className="text-sm text-gray-500">Total Enrolled</div>
+            <div className="text-center p-4 rounded-lg bg-[var(--st-bg)]">
+              <div className="text-3xl font-bold text-[var(--st-fg)]">{totalStudents}</div>
+              <div className="text-sm text-[var(--st-muted)]">Total Enrolled</div>
             </div>
             <div className="text-center p-4 rounded-lg bg-green-50">
               <div className="text-3xl font-bold text-green-600">{paidCount}</div>
@@ -381,7 +376,7 @@ export default async function Dashboard() {
             </div>
           </div>
           {/* Visual bar */}
-          <div className="mt-4 h-4 w-full rounded-full bg-gray-200 overflow-hidden flex">
+          <div className="mt-4 h-4 w-full rounded-full bg-[var(--st-border)] overflow-hidden flex">
             <div
               className="bg-green-500 transition-all duration-500"
               style={{ width: `${paymentPercentage}%` }}
@@ -391,7 +386,7 @@ export default async function Dashboard() {
               style={{ width: `${100 - paymentPercentage}%` }}
             />
           </div>
-          <div className="mt-2 flex justify-between text-xs text-gray-500">
+          <div className="mt-2 flex justify-between text-xs text-[var(--st-muted)]">
             <span className="flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-green-500" /> Paid</span>
             <span className="flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-amber-400" /> Pending</span>
           </div>
@@ -401,53 +396,53 @@ export default async function Dashboard() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/reports"
-            className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all"
+            className="flex items-center gap-3 p-4 rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] hover:border-[var(--st-primary)]/50 hover:shadow-md transition-all"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-              <BarChart3 className="h-6 w-6 text-blue-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--st-primary)]/10">
+              <BarChart3 className="h-6 w-6 text-[var(--st-primary)]" />
             </div>
             <div>
-              <div className="font-medium text-gray-900">Reports</div>
-              <div className="text-xs text-gray-500">Generate & export</div>
+              <div className="font-medium text-[var(--st-fg)]">Reports</div>
+              <div className="text-xs text-[var(--st-muted)]">Generate & export</div>
             </div>
           </Link>
 
           <Link
             href="/attendance"
-            className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-green-300 hover:shadow-md transition-all"
+            className="flex items-center gap-3 p-4 rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] hover:border-green-300 hover:shadow-md transition-all"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
               <ClipboardList className="h-6 w-6 text-green-600" />
             </div>
             <div>
-              <div className="font-medium text-gray-900">Attendance</div>
-              <div className="text-xs text-gray-500">Track & manage</div>
+              <div className="font-medium text-[var(--st-fg)]">Attendance</div>
+              <div className="text-xs text-[var(--st-muted)]">Track & manage</div>
             </div>
           </Link>
 
           <Link
             href="/schedule"
-            className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-purple-300 hover:shadow-md transition-all"
+            className="flex items-center gap-3 p-4 rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] hover:border-purple-300 hover:shadow-md transition-all"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
               <Calendar className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <div className="font-medium text-gray-900">Schedule</div>
-              <div className="text-xs text-gray-500">Event calendar</div>
+              <div className="font-medium text-[var(--st-fg)]">Schedule</div>
+              <div className="text-xs text-[var(--st-muted)]">Event calendar</div>
             </div>
           </Link>
 
           <Link
             href="/admin"
-            className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 bg-white hover:border-amber-300 hover:shadow-md transition-all"
+            className="flex items-center gap-3 p-4 rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)] hover:border-amber-300 hover:shadow-md transition-all"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100">
               <Settings className="h-6 w-6 text-amber-600" />
             </div>
             <div>
-              <div className="font-medium text-gray-900">Admin</div>
-              <div className="text-xs text-gray-500">Settings & config</div>
+              <div className="font-medium text-[var(--st-fg)]">Admin</div>
+              <div className="text-xs text-[var(--st-muted)]">Settings & config</div>
             </div>
           </Link>
         </div>
@@ -456,7 +451,7 @@ export default async function Dashboard() {
   } catch (error) {
     return (
       <div className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Dashboard</h1>
         <div className="rounded-md bg-yellow-50 p-4">
           <p className="text-sm text-yellow-800">
             {error instanceof Error

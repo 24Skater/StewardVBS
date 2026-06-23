@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Button } from "@steward-apps/ui";
 import { Download, Printer, Check, X, ArrowLeft } from "lucide-react";
 
 interface AttendanceReportBuilderProps {
@@ -108,11 +109,11 @@ export default function AttendanceReportBuilder({
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Report Options</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Report Options</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="date" className="block text-sm font-medium text-[var(--st-fg)]">
               Date
             </label>
             <input
@@ -120,7 +121,7 @@ export default function AttendanceReportBuilder({
               id="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
             {availableDates.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1">
@@ -131,8 +132,8 @@ export default function AttendanceReportBuilder({
                     onClick={() => setSelectedDate(date)}
                     className={`text-xs px-2 py-1 rounded ${
                       selectedDate === date
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-[var(--st-primary)]/10 text-[var(--st-primary)]"
+                        : "bg-[var(--st-bg)] text-[var(--st-muted)] hover:opacity-80"
                     }`}
                   >
                     {new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
@@ -143,14 +144,14 @@ export default function AttendanceReportBuilder({
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="category" className="block text-sm font-medium text-[var(--st-fg)]">
               Category/Group
             </label>
             <select
               id="category"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -162,14 +163,14 @@ export default function AttendanceReportBuilder({
           </div>
 
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="status" className="block text-sm font-medium text-[var(--st-fg)]">
               Status Filter
             </label>
             <select
               id="status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             >
               <option value="all">All Students</option>
               <option value="checkedIn">Checked In Only</option>
@@ -181,17 +182,16 @@ export default function AttendanceReportBuilder({
 
       {/* Generate Button */}
       <div className="flex items-center gap-4">
-        <button
-          type="button"
+        <Button
+          variant="primary"
           onClick={generateReport}
           disabled={loading}
-          className="rounded-md bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           {loading ? "Generating..." : "Generate Report"}
-        </button>
+        </Button>
         <Link
           href="/reports"
-          className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="inline-flex items-center gap-1 rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Reports
         </Link>
@@ -208,9 +208,9 @@ export default function AttendanceReportBuilder({
         <div className="space-y-4 print:space-y-2">
           {/* Summary Cards */}
           <div className="grid gap-4 sm:grid-cols-4 print:hidden">
-            <div className="rounded-lg border border-gray-200 bg-white p-4 text-center">
-              <div className="text-3xl font-bold text-gray-900">{reportData.summary.total}</div>
-              <div className="text-sm text-gray-500">Total Students</div>
+            <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-4 text-center">
+              <div className="text-3xl font-bold text-[var(--st-fg)]">{reportData.summary.total}</div>
+              <div className="text-sm text-[var(--st-muted)]">Total Students</div>
             </div>
             <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-center">
               <div className="text-3xl font-bold text-green-600">{reportData.summary.checkedIn}</div>
@@ -220,15 +220,15 @@ export default function AttendanceReportBuilder({
               <div className="text-3xl font-bold text-red-600">{reportData.summary.notCheckedIn}</div>
               <div className="text-sm text-red-700">Not Checked In</div>
             </div>
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-center">
-              <div className="text-3xl font-bold text-blue-600">{reportData.summary.percentage}%</div>
-              <div className="text-sm text-blue-700">Attendance Rate</div>
+            <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-primary)]/10 p-4 text-center">
+              <div className="text-3xl font-bold text-[var(--st-primary)]">{reportData.summary.percentage}%</div>
+              <div className="text-sm text-[var(--st-muted)]">Attendance Rate</div>
             </div>
           </div>
 
           {/* Export Actions */}
           <div className="flex items-center justify-between print:hidden">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-[var(--st-muted)]">
               Showing <strong>{filteredStudents.length}</strong> of {reportData.students.length} students
               {" "}for{" "}
               <strong>{new Date(reportData.date).toLocaleDateString()}</strong>
@@ -244,7 +244,7 @@ export default function AttendanceReportBuilder({
               <button
                 type="button"
                 onClick={printReport}
-                className="inline-flex items-center gap-2 rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+                className="inline-flex items-center gap-2 rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
               >
                 <Printer className="h-4 w-4" /> Print
               </button>
@@ -265,40 +265,40 @@ export default function AttendanceReportBuilder({
           </div>
 
           {/* Results Table */}
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)]">
+            <table className="min-w-full divide-y divide-[var(--st-border)]">
+              <thead className="bg-[var(--st-bg)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     #
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Name
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Category
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                     Check-in Time
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
+              <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
                 {filteredStudents.map((student, index) => (
                   <tr
                     key={student.id}
                     className={student.checkedIn ? "bg-green-50" : "bg-red-50"}
                   >
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                       {index + 1}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-[var(--st-fg)]">
                       {student.name}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-600">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                       {student.category}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-sm">
@@ -312,7 +312,7 @@ export default function AttendanceReportBuilder({
                         </span>
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-600">
+                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                       {student.checkInTime
                         ? new Date(student.checkInTime).toLocaleTimeString()
                         : "—"}
@@ -324,7 +324,7 @@ export default function AttendanceReportBuilder({
           </div>
 
           {filteredStudents.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-[var(--st-muted)]">
               No students found matching your criteria.
             </div>
           )}
@@ -333,4 +333,3 @@ export default function AttendanceReportBuilder({
     </div>
   );
 }
-

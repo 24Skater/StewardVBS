@@ -1,8 +1,32 @@
 /* src/app/globals.css */
 @import "tailwindcss";
+@import "@steward-apps/tokens/css";
+@import "@steward-apps/tokens/themes/vbs";
 
-body { @apply bg-gray-50 text-gray-900; }
-header { @apply bg-white shadow; }
-nav a { @apply text-blue-600 hover:text-blue-800 no-underline; }
-main { @apply p-6; }
-footer { @apply bg-white text-center text-sm text-gray-500 p-4; }
+@layer base {
+  body {
+    background: var(--st-bg);
+    color: var(--st-fg);
+  }
+  header {
+    background: var(--st-surface);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+  nav a {
+    color: var(--st-link);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--st-primary);
+  }
+  main {
+    padding: 1.5rem;
+  }
+  footer {
+    background: var(--st-surface);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--st-muted);
+    padding: 1rem;
+  }
+}

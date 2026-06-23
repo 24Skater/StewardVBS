@@ -1,12 +1,12 @@
 export default function VerifyPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--st-bg)]">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-[var(--st-surface)] p-8 shadow-md">
         <div>
-          <h1 className="text-center text-3xl font-bold text-gray-900">
+          <h1 className="text-center text-3xl font-bold text-[var(--st-fg)]">
             Check your email
           </h1>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-[var(--st-muted)]">
             A sign-in link has been sent to your email address.
           </p>
         </div>

@@ -51,7 +51,7 @@ function buildICS(
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//VBS App//Schedule//EN",
+    "PRODID:-//Steward VBS//Schedule//EN",
     `X-WR-CALNAME:${escapeICS(calendarName)}`,
   ];
 

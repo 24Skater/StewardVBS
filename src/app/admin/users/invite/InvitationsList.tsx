@@ -48,7 +48,7 @@ export default function InvitationsList({ invitations }: InvitationsListProps) {
   const roleColors: Record<string, string> = {
     ADMIN: "bg-purple-100 text-purple-800",
     STAFF: "bg-blue-100 text-blue-800",
-    VIEWER: "bg-gray-100 text-gray-800",
+    VIEWER: "bg-[var(--st-bg)] text-gray-800",
   };
 
   function formatDate(date: Date) {
@@ -73,31 +73,31 @@ export default function InvitationsList({ invitations }: InvitationsListProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    <div className="overflow-hidden rounded-lg border border-[var(--st-border)]">
+      <table className="min-w-full divide-y divide-[var(--st-border)]">
+        <thead className="bg-[var(--st-bg)]">
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
               Email
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
               Role
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
               Invited By
             </th>
-            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
               Expires
             </th>
-            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+            <th className="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
           {invitations.map((invitation) => (
             <tr key={invitation.id}>
-              <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-900">
+              <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-fg)]">
                 {invitation.email}
               </td>
               <td className="whitespace-nowrap px-4 py-3 text-sm">
@@ -109,10 +109,10 @@ export default function InvitationsList({ invitations }: InvitationsListProps) {
                   {invitation.role}
                 </span>
               </td>
-              <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+              <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                 {invitation.inviter.name || invitation.inviter.email}
               </td>
-              <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+              <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                 <span title={formatDate(invitation.expiresAt)}>
                   {getTimeRemaining(invitation.expiresAt)}
                 </span>

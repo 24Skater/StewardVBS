@@ -91,21 +91,21 @@ export default async function TeachersPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900"><GraduationCap className="h-4 w-4" /> Assigned Teachers</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-[var(--st-fg)]"><GraduationCap className="h-4 w-4" /> Assigned Teachers</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage teacher assignments for {student.name}
           </p>
         </div>
         <div className="flex gap-2">
           <Link
             href="/admin/teachers"
-            className="rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+            className="rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
           >
             Manage Teachers
           </Link>
           <Link
             href={`/students/${id}`}
-            className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+            className="inline-flex items-center gap-1 rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Profile
           </Link>
@@ -114,11 +114,11 @@ export default async function TeachersPage({ params }: Props) {
 
       {/* Current Assignments */}
       {student.teachers.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Teachers</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Current Teachers</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {student.teachers.map((assignment) => (
-              <div key={assignment.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={assignment.id} className="flex items-center justify-between p-4 bg-[var(--st-bg)] rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     {(assignment.teacher.profileImage || assignment.teacher.profileImageUrl) ? (
@@ -128,18 +128,18 @@ export default async function TeachersPage({ params }: Props) {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="text-blue-600 font-medium text-lg">
+                      <span className="text-[var(--st-primary)] font-medium text-lg">
                         {assignment.teacher.name.charAt(0)}
                       </span>
                     )}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">{assignment.teacher.name}</div>
+                    <div className="font-medium text-[var(--st-fg)]">{assignment.teacher.name}</div>
                     {assignment.role && (
-                      <div className="text-sm text-blue-600">{assignment.role}</div>
+                      <div className="text-sm text-[var(--st-primary)]">{assignment.role}</div>
                     )}
                     {assignment.teacher.email && (
-                      <div className="text-xs text-gray-500">{assignment.teacher.email}</div>
+                      <div className="text-xs text-[var(--st-muted)]">{assignment.teacher.email}</div>
                     )}
                   </div>
                 </div>
@@ -156,20 +156,20 @@ export default async function TeachersPage({ params }: Props) {
       )}
 
       {/* Assign Teacher Form */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Assign Teacher</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Assign Teacher</h2>
         {availableTeachers.length > 0 ? (
           <form action={assignAction} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="teacherId" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="teacherId" className="block text-sm font-medium text-[var(--st-fg)]">
                   Select Teacher <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="teacherId"
                   name="teacherId"
                   required
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 >
                   <option value="">Choose a teacher...</option>
                   {availableTeachers.map((teacher) => (
@@ -181,13 +181,13 @@ export default async function TeachersPage({ params }: Props) {
               </div>
 
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="role" className="block text-sm font-medium text-[var(--st-fg)]">
                   Role/Responsibility
                 </label>
                 <select
                   id="role"
                   name="role"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 >
                   <option value="">Select...</option>
                   <option value="Primary Teacher">Primary Teacher</option>
@@ -201,23 +201,23 @@ export default async function TeachersPage({ params }: Props) {
 
             <button
               type="submit"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
             >
               Assign Teacher
             </button>
           </form>
         ) : allTeachers.length === 0 ? (
           <div className="text-center py-6">
-            <p className="text-gray-500 mb-4">No teachers available.</p>
+            <p className="text-[var(--st-muted)] mb-4">No teachers available.</p>
             <Link
               href="/admin/teachers/new"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
             >
               Add First Teacher
             </Link>
           </div>
         ) : (
-          <p className="text-gray-500">All available teachers are already assigned to this student.</p>
+          <p className="text-[var(--st-muted)]">All available teachers are already assigned to this student.</p>
         )}
       </div>
     </div>

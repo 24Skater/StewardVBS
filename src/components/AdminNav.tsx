@@ -17,7 +17,7 @@ export default function AdminNav() {
   ];
 
   return (
-    <nav className="border-b border-gray-200">
+    <nav className="border-b border-[var(--st-border)]">
       <div className="flex space-x-8">
         {links.map((link) => {
           const isActive = pathname === link.href || pathname?.startsWith(`${link.href}/`);
@@ -27,8 +27,8 @@ export default function AdminNav() {
               href={link.href}
               className={`border-b-2 px-1 py-4 text-sm font-medium ${
                 isActive
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  ? "border-[var(--st-primary)] text-[var(--st-primary)]"
+                  : "border-transparent text-[var(--st-muted)] hover:border-[var(--st-border)] hover:text-[var(--st-fg)]"
               }`}
             >
               {link.label}

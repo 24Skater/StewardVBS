@@ -38,46 +38,36 @@ export default async function AdminDashboard() {
         />
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)]">Quick Actions</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/admin/events/new"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Create New Event
           </Link>
           <Link
             href="/admin/categories/new"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Add Category
           </Link>
           <Link
             href="/admin/settings"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Update Settings
           </Link>
         </div>
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900">Current Settings</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)]">Current Settings</h2>
         <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-sm font-medium text-gray-500">Site Name</dt>
-            <dd className="mt-1 text-sm text-gray-900">{settings.siteName}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Primary Color</dt>
-            <dd className="mt-1 flex items-center gap-2">
-              <span className="text-sm text-gray-900">{settings.primaryColor}</span>
-              <div
-                className="h-6 w-6 rounded border border-gray-300"
-                style={{ backgroundColor: settings.primaryColor }}
-              />
-            </dd>
+            <dt className="text-sm font-medium text-[var(--st-muted)]">Site Name</dt>
+            <dd className="mt-1 text-sm text-[var(--st-fg)]">{settings.siteName}</dd>
           </div>
         </dl>
       </div>

@@ -33,25 +33,34 @@ export async function recordLoginAttempt(email: string, success: boolean): Promi
   const key = `lockout:${email}`
 
   if (success) {
-    // Clear lockout state on successful login
     if (redis) {
-      await redis.del(key)
-    } else {
-      _memAttempts.delete(email)
+      try {
+        await redis.del(key)
+        return
+      } catch {
+        // Redis command failed — fall through to in-memory
+      }
     }
+    _memAttempts.delete(email)
     return
   }
 
   // Record failure
-  const windowSec = Math.ceil(LOCKOUT_WINDOW_MS / 1000)
-  if (redis) {
-    await redis.lpush(key, JSON.stringify({ ts: Date.now(), success: false }))
-    await redis.expire(key, windowSec)
-    return
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout requires Redis in production')
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('Account lockout requires Redis in production')
+  const windowSec = Math.ceil(LOCKOUT_WINDOW_MS / 1000)
+  if (redis) {
+    try {
+      await redis.lpush(key, JSON.stringify({ ts: Date.now(), success: false }))
+      await redis.expire(key, windowSec)
+      return
+    } catch {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout requires Redis in production')
+      }
+    }
   }
 
   const existing = _memAttempts.get(email) ?? []
@@ -63,16 +72,22 @@ async function _getRecentFailureCount(email: string): Promise<number> {
   const redis = await _tryGetRedis()
   const cutoff = Date.now() - LOCKOUT_WINDOW_MS
 
-  if (redis) {
-    const raw = await redis.lrange(`lockout:${email}`, 0, -1)
-    return raw.filter((e) => {
-      const parsed = JSON.parse(e) as { ts: number; success: boolean }
-      return !parsed.success && parsed.ts > cutoff
-    }).length
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('Account lockout check requires Redis in production')
+  if (redis) {
+    try {
+      const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+      return raw.filter((e) => {
+        const parsed = JSON.parse(e) as { ts: number; success: boolean }
+        return !parsed.success && parsed.ts > cutoff
+      }).length
+    } catch {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout check requires Redis in production')
+      }
+    }
   }
 
   return (_memAttempts.get(email) ?? []).filter((a) => !a.success && a.ts > cutoff).length
@@ -82,17 +97,23 @@ async function _getLastFailureTs(email: string): Promise<number | null> {
   const redis = await _tryGetRedis()
   const cutoff = Date.now() - LOCKOUT_WINDOW_MS
 
-  if (redis) {
-    const raw = await redis.lrange(`lockout:${email}`, 0, -1)
-    const failureTimes = raw
-      .map((e) => JSON.parse(e) as { ts: number; success: boolean })
-      .filter((e) => !e.success && e.ts > cutoff)
-      .map((e) => e.ts)
-    return failureTimes.length ? Math.max(...failureTimes) : null
+  if (!redis && process.env.NODE_ENV === 'production') {
+    throw new Error('Account lockout check requires Redis in production')
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('Account lockout check requires Redis in production')
+  if (redis) {
+    try {
+      const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+      const failureTimes = raw
+        .map((e) => JSON.parse(e) as { ts: number; success: boolean })
+        .filter((e) => !e.success && e.ts > cutoff)
+        .map((e) => e.ts)
+      return failureTimes.length ? Math.max(...failureTimes) : null
+    } catch {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Account lockout check requires Redis in production')
+      }
+    }
   }
 
   const failures = (_memAttempts.get(email) ?? []).filter((a) => !a.success && a.ts > cutoff)

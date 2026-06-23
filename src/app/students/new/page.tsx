@@ -7,6 +7,7 @@ import { getCategories } from "@/lib/categories";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import { ArrowLeft } from "lucide-react";
+import { Button, Input } from "@steward-apps/ui";
 
 async function createStudent(formData: FormData) {
   "use server";
@@ -79,47 +80,46 @@ export default async function NewStudentPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Add New Student</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Add New Student</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Add a student to your roster — assign them to events from their profile
           </p>
         </div>
-        <Link
-          href="/students"
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to list
+        <Link href="/students">
+          <Button variant="secondary" size="sm">
+            <ArrowLeft className="h-4 w-4" /> Back to list
+          </Button>
         </Link>
       </div>
 
       <form action={createStudent} className="space-y-8">
         {/* Basic Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Basic Information</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
                 Full Name <span className="text-red-500">*</span>
               </label>
-              <input
+              <Input
                 type="text"
                 id="name"
                 name="name"
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
                 placeholder="Enter student's full name"
               />
             </div>
 
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="category" className="block text-sm font-medium text-[var(--st-fg)]">
                 Category/Group <span className="text-red-500">*</span>
               </label>
               <select
                 id="category"
                 name="category"
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
@@ -131,14 +131,14 @@ export default async function NewStudentPage() {
             </div>
 
             <div>
-              <label htmlFor="size" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="size" className="block text-sm font-medium text-[var(--st-fg)]">
                 Shirt Size
               </label>
               <select
                 id="size"
                 name="size"
                 defaultValue="YM"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 {shirtSizes.map((s) => (
                   <option key={s} value={s}>
@@ -149,32 +149,32 @@ export default async function NewStudentPage() {
             </div>
 
             <div>
-              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-[var(--st-fg)]">
                 Date of Birth
               </label>
-              <input
+              <Input
                 type="date"
                 id="dateOfBirth"
                 name="dateOfBirth"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div>
-              <label htmlFor="grade" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="grade" className="block text-sm font-medium text-[var(--st-fg)]">
                 Grade/Year
               </label>
-              <input
+              <Input
                 type="text"
                 id="grade"
                 name="grade"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
                 placeholder="e.g., 3rd Grade, Kindergarten"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-md">
+              <p className="text-sm text-[var(--st-muted)] bg-[var(--st-primary)]/10 p-3 rounded-md">
                 Profile photo can be uploaded after the student is created.
               </p>
             </div>
@@ -182,43 +182,43 @@ export default async function NewStudentPage() {
         </div>
 
         {/* Parent/Guardian Information */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Parent/Guardian Information</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Parent/Guardian Information</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="parentName" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentName" className="block text-sm font-medium text-[var(--st-fg)]">
                 Parent/Guardian Name
               </label>
-              <input
+              <Input
                 type="text"
                 id="parentName"
                 name="parentName"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
             <div>
-              <label htmlFor="parentPhone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentPhone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Phone Number
               </label>
-              <input
+              <Input
                 type="tel"
                 id="parentPhone"
                 name="parentPhone"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
                 placeholder="(555) 123-4567"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="parentEmail" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="parentEmail" className="block text-sm font-medium text-[var(--st-fg)]">
                 Email Address
               </label>
-              <input
+              <Input
                 type="email"
                 id="parentEmail"
                 name="parentEmail"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
           </div>
@@ -232,11 +232,11 @@ export default async function NewStudentPage() {
               <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-700">
                 Contact Name
               </label>
-              <input
+              <Input
                 type="text"
                 id="emergencyContact"
                 name="emergencyContact"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
               />
             </div>
 
@@ -244,11 +244,11 @@ export default async function NewStudentPage() {
               <label htmlFor="emergencyPhone" className="block text-sm font-medium text-gray-700">
                 Phone Number
               </label>
-              <input
+              <Input
                 type="tel"
                 id="emergencyPhone"
                 name="emergencyPhone"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
                 placeholder="(555) 123-4567"
               />
             </div>
@@ -257,11 +257,11 @@ export default async function NewStudentPage() {
               <label htmlFor="emergencyRelationship" className="block text-sm font-medium text-gray-700">
                 Relationship
               </label>
-              <input
+              <Input
                 type="text"
                 id="emergencyRelationship"
                 name="emergencyRelationship"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1"
                 placeholder="e.g., Aunt, Grandparent, Neighbor"
               />
             </div>
@@ -280,7 +280,7 @@ export default async function NewStudentPage() {
                 id="allergies"
                 name="allergies"
                 rows={2}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 placeholder="List any food, environmental, or medication allergies"
               />
             </div>
@@ -293,7 +293,7 @@ export default async function NewStudentPage() {
                 id="medicalNotes"
                 name="medicalNotes"
                 rows={2}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 placeholder="Any medical conditions, medications, or special needs we should be aware of"
               />
             </div>
@@ -303,9 +303,9 @@ export default async function NewStudentPage() {
                 type="checkbox"
                 id="photoConsent"
                 name="photoConsent"
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
               />
-              <label htmlFor="photoConsent" className="text-sm text-gray-700">
+              <label htmlFor="photoConsent" className="text-sm text-[var(--st-fg)]">
                 <span className="font-medium">Photo consent granted</span> — I give permission
                 for this student to be photographed during VBS activities.
               </label>
@@ -314,17 +314,17 @@ export default async function NewStudentPage() {
         </div>
 
         {/* Additional Notes */}
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Additional Notes</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Additional Notes</h2>
           <div>
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="notes" className="block text-sm font-medium text-[var(--st-fg)]">
               Notes
             </label>
             <textarea
               id="notes"
               name="notes"
               rows={3}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-[var(--st-fg)] shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               placeholder="Any other information about this student"
             />
           </div>
@@ -332,21 +332,12 @@ export default async function NewStudentPage() {
 
         {/* Submit */}
         <div className="flex gap-4">
-          <button
-            type="submit"
-            className="rounded-md bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Add Student
-          </button>
-          <Link
-            href="/students"
-            className="rounded-md border border-gray-300 bg-white px-6 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
+          <Button type="submit" variant="primary">Add Student</Button>
+          <Link href="/students">
+            <Button variant="outline">Cancel</Button>
           </Link>
         </div>
       </form>
     </div>
   );
 }
-

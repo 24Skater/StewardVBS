@@ -49,23 +49,23 @@ export default async function NewTeacherPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Add Teacher</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-[var(--st-fg)]">Add Teacher</h2>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Add a new teacher or volunteer.
           </p>
         </div>
         <Link
           href="/admin/teachers"
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </Link>
       </div>
 
-      <form action={createTeacher} className="space-y-6 rounded-lg border border-gray-200 bg-white p-6">
+      <form action={createTeacher} className="space-y-6 rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
               Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -73,49 +73,49 @@ export default async function NewTeacherPage() {
               id="name"
               name="name"
               required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-[var(--st-fg)]">
               Email
             </label>
             <input
               type="email"
               id="email"
               name="email"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="phone" className="block text-sm font-medium text-[var(--st-fg)]">
               Phone
             </label>
             <input
               type="tel"
               id="phone"
               name="phone"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <p className="text-sm text-gray-500 bg-blue-50 p-3 rounded-md">
+            <p className="text-sm text-[var(--st-muted)] bg-blue-50 p-3 rounded-md">
               Profile photo can be uploaded after the teacher is created.
             </p>
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="bio" className="block text-sm font-medium text-[var(--st-fg)]">
               Bio / Notes
             </label>
             <textarea
               id="bio"
               name="bio"
               rows={3}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               placeholder="Brief description, experience, or notes about this teacher"
             />
           </div>
@@ -124,13 +124,13 @@ export default async function NewTeacherPage() {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
           >
             Add Teacher
           </button>
           <Link
             href="/admin/teachers"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Cancel
           </Link>

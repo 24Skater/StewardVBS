@@ -73,43 +73,43 @@ export default async function TeachersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Teachers & Volunteers</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-[var(--st-fg)]">Teachers & Volunteers</h2>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage teachers and volunteers who can be assigned to students.
           </p>
         </div>
         <Link
           href="/admin/teachers/new"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
         >
           Add Teacher
         </Link>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
+        <table className="min-w-full divide-y divide-[var(--st-border)]">
+          <thead className="bg-[var(--st-bg)]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Teacher
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Contact
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Students
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Status
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
             {teachers.map((teacher) => (
-              <tr key={teacher.id} className={!teacher.isActive ? "bg-gray-50" : ""}>
+              <tr key={teacher.id} className={!teacher.isActive ? "bg-[var(--st-bg)]" : ""}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
@@ -120,27 +120,27 @@ export default async function TeachersPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <span className="text-blue-600 font-medium">
+                        <span className="text-[var(--st-primary)] font-medium">
                           {teacher.name.charAt(0)}
                         </span>
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">{teacher.name}</div>
+                      <div className="font-medium text-[var(--st-fg)]">{teacher.name}</div>
                       {teacher.bio && (
-                        <div className="text-sm text-gray-500 truncate max-w-xs">
+                        <div className="text-sm text-[var(--st-muted)] truncate max-w-xs">
                           {teacher.bio}
                         </div>
                       )}
                     </div>
                   </div>
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                   {teacher.email && <div>{teacher.email}</div>}
                   {teacher.phone && <div>{teacher.phone}</div>}
                   {!teacher.email && !teacher.phone && "—"}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-[var(--st-muted)]">
                   {teacher._count.students} assigned
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm">
@@ -150,7 +150,7 @@ export default async function TeachersPage() {
                       className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
                         teacher.isActive
                           ? "bg-green-100 text-green-800 hover:bg-green-200"
-                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                          : "bg-[var(--st-bg)] text-gray-800 hover:bg-gray-200"
                       }`}
                     >
                       {teacher.isActive ? "Active" : "Inactive"}
@@ -161,7 +161,7 @@ export default async function TeachersPage() {
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/admin/teachers/${teacher.id}`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="text-[var(--st-primary)] hover:text-blue-900"
                     >
                       Edit
                     </Link>
@@ -179,7 +179,7 @@ export default async function TeachersPage() {
             ))}
             {teachers.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-500">
+                <td colSpan={5} className="px-6 py-8 text-center text-sm text-[var(--st-muted)]">
                   No teachers yet. Add your first teacher to get started.
                 </td>
               </tr>

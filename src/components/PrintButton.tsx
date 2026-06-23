@@ -1,5 +1,6 @@
 "use client";
 import { Printer } from "lucide-react";
+import { Button } from "@steward-apps/ui";
 
 interface PrintButtonProps {
   className?: string;
@@ -7,15 +8,15 @@ interface PrintButtonProps {
 }
 
 export default function PrintButton({
-  className = "rounded-md bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700",
+  className,
   label = "Print",
 }: PrintButtonProps) {
   return (
-    <button type="button" onClick={() => window.print()} className={className}>
+    <Button variant="outline" onClick={() => window.print()} className={className}>
       <span className="flex items-center gap-2">
         <Printer className="h-4 w-4" />
         {label}
       </span>
-    </button>
+    </Button>
   );
 }

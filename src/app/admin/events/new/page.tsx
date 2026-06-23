@@ -82,15 +82,15 @@ export default function NewEventPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Create New Event</h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <h2 className="text-2xl font-bold text-[var(--st-fg)]">Create New Event</h2>
+        <p className="mt-1 text-sm text-[var(--st-muted)]">
           Create a new VBS event for a specific year.
         </p>
       </div>
 
-      <form action={createEvent} className="space-y-6 rounded-lg border border-gray-200 bg-white p-6">
+      <form action={createEvent} className="space-y-6 rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
         <div>
-          <label htmlFor="year" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="year" className="block text-sm font-medium text-[var(--st-fg)]">
             Year <span className="text-red-500">*</span>
           </label>
           <input
@@ -101,12 +101,12 @@ export default function NewEventPage() {
             defaultValue={currentYear}
             min="2000"
             max="2100"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
           />
         </div>
 
         <div>
-          <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="theme" className="block text-sm font-medium text-[var(--st-fg)]">
             Theme
           </label>
           <input
@@ -114,32 +114,32 @@ export default function NewEventPage() {
             id="theme"
             name="theme"
             placeholder="e.g., True North, Adventure Island"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
           />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="startDate" className="block text-sm font-medium text-[var(--st-fg)]">
               Start Date
             </label>
             <input
               type="date"
               id="startDate"
               name="startDate"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
 
           <div>
-            <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="endDate" className="block text-sm font-medium text-[var(--st-fg)]">
               End Date
             </label>
             <input
               type="date"
               id="endDate"
               name="endDate"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
             />
           </div>
         </div>
@@ -149,9 +149,9 @@ export default function NewEventPage() {
             id="setActive"
             name="setActive"
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
           />
-          <label htmlFor="setActive" className="ml-2 block text-sm text-gray-900">
+          <label htmlFor="setActive" className="ml-2 block text-sm text-[var(--st-fg)]">
             Set as active event (will deactivate current active event)
           </label>
         </div>
@@ -159,13 +159,13 @@ export default function NewEventPage() {
         <div className="flex gap-4">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
           >
             Create Event
           </button>
           <a
             href="/admin/events"
-            className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Cancel
           </a>

@@ -5,6 +5,7 @@ import { getCategories } from "@/lib/categories";
 import StudentsFilters from "@/components/StudentsFilters";
 import { parsePagination, getSkip, calculatePagination } from "@/lib/pagination";
 import { escapeHtml } from "@/lib/xss-protection";
+import { Button, Badge } from "@steward-apps/ui";
 
 type Props = {
   searchParams: Promise<{
@@ -54,36 +55,33 @@ export default async function StudentsPage({ searchParams }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Students</h1>
+        <h1 className="text-3xl font-bold text-[var(--st-fg)]">Students</h1>
         <div className="flex items-center gap-2">
           <a
             href="/api/students/import/template"
             download
-            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Download Template
           </a>
           <Link
             href="/students/import"
-            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-3 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             Import CSV
           </Link>
-          <Link
-            href="/students/new"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            Add Student
+          <Link href="/students/new">
+            <Button variant="primary" size="sm">Add Student</Button>
           </Link>
         </div>
       </div>
 
       <StudentsFilters sizes={sizes} categories={categories} />
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-[var(--st-border)] bg-[var(--st-surface)]">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr className="text-left text-sm text-gray-600">
+          <thead className="bg-[var(--st-bg)]">
+            <tr className="text-left text-sm text-[var(--st-muted)]">
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Size</th>
               <th className="px-4 py-2">Category</th>
@@ -94,27 +92,24 @@ export default async function StudentsPage({ searchParams }: Props) {
           </thead>
           <tbody>
             {students.map((s) => (
-              <tr key={s.id} className="border-t text-sm">
-                <td className="px-4 py-2 font-medium">{escapeHtml(s.name)}</td>
-                <td className="px-4 py-2">{escapeHtml(s.size)}</td>
-                <td className="px-4 py-2">{escapeHtml(s.category)}</td>
-                <td className="px-4 py-2 text-gray-500">{s._count.events}</td>
-                <td className="px-4 py-2 text-gray-500">{s._count.attendances}</td>
+              <tr key={s.id} className="border-t border-[var(--st-border)] text-sm">
+                <td className="px-4 py-2 font-medium text-[var(--st-fg)]">{escapeHtml(s.name)}</td>
+                <td className="px-4 py-2 text-[var(--st-fg)]">{escapeHtml(s.size)}</td>
+                <td className="px-4 py-2 text-[var(--st-fg)]">{escapeHtml(s.category)}</td>
+                <td className="px-4 py-2 text-[var(--st-muted)]">{s._count.events}</td>
+                <td className="px-4 py-2 text-[var(--st-muted)]">{s._count.attendances}</td>
                 <td className="px-4 py-2 text-right">
-                  <Link
-                    className="rounded-md bg-blue-600 px-3 py-1.5 text-white hover:bg-blue-700"
-                    href={`/students/${s.id}`}
-                  >
-                    View
+                  <Link href={`/students/${s.id}`}>
+                    <Button variant="primary" size="sm">View</Button>
                   </Link>
                 </td>
               </tr>
             ))}
             {students.length === 0 && (
               <tr>
-                <td className="px-4 py-6 text-gray-500" colSpan={6}>
+                <td className="px-4 py-6 text-[var(--st-muted)]" colSpan={6}>
                   No students found.{" "}
-                  <Link href="/students/new" className="text-blue-600 hover:underline">
+                  <Link href="/students/new" className="text-[var(--st-primary)] hover:underline">
                     Add your first student
                   </Link>
                 </td>
@@ -125,9 +120,9 @@ export default async function StudentsPage({ searchParams }: Props) {
       </div>
 
       {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+        <div className="flex items-center justify-between border-t border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-3 sm:px-6">
           <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[var(--st-muted)]">
               Showing <span className="font-medium">{getSkip(page, pageSize) + 1}</span> to{" "}
               <span className="font-medium">
                 {Math.min(getSkip(page, pageSize) + pageSize, pagination.total)}
@@ -138,7 +133,7 @@ export default async function StudentsPage({ searchParams }: Props) {
               {pagination.hasPrev && (
                 <Link
                   href={`/students?${new URLSearchParams({ ...resolvedSearchParams, page: String(pagination.page - 1) }).toString()}`}
-                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-[var(--st-muted)] ring-1 ring-inset ring-[var(--st-border)] hover:bg-[var(--st-bg)]"
                 >
                   Previous
                 </Link>
@@ -146,7 +141,7 @@ export default async function StudentsPage({ searchParams }: Props) {
               {pagination.hasNext && (
                 <Link
                   href={`/students?${new URLSearchParams({ ...resolvedSearchParams, page: String(pagination.page + 1) }).toString()}`}
-                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-[var(--st-muted)] ring-1 ring-inset ring-[var(--st-border)] hover:bg-[var(--st-bg)]"
                 >
                   Next
                 </Link>

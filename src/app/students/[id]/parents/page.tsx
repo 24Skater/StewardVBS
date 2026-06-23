@@ -82,14 +82,14 @@ export default async function ParentsPage({ params }: Props) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Parents/Guardians</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Parents/Guardians</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Manage parents and guardians for {student.name}
           </p>
         </div>
         <Link
           href={`/students/${id}`}
-          className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-3 py-1.5 text-sm hover:bg-gray-200"
+          className="inline-flex items-center gap-1 rounded-md bg-[var(--st-bg)] px-3 py-1.5 text-sm hover:bg-gray-200"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Profile
         </Link>
@@ -97,14 +97,14 @@ export default async function ParentsPage({ params }: Props) {
 
       {/* Current Parents */}
       {student.parents.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Parents/Guardians</h2>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+          <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Current Parents/Guardians</h2>
           <div className="space-y-4">
             {student.parents.map((parent) => (
-              <div key={parent.id} className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={parent.id} className="flex items-start justify-between p-4 bg-[var(--st-bg)] rounded-lg">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900">{parent.name}</span>
+                    <span className="font-medium text-[var(--st-fg)]">{parent.name}</span>
                     {parent.isPrimary && (
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
                         Primary
@@ -117,9 +117,9 @@ export default async function ParentsPage({ params }: Props) {
                     )}
                   </div>
                   {parent.relationship && (
-                    <div className="text-sm text-gray-500">{parent.relationship}</div>
+                    <div className="text-sm text-[var(--st-muted)]">{parent.relationship}</div>
                   )}
-                  <div className="mt-1 text-sm text-gray-600 space-y-1">
+                  <div className="mt-1 text-sm text-[var(--st-muted)] space-y-1">
                     {parent.phone && <div className="flex items-center gap-1"><Phone className="h-4 w-4" /> {parent.phone}</div>}
                     {parent.email && <div className="flex items-center gap-1"><Mail className="h-4 w-4" /> {parent.email}</div>}
                   </div>
@@ -137,12 +137,12 @@ export default async function ParentsPage({ params }: Props) {
       )}
 
       {/* Add Parent Form */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Add Parent/Guardian</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Add Parent/Guardian</h2>
         <form action={addParentAction} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-[var(--st-fg)]">
                 Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -150,18 +150,18 @@ export default async function ParentsPage({ params }: Props) {
                 id="name"
                 name="name"
                 required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
 
             <div>
-              <label htmlFor="relationship" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="relationship" className="block text-sm font-medium text-[var(--st-fg)]">
                 Relationship
               </label>
               <select
                 id="relationship"
                 name="relationship"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               >
                 <option value="">Select...</option>
                 <option value="Mother">Mother</option>
@@ -175,27 +175,27 @@ export default async function ParentsPage({ params }: Props) {
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone" className="block text-sm font-medium text-[var(--st-fg)]">
                 Phone Number
               </label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
                 placeholder="(555) 123-4567"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-[var(--st-fg)]">
                 Email
               </label>
               <input
                 type="email"
                 id="email"
                 name="email"
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                className="mt-1 block w-full rounded-md border border-[var(--st-border)] px-3 py-2 shadow-sm focus:border-[var(--st-primary)] focus:outline-none focus:ring-[var(--st-primary)]"
               />
             </div>
           </div>
@@ -206,9 +206,9 @@ export default async function ParentsPage({ params }: Props) {
                 id="isPrimary"
                 name="isPrimary"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
               />
-              <label htmlFor="isPrimary" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="isPrimary" className="ml-2 block text-sm text-[var(--st-fg)]">
                 Primary contact
               </label>
             </div>
@@ -219,9 +219,9 @@ export default async function ParentsPage({ params }: Props) {
                 name="canPickup"
                 type="checkbox"
                 defaultChecked
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-[var(--st-border)] text-[var(--st-primary)] focus:ring-[var(--st-primary)]"
               />
-              <label htmlFor="canPickup" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="canPickup" className="ml-2 block text-sm text-[var(--st-fg)]">
                 Authorized for pickup
               </label>
             </div>
@@ -229,7 +229,7 @@ export default async function ParentsPage({ params }: Props) {
 
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-md bg-[var(--st-primary)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--st-primary)]/90"
           >
             Add Parent/Guardian
           </button>

@@ -64,7 +64,7 @@ export default async function EnrollmentReportPage() {
   } catch {
     return (
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-gray-900">Enrollment Report</h1>
+        <h1 className="text-2xl font-bold text-[var(--st-fg)]">Enrollment Report</h1>
         <div className="rounded-md bg-red-50 p-4">
           <p className="text-sm text-red-800">
             No active event found. Please activate an event first.
@@ -100,8 +100,8 @@ export default async function EnrollmentReportPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Enrollment Report</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--st-fg)]">Enrollment Report</h1>
+          <p className="mt-1 text-sm text-[var(--st-muted)]">
             Registration status for {event.year} {event.theme && `- ${event.theme}`}
           </p>
         </div>
@@ -116,7 +116,7 @@ export default async function EnrollmentReportPage() {
           <PrintButton />
           <Link
             href="/reports"
-            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="inline-flex items-center gap-1 rounded-md border border-[var(--st-border)] bg-[var(--st-surface)] px-4 py-2 text-sm font-medium text-[var(--st-fg)] hover:bg-[var(--st-bg)]"
           >
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
@@ -125,9 +125,9 @@ export default async function EnrollmentReportPage() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 print:grid-cols-4">
-        <div className="rounded-lg border border-gray-200 bg-white p-4 text-center">
-          <div className="text-3xl font-bold text-gray-900">{totalStudents}</div>
-          <div className="text-sm text-gray-500">Total Enrolled</div>
+        <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-4 text-center">
+          <div className="text-3xl font-bold text-[var(--st-fg)]">{totalStudents}</div>
+          <div className="text-sm text-[var(--st-muted)]">Total Enrolled</div>
         </div>
         <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-center">
           <div className="text-3xl font-bold text-green-600">{completeCount}</div>
@@ -138,8 +138,8 @@ export default async function EnrollmentReportPage() {
           <div className="text-sm text-amber-700">Incomplete</div>
         </div>
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-center">
-          <div className="text-3xl font-bold text-blue-600">{paidCount}</div>
-          <div className="text-sm text-blue-700">Paid</div>
+          <div className="text-3xl font-bold text-[var(--st-primary)]">{paidCount}</div>
+          <div className="text-sm text-[var(--st-primary)]">Paid</div>
         </div>
       </div>
 
@@ -159,13 +159,13 @@ export default async function EnrollmentReportPage() {
       )}
 
       {/* By Category */}
-      <div className="rounded-lg border border-gray-200 bg-white p-6 print:hidden">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Enrollment by Category</h2>
+      <div className="rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)] p-6 print:hidden">
+        <h2 className="text-lg font-semibold text-[var(--st-fg)] mb-4">Enrollment by Category</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((cat) => (
-            <div key={cat.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-900">{cat.name}</span>
-              <span className="text-lg font-bold text-blue-600">{cat.count}</span>
+            <div key={cat.name} className="flex items-center justify-between p-3 bg-[var(--st-bg)] rounded-lg">
+              <span className="font-medium text-[var(--st-fg)]">{cat.name}</span>
+              <span className="text-lg font-bold text-[var(--st-primary)]">{cat.count}</span>
             </div>
           ))}
         </div>
@@ -176,58 +176,58 @@ export default async function EnrollmentReportPage() {
         <div className="text-xl font-bold">
           Enrollment Report - {event.year} {event.theme && `- ${event.theme}`}
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[var(--st-muted)]">
           Total: {totalStudents} | Complete: {completeCount} | Paid: {paidCount} |
           Generated: {new Date().toLocaleDateString()}
         </p>
       </div>
 
       {/* Student List */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto rounded-lg border border-[var(--st-border)] bg-[var(--st-surface)]">
+        <table className="min-w-full divide-y divide-[var(--st-border)]">
+          <thead className="bg-[var(--st-bg)]">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 #
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Name
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Category
               </th>
-              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Paid
               </th>
-              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Parent
               </th>
-              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Emergency
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Status
               </th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--st-muted)]">
                 Registered
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-[var(--st-border)] bg-[var(--st-surface)]">
             {students.map((student, index) => (
               <tr
                 key={student.id}
                 className={student.isComplete ? "" : "bg-amber-50"}
               >
-                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                   {index + 1}
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-900">
-                  <Link href={`/students/${student.id}`} className="hover:text-blue-600">
+                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-[var(--st-fg)]">
+                  <Link href={`/students/${student.id}`} className="hover:text-[var(--st-primary)]">
                     {student.name}
                   </Link>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-600">
+                <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                   {student.category}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
@@ -262,7 +262,7 @@ export default async function EnrollmentReportPage() {
                     </span>
                   )}
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-500">
+                <td className="whitespace-nowrap px-4 py-3 text-sm text-[var(--st-muted)]">
                   {student.createdAt.toLocaleDateString()}
                 </td>
               </tr>
@@ -272,7 +272,7 @@ export default async function EnrollmentReportPage() {
       </div>
 
       {students.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-[var(--st-muted)]">
           No students enrolled yet.
         </div>
       )}
