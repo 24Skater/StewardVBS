@@ -6,6 +6,14 @@ import { validateInvitation } from "@/lib/invitations";
 import RegisterForm from "./RegisterForm";
 import Link from "next/link";
 
+// Rendered per request: this page branches on needsSetup(), which reads the
+// database. Statically prerendering it bakes the build-time answer into the
+// page — and a production image is built before any admin exists, so the
+// baked answer is "redirect to /setup" forever. /setup then redirects back
+// here once an admin is created, and nobody can ever sign in.
+// /setup and / already do this; these two were missed.
+export const dynamic = "force-dynamic";
+
 interface RegisterPageProps {
   searchParams: Promise<{ token?: string }>;
 }
