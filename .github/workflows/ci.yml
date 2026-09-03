@@ -7,6 +7,15 @@ on:
     branches: [main]
 
 jobs:
+  boundaries:
+    name: Platform Boundaries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check platform boundaries
+        run: sh scripts/ci/check-platform-boundaries.sh
+
   test:
     name: Test & Build
     runs-on: ubuntu-latest

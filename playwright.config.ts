@@ -21,11 +21,14 @@ export default defineConfig({
       name: "setup",
       testMatch: /auth\.setup\.ts/,
     },
-    // Public tests — no auth required
+    // Public tests — no storageState, but still dependent on setup: /auth/signin
+    // redirects to the first-launch wizard until an ADMIN exists, so these
+    // specs need the fixtures too, just not the session.
     {
       name: "public",
       testMatch: /\/(auth-flow|auth|admin-protection|register)\.spec\.ts/,
       use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup"],
     },
     // Authenticated tests — depend on setup
     {
