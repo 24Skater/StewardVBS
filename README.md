@@ -1,49 +1,55 @@
 <div align="center">
 
-<img src="public/hero-illustration.svg" alt="Steward VBS" width="100%"/>
+<img src="Docs/banner.svg" alt="Steward VBS — self-hosted Vacation Bible School management covering registration, daily check-in and reporting" width="100%"/>
 
-<br/>
+<br/><br/>
 
-[![Build](https://img.shields.io/github/actions/workflow/status/24Skater/vbs-app/ci.yml?style=flat-square&label=CI&color=2563eb)](https://github.com/24Skater/vbs-app/actions)
-[![License](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=nextdotjs)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
-[![Docker](https://img.shields.io/badge/Docker-ready-2496ed?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com)
+<a href="https://github.com/24Skater/StewardVBS/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/24Skater/StewardVBS/ci.yml?style=flat-square&label=CI&labelColor=0D1B2E&color=F97316" alt="CI"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F97316?style=flat-square&labelColor=0D1B2E" alt="MIT licence"></a>
+<img src="https://img.shields.io/badge/self--hosted-yes-6B7A8D?style=flat-square&labelColor=0D1B2E" alt="Self-hosted">
+<img src="https://img.shields.io/badge/docker-ready-6B7A8D?style=flat-square&labelColor=0D1B2E" alt="Docker ready">
 
-<br/>
+<br/><br/>
 
-[Quick Start](#quick-start) &nbsp;&middot;&nbsp;
-[Screenshots](#screenshots) &nbsp;&middot;&nbsp;
-[Features](#features) &nbsp;&middot;&nbsp;
-[Deploy](#deployment) &nbsp;&middot;&nbsp;
-[Contributing](#contributing)
+**[Quick start](#quick-start)** &nbsp;·&nbsp;
+**[What it does](#what-it-does)** &nbsp;·&nbsp;
+**[Architecture](#architecture)** &nbsp;·&nbsp;
+**[Status](#status)** &nbsp;·&nbsp;
+**[Docs](#documentation)**
 
 </div>
 
 ---
 
-> *"Whatever you do, work at it with all your heart, as working for the Lord."* — Colossians 3:23
+Vacation Bible School runs for one week a year, and the software for it is
+usually a spreadsheet, a clipboard, and one volunteer who knows where everything
+is. Steward VBS replaces that with something a church runs on its own server:
+register students, check them in each morning, and print the roster the
+children's director actually asked for.
 
-Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. Steward VBS is a full-featured, self-hosted management platform — free forever, built by someone who volunteers in ministry. Register students, run daily check-in, generate reports, and configure your church's branding without writing a line of code.
+Free, self-hosted, and built by someone who volunteers in ministry.
+
+> *"Whatever you do, work at it with all your heart, as working for the Lord."* — Colossians 3:23
 
 ---
 
 ## Contents
 
 - [Screenshots](#screenshots)
-- [Features](#features)
-- [Quick Start](#quick-start)
-- [First-Time Setup](#first-time-setup)
+- [What it does](#what-it-does)
+- [Quick start](#quick-start)
+- [First-time setup](#first-time-setup)
 - [Deployment](#deployment)
 - [Configuration](#configuration)
 - [Architecture](#architecture)
-- [User Roles](#user-roles)
+- [User roles](#user-roles)
 - [Integrations](#integrations)
+- [Status](#status)
+- [The Steward family](#the-steward-family)
+- [Documentation](#documentation)
 - [Security](#security)
 - [Contributing](#contributing)
-- [Roadmap](#roadmap)
-- [License](#license)
+- [Licence](#licence)
 
 ---
 
@@ -84,7 +90,7 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. Stewar
 
 ---
 
-## Features
+## What it does
 
 <table>
   <tr>
@@ -142,12 +148,12 @@ Churches shouldn't wrestle with spreadsheets or pay SaaS fees to run VBS. Stewar
 
 ---
 
-## Quick Start
+## Quick start
 
 **Requirements:** Node.js 20+, Docker
 
 ```bash
-git clone https://github.com/24Skater/vbs-app
+git clone https://github.com/24Skater/StewardVBS
 cd vbs-app
 npm install
 cp .env.example .env   # fill in DATABASE_URL, NEXTAUTH_URL, NEXTAUTH_SECRET
@@ -200,7 +206,7 @@ npm run test:coverage # coverage report
 
 ---
 
-## First-Time Setup
+## First-time setup
 
 The setup wizard appears automatically on first launch — no manual database seeding or config file editing required.
 
@@ -352,7 +358,7 @@ prisma/
 
 ---
 
-## User Roles
+## User roles
 
 | Role | Capabilities |
 |------|-------------|
@@ -390,6 +396,57 @@ Full walkthrough: [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRA
 
 ---
 
+## Status
+
+Pre-production. No church has yet run a live VBS week on it, which is the honest
+framing for software whose busiest day is a Monday morning with forty children
+in a queue.
+
+**Shipped and working:** student management with categories, shirt sizes,
+teacher assignment and payment status; daily check-in and attendance records;
+dashboard analytics; the reports and export centre; Google Forms
+self-registration through the Apps Script webhook; Google and Microsoft OAuth;
+church branding; and the first-launch setup wizard.
+
+**Planned:** email reminders and confirmations, a PWA with mobile-optimised
+check-in, multi-language support, Planning Center integration, and online
+payment processing.
+
+**Worth knowing before a live week:** check-in has not been load-tested against a
+real morning rush, and there is no offline mode — if the network drops, check-in
+stops. Take a database backup before every update.
+
+---
+
+## The Steward family
+
+Steward is four applications on one design system. Each one runs standalone and
+self-hosted — nothing here requires the others, or us.
+
+| Application | What it does |
+| --- | --- |
+| **[Congregation](https://github.com/24Skater/StewardChMS)** | Members, giving, worship planning, reporting |
+| **[StewardPOS](https://github.com/24Skater/stewardpos)** | Point of sale, inventory, returns |
+| **[Table](https://github.com/24Skater/steward-table)** | Food orders, kitchen display, delivery |
+| **[VBS](https://github.com/24Skater/StewardVBS)** | Registration, check-in, reporting |
+
+They share one design system — [Steward Brand](https://github.com/24Skater/steward-brand),
+the tokens, components and icons every screen is built from.
+
+---
+
+## Documentation
+
+| Document | What is in it |
+| --- | --- |
+| [`Docs/HOSTING.md`](Docs/HOSTING.md) | Running it in production, and the invariants that matter |
+| [`Docs/GOOGLE_FORMS_INTEGRATION.md`](Docs/GOOGLE_FORMS_INTEGRATION.md) | Parent self-registration, start to finish |
+| [`Docs/ADMIN_PANEL.md`](Docs/ADMIN_PANEL.md) | Every admin screen and what it controls |
+| [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLETE.md) | The full security posture |
+| [`Docs/PRODUCTION_ENV_EXAMPLE.md`](Docs/PRODUCTION_ENV_EXAMPLE.md) | Production configuration reference |
+
+---
+
 ## Security
 
 Steward VBS is built with multiple layers of defense:
@@ -423,7 +480,7 @@ Full security documentation: [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLET
 Contributions are welcome — especially from those in ministry who understand the real-world needs of VBS volunteers and coordinators.
 
 ```bash
-git clone https://github.com/24Skater/vbs-app
+git clone https://github.com/24Skater/StewardVBS
 cd vbs-app && npm install
 npm run dev          # dev server with hot reload
 npm test             # unit tests
@@ -434,27 +491,7 @@ Before opening a pull request, please read [CONTRIBUTING.md](CONTRIBUTING.md) an
 
 ---
 
-## Roadmap
-
-| Status | Item |
-|--------|------|
-| Done | Student management with categories, sizes, payment tracking |
-| Done | Daily check-in and attendance records |
-| Done | Google Forms self-registration webhook |
-| Done | Google & Microsoft OAuth sign-in |
-| Done | Dashboard analytics and visual charts |
-| Done | Reports and export center |
-| Done | Church branding customization |
-| Done | First-launch setup wizard |
-| Planned | Email notifications — reminders, confirmations |
-| Planned | Progressive Web App (PWA) and mobile-optimized check-in |
-| Planned | Multi-language support |
-| Planned | Planning Center integration |
-| Planned | Online payment processing |
-
----
-
-## License
+## Licence
 
 [MIT](./LICENSE) — free to use, modify, and self-host.
 
