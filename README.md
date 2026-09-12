@@ -4,7 +4,7 @@
 
 <br/><br/>
 
-<a href="https://github.com/24Skater/vbs-app/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/24Skater/vbs-app/ci.yml?style=flat-square&label=CI&labelColor=0D1B2E&color=F97316" alt="CI"></a>
+<a href="https://github.com/24Skater/StewardVBS/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/24Skater/StewardVBS/ci.yml?style=flat-square&label=CI&labelColor=0D1B2E&color=F97316" alt="CI"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F97316?style=flat-square&labelColor=0D1B2E" alt="MIT licence"></a>
 <img src="https://img.shields.io/badge/self--hosted-yes-6B7A8D?style=flat-square&labelColor=0D1B2E" alt="Self-hosted">
 <img src="https://img.shields.io/badge/docker-ready-6B7A8D?style=flat-square&labelColor=0D1B2E" alt="Docker ready">
@@ -153,7 +153,7 @@ Free, self-hosted, and built by someone who volunteers in ministry.
 **Requirements:** Node.js 20+, Docker
 
 ```bash
-git clone https://github.com/24Skater/vbs-app
+git clone https://github.com/24Skater/StewardVBS
 cd vbs-app
 npm install
 cp .env.example .env   # fill in DATABASE_URL, NEXTAUTH_URL, NEXTAUTH_SECRET
@@ -428,7 +428,7 @@ self-hosted — nothing here requires the others, or us.
 | **[Congregation](https://github.com/24Skater/StewardChMS)** | Members, giving, worship planning, reporting |
 | **[StewardPOS](https://github.com/24Skater/stewardpos)** | Point of sale, inventory, returns |
 | **[Table](https://github.com/24Skater/steward-table)** | Food orders, kitchen display, delivery |
-| **[VBS](https://github.com/24Skater/vbs-app)** | Registration, check-in, reporting |
+| **[VBS](https://github.com/24Skater/StewardVBS)** | Registration, check-in, reporting |
 
 They share one design system — [Steward Brand](https://github.com/24Skater/steward-brand),
 the tokens, components and icons every screen is built from.
@@ -480,7 +480,7 @@ Full security documentation: [`Docs/SECURITY_COMPLETE.md`](Docs/SECURITY_COMPLET
 Contributions are welcome — especially from those in ministry who understand the real-world needs of VBS volunteers and coordinators.
 
 ```bash
-git clone https://github.com/24Skater/vbs-app
+git clone https://github.com/24Skater/StewardVBS
 cd vbs-app && npm install
 npm run dev          # dev server with hot reload
 npm test             # unit tests
