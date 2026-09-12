@@ -6,6 +6,7 @@ import { getActiveEvent } from "@/lib/event";
 import { requireRole } from "@/lib/auth";
 import { verifyStudentAccess, validateId } from "@/lib/resource-access";
 import { getTodayRange } from "@/lib/date-utils";
+import { requireOrgId } from "@/lib/org-resolve";
 
 export async function checkInById(studentId: number) {
   await requireRole("STAFF");
@@ -32,7 +33,7 @@ export async function checkInById(studentId: number) {
 
   if (!already) {
     await prisma.attendance.create({
-      data: { studentId: validId, eventId: event.id },
+      data: { orgId: await requireOrgId(), studentId: validId, eventId: event.id },
     });
   }
 

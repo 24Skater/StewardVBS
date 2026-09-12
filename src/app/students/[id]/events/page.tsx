@@ -4,6 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth";
 import { ArrowLeft } from "lucide-react";
+import { requireOrgId } from "@/lib/org-resolve";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -16,7 +17,7 @@ async function toggleEnrollment(studentId: number, eventId: number, enrolled: bo
   } else {
     await prisma.studentEvent.upsert({
       where: { studentId_eventId: { studentId, eventId } },
-      create: { studentId, eventId },
+      create: { orgId: await requireOrgId(), studentId, eventId },
       update: {},
     });
   }

@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import ConfirmButton from "@/components/ConfirmButton";
 import { Phone, Mail, ArrowLeft } from "lucide-react";
+import { requireOrgId } from "@/lib/org-resolve";
 
 async function addParent(studentId: number, formData: FormData) {
   "use server";
@@ -32,6 +33,7 @@ async function addParent(studentId: number, formData: FormData) {
 
   await prisma.studentParent.create({
     data: {
+      orgId: await requireOrgId(),
       studentId,
       name,
       relationship,

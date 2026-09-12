@@ -2,6 +2,7 @@ import 'server-only'
 import { Prisma } from '@prisma/client'
 import { prisma } from './prisma'
 import { logger } from './logger'
+import { requireOrgId } from '@/lib/org-resolve'
 
 export type AuditAction =
   | 'USER_ROLE_CHANGED'
@@ -37,6 +38,7 @@ export async function auditLog(entry: AuditLogEntry): Promise<void> {
   try {
     await prisma.auditLog.create({
       data: {
+        orgId: await requireOrgId(),
         userId: entry.userId,
         action: entry.action,
         resourceType: entry.resourceType ?? null,

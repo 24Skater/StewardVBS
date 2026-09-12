@@ -3,6 +3,7 @@
  */
 import "server-only";
 import { prisma } from "./prisma";
+import { requireOrgId } from '@/lib/org-resolve';
 
 export type StudentCategory = {
   id: number;
@@ -61,6 +62,7 @@ export async function createCategory(data: {
 }): Promise<StudentCategory> {
   return await prisma.studentCategory.create({
     data: {
+      orgId: await requireOrgId(),
       name: data.name,
       description: data.description ?? null,
       color: data.color ?? null,
@@ -98,11 +100,12 @@ export async function deleteCategory(id: number): Promise<void> {
 export async function initializeDefaultCategories(): Promise<void> {
   const count = await prisma.studentCategory.count();
   if (count === 0) {
+    const orgId = await requireOrgId();
     await prisma.studentCategory.createMany({
       data: [
-        { name: "Youth", order: 1, eventId: null },
-        { name: "Jovenes", order: 2, eventId: null },
-        { name: "Teacher/Assistant", order: 3, eventId: null },
+        { orgId, name: "Youth", order: 1, eventId: null },
+        { orgId, name: "Jovenes", order: 2, eventId: null },
+        { orgId, name: "Teacher/Assistant", order: 3, eventId: null },
       ],
     });
   }

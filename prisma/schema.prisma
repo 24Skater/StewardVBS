@@ -10,6 +10,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Tenancy ---
+
+//
+// A church. The tenant root.
+//
+// `id` is the UUID the console issues at signup - the same value every other
+// Steward app stores for this church - so a church has one identity across the
+// platform rather than one per app.
+model Org {
+  id        String   @id
+  slug      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships       Membership[]
+  settings          AppSettings?
+  invitations       Invitation[]
+  studentCategories StudentCategory[]
+  events            Event[]
+  students          Student[]
+  studentEvents     StudentEvent[]
+  studentParents    StudentParent[]
+  emergencyContacts StudentEmergencyContact[]
+  teachers          Teacher[]
+  studentTeachers   StudentTeacher[]
+  attendances       Attendance[]
+  payments          Payment[]
+  auditLogs         AuditLog[]
+  scheduleSessions  ScheduleSession[]
+
+  @@index([slug])
+}
+
+//
+// One person's place in one church.
+//
+// Role lives here rather than on `User` because a pooled deployment can hold
+// the same person twice - a volunteer at two churches is one login and two
+// roles. A role on `User` would be whichever church wrote last.
+model Membership {
+  id        String   @id @default(cuid())
+  userId    String
+  orgId     String
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org  Org  @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, orgId])
+  @@index([orgId])
+  @@index([userId])
+}
+
 // --- Authentication ---
 
 model User {
@@ -19,13 +75,13 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?   // Null for OAuth/magic-link users
-  role           UserRole  @default(STAFF)
   sessionVersion Int       @default(1)
   createdAt      DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
   invitations   Invitation[]
+  memberships   Membership[]
 }
 
 model Account {
@@ -68,6 +124,8 @@ model VerificationToken {
 
 model Invitation {
   id        String    @id @default(cuid())
+  orgId     String
+  org       Org       @relation(fields: [orgId], references: [id], onDelete: Cascade)
   email     String
   role      UserRole  @default(STAFF)
   token     String    @unique
@@ -77,9 +135,10 @@ model Invitation {
   usedAt    DateTime?
   createdAt DateTime  @default(now())
 
-  @@unique([email])
+  @@unique([orgId, email])
   @@index([token])
   @@index([expiresAt])
+  @@index([orgId])
 }
 
 enum UserRole {
@@ -91,7 +150,13 @@ enum UserRole {
 // --- Configuration & Settings ---
 
 model AppSettings {
-  id             String   @id @default("singleton")
+  id             String   @id @default(cuid())
+
+  // One settings row per church. The singleton default this replaced is the
+  // single most dangerous thing in a pooled database: every church would have
+  // read, and overwritten, the same row.
+  orgId          String   @unique
+  org            Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   
   // Basic Branding
   siteName       String   @default("Steward · VBS")
@@ -131,6 +196,8 @@ model AppSettings {
 
 model StudentCategory {
   id          Int      @id @default(autoincrement())
+  orgId       String
+  org         Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   name        String
   description String?
   color       String?
@@ -144,13 +211,16 @@ model StudentCategory {
 
   @@unique([eventId, name])
   @@index([eventId])
+  @@index([orgId])
 }
 
 // --- Core Models ---
 
 model Event {
   id        Int      @id @default(autoincrement())
-  year      Int      @unique
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  year      Int
   theme     String?
   isActive  Boolean  @default(false)
   startDate DateTime?
@@ -163,10 +233,15 @@ model Event {
   payments         Payment[]
   sessions         ScheduleSession[]
   studentCategories StudentCategory[]
+
+  @@unique([orgId, year])
+  @@index([orgId, isActive])
 }
 
 model Student {
   id        Int      @id @default(autoincrement())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   name      String
   size      String
   category  String
@@ -201,12 +276,15 @@ model Student {
   emergencyContacts StudentEmergencyContact[]
   teachers          StudentTeacher[]
 
-  @@index([name])
+  @@index([orgId, name])
   @@index([categoryId])
+  @@index([orgId])
 }
 
 model StudentEvent {
   id         Int      @id @default(autoincrement())
+  orgId      String
+  org        Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId  Int
   event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -216,12 +294,15 @@ model StudentEvent {
   @@unique([studentId, eventId])
   @@index([studentId])
   @@index([eventId])
+  @@index([orgId])
 }
 
 // --- Parent/Guardian (supports multiple) ---
 
 model StudentParent {
   id            Int      @id @default(autoincrement())
+  orgId         String
+  org           Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId     Int
   name          String
@@ -235,12 +316,15 @@ model StudentParent {
   updatedAt     DateTime @updatedAt
 
   @@index([studentId])
+  @@index([orgId])
 }
 
 // --- Emergency Contact (supports multiple) ---
 
 model StudentEmergencyContact {
   id            Int      @id @default(autoincrement())
+  orgId         String
+  org           Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId     Int
   name          String
@@ -254,12 +338,15 @@ model StudentEmergencyContact {
 
   @@index([studentId])
   @@index([studentId, priority])
+  @@index([orgId])
 }
 
 // --- Teachers/Volunteers ---
 
 model Teacher {
   id            Int      @id @default(autoincrement())
+  orgId         String
+  org           Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   name          String
   email         String?
   phone         String?
@@ -272,11 +359,14 @@ model Teacher {
 
   students      StudentTeacher[]
 
-  @@index([isActive])
+  @@index([orgId, isActive])
+  @@index([orgId])
 }
 
 model StudentTeacher {
   id          Int      @id @default(autoincrement())
+  orgId       String
+  org         Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId   Int
   teacher     Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
@@ -287,12 +377,15 @@ model StudentTeacher {
   @@unique([studentId, teacherId])
   @@index([studentId])
   @@index([teacherId])
+  @@index([orgId])
 }
 
 // --- Attendance & Payment ---
 
 model Attendance {
   id        Int      @id @default(autoincrement())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId Int
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -303,10 +396,13 @@ model Attendance {
   @@unique([eventId, studentId, date])
   @@index([eventId, date])
   @@index([studentId])
+  @@index([orgId])
 }
 
 model Payment {
   id        Int      @id @default(autoincrement())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId Int
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -318,12 +414,15 @@ model Payment {
 
   @@index([eventId, studentId])
   @@index([studentId])
+  @@index([orgId])
 }
 
 // --- Audit Log ---
 
 model AuditLog {
   id           String   @id @default(cuid())
+  orgId        String
+  org          Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   userId       String
   action       String
   resourceType String?
@@ -335,13 +434,16 @@ model AuditLog {
 
   @@index([userId])
   @@index([action])
-  @@index([createdAt])
+  @@index([orgId, createdAt])
+  @@index([orgId])
 }
 
 // --- Schedule Sessions ---
 
 model ScheduleSession {
   id        Int      @id @default(autoincrement())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id], onDelete: Cascade)
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId   Int
   title     String
@@ -355,6 +457,7 @@ model ScheduleSession {
 
   @@index([eventId, start])
   @@index([eventId, end])
+  @@index([orgId])
 }
 
 model PasswordResetToken {

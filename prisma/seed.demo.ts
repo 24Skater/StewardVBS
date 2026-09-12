@@ -70,6 +70,7 @@ async function main() {
 
     await prisma.student.create({
       data: {
+        orgId: event.orgId,
         name: s.name,
         size: s.size,
         category: s.category,
@@ -78,7 +79,7 @@ async function main() {
         parentPhone: s.parentPhone,
         parentEmail: s.parentEmail,
         allergies: s.allergies,
-        events: { create: { eventId: event.id } },
+        events: { create: { orgId: event.orgId, eventId: event.id } },
       },
     });
     created++;

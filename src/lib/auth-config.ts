@@ -11,6 +11,7 @@ import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { roleInCurrentOrg } from "@/lib/membership";
 import { UserRole, SESSION_MAX_AGE_SEC, SESSION_UPDATE_AGE_SEC } from "@/lib/constants";
 import { isAccountLocked, getLockoutRemaining, recordLoginAttempt } from "@/lib/auth-lockout";
 
@@ -78,12 +79,22 @@ export const authOptions = {
           throw new Error("Invalid email or password");
         }
 
+        // The role belongs to the church this sign-in is for, not to the
+        // login. Someone with no membership here is not signing in here, even
+        // with the right password — that is what stops a volunteer at one
+        // church reaching another church's VBS on the strength of one account.
+        const role = await roleInCurrentOrg(user.id);
+        if (!role) {
+          await recordLoginAttempt(email, false);
+          throw new Error("Invalid email or password");
+        }
+
         await recordLoginAttempt(email, true);
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role,
         };
       },
     }),
@@ -170,7 +181,7 @@ export const authOptions = {
       if (user.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
-          select: { id: true, emailVerified: true, role: true },
+          select: { id: true, emailVerified: true },
         });
 
         if (dbUser?.emailVerified) {
@@ -188,9 +199,12 @@ export const authOptions = {
               },
             });
             if (invitation && dbUser) {
-              await tx.user.update({
-                where: { id: dbUser.id },
-                data: { role: invitation.role },
+              // The invitation carries the church, so accepting it creates the
+              // membership rather than overwriting a role on the login.
+              await tx.membership.upsert({
+                where: { userId_orgId: { userId: dbUser.id, orgId: invitation.orgId } },
+                create: { userId: dbUser.id, orgId: invitation.orgId, role: invitation.role },
+                update: { role: invitation.role },
               });
               await tx.invitation.update({
                 where: { id: invitation.id },
@@ -230,11 +244,11 @@ export const authOptions = {
       if (account && account.provider !== "credentials" && token.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email },
-          select: { id: true, role: true, sessionVersion: true },
+          select: { id: true, sessionVersion: true },
         });
         if (dbUser) {
           token.id = dbUser.id;
-          token.role = dbUser.role;
+          token.role = await roleInCurrentOrg(dbUser.id);
           token.sessionVersion = dbUser.sessionVersion;
         }
       }
@@ -245,14 +259,23 @@ export const authOptions = {
       if (token && session.user) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id },
-          select: { sessionVersion: true, role: true },
+          select: { sessionVersion: true },
         });
         if (!dbUser || dbUser.sessionVersion !== token.sessionVersion) {
           // Token is stale — reject the session
           return { ...session, user: null, expires: new Date(0).toISOString() };
         }
+
+        // Re-derived every request, against the church this request is for. A
+        // session minted on one church's host and replayed against another
+        // finds no membership and is rejected rather than quietly downgraded.
+        const role = await roleInCurrentOrg(token.id);
+        if (!role) {
+          return { ...session, user: null, expires: new Date(0).toISOString() };
+        }
+
         session.user.id = token.id;
-        session.user.role = dbUser.role;
+        session.user.role = role;
       }
       return session;
     },

@@ -1,12 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+const { mockTransaction } = vi.hoisted(() => ({ mockTransaction: vi.fn() }));
+
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     user: {
       findUnique: vi.fn(),
       create: vi.fn(),
     },
+    membership: { create: vi.fn() },
+    $transaction: mockTransaction,
   },
+}));
+
+// Registration now creates a login and a membership together, so it has to
+// know which church the request is for.
+vi.mock("@/lib/org-resolve", () => ({
+  requireOrgId: vi.fn().mockResolvedValue("org-test"),
 }));
 
 vi.mock("@/lib/audit-log", () => ({ auditLog: vi.fn() }));
@@ -39,6 +49,8 @@ describe("POST /api/auth/register", () => {
       email: "alice@example.com",
       role: "VIEWER",
     } as any);
+    // Run the callback against the same mocked client the route would use.
+    mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => fn(prisma));
     vi.mocked(checkRateLimit).mockResolvedValue({
       success: true,
       remaining: 9,

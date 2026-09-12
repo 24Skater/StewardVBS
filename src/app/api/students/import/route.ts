@@ -2,6 +2,7 @@ import { requireRole } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { auditLog } from "@/lib/audit-log";
 import { NextRequest, NextResponse } from "next/server";
+import { requireOrgId } from "@/lib/org-resolve";
 
 const REQUIRED_HEADERS = ["name", "category"];
 const VALID_SIZES = ["YXS", "YS", "YM", "YL", "YXL", "AS", "AM", "AL", "AXL", "A2XL"];
@@ -101,6 +102,7 @@ export async function POST(req: NextRequest) {
 
       await prisma.student.create({
         data: {
+          orgId: await requireOrgId(),
           name,
           category,
           size,

@@ -8,6 +8,7 @@ import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import { ArrowLeft } from "lucide-react";
 import { Button, Input } from "@steward-apps/ui";
+import { requireOrgId } from "@/lib/org-resolve";
 
 async function createStudent(formData: FormData) {
   "use server";
@@ -39,6 +40,7 @@ async function createStudent(formData: FormData) {
 
   const student = await prisma.student.create({
     data: {
+      orgId: await requireOrgId(),
       name,
       category,
       size,

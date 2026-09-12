@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import crypto from "crypto";
+import { requireOrgId } from "@/lib/org-resolve";
 
 /**
  * Google Forms Webhook Endpoint
@@ -205,8 +206,10 @@ export async function POST(request: NextRequest) {
     });
 
     // Create the student and enroll in active event
+    const orgId = await requireOrgId();
     const student = await prisma.student.create({
       data: {
+        orgId,
         name: data.studentName.trim(),
         size: data.size || "YM",
         category: categoryName,
@@ -226,7 +229,10 @@ export async function POST(request: NextRequest) {
         emergencyPhone: sanitize(data.emergencyContactPhone),
         emergencyRelationship: sanitize(data.emergencyContactRelationship),
 
-        events: { create: { eventId: activeEvent.id } },
+        // Named explicitly because this is a nested create: the tenancy guard
+        // is a query extension and never sees rows written inside a parent's
+        // payload, so it cannot stamp this one.
+        events: { create: { orgId, eventId: activeEvent.id } },
       },
     });
 
@@ -234,6 +240,7 @@ export async function POST(request: NextRequest) {
     if (data.parentName) {
       await prisma.studentParent.create({
         data: {
+          orgId,
           studentId: student.id,
           name: data.parentName.trim(),
           phone: sanitize(data.parentPhone),
@@ -249,6 +256,7 @@ export async function POST(request: NextRequest) {
     if (data.emergencyContactName && data.emergencyContactPhone) {
       await prisma.studentEmergencyContact.create({
         data: {
+          orgId,
           studentId: student.id,
           name: data.emergencyContactName.trim(),
           phone: data.emergencyContactPhone.trim(),
