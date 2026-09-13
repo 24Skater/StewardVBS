@@ -16,7 +16,7 @@ vi.mock("@/lib/prisma", () => ({
 // Registration now creates a login and a membership together, so it has to
 // know which church the request is for.
 vi.mock("@/lib/org-resolve", () => ({
-  requireOrgId: vi.fn().mockResolvedValue("org-test"),
+  currentOrgId: vi.fn().mockResolvedValue("org-test"),
 }));
 
 vi.mock("@/lib/audit-log", () => ({ auditLog: vi.fn() }));
@@ -32,6 +32,7 @@ vi.mock("@/lib/rate-limit", () => ({
 import { POST } from "@/app/api/auth/register/route";
 import { prisma } from "@/lib/prisma";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { currentOrgId } from "@/lib/org-resolve";
 
 function makeRequest(body: unknown) {
   return new Request("http://localhost/api/auth/register", {
@@ -43,6 +44,9 @@ function makeRequest(body: unknown) {
 
 describe("POST /api/auth/register", () => {
   beforeEach(() => {
+    // Call history, not implementations — every test below re-establishes those.
+    vi.clearAllMocks();
+    vi.mocked(currentOrgId).mockResolvedValue("org-test");
     vi.mocked(prisma.user.findUnique).mockResolvedValue(null);
     vi.mocked(prisma.user.create).mockResolvedValue({
       id: "user-1",
@@ -67,6 +71,18 @@ describe("POST /api/auth/register", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.success).toBe(true);
+  });
+
+  it("refuses to register when the install has no church yet", async () => {
+    // A fresh install has no church until the first-run wizard runs. Joining one
+    // that does not exist is a 503, not a 500 from a thrown guard.
+    vi.mocked(currentOrgId).mockResolvedValueOnce(null);
+    const res = await POST(makeRequest({
+      email: "alice@example.com",
+      password: "StrongPass1",
+    }));
+    expect(res.status).toBe(503);
+    expect(prisma.user.create).not.toHaveBeenCalled();
   });
 
   it("returns 400 for invalid email", async () => {

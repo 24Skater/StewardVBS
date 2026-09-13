@@ -57,16 +57,6 @@ async function ensureActiveEvent(prisma: PrismaClient): Promise<void> {
 }
 
 setup("create test admin session", async ({ page }) => {
-  // Try to register the test admin user — idempotent (server ignores duplicate email)
-  await page.request.post("/api/auth/register", {
-    data: {
-      email: TEST_ADMIN_EMAIL,
-      password: TEST_ADMIN_PASSWORD,
-      name: "E2E Admin",
-    },
-  });
-
-  // Prepare the database state every downstream spec assumes.
   const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL;
   if (!url) {
     throw new Error(
@@ -74,7 +64,23 @@ setup("create test admin session", async ({ page }) => {
     );
   }
   const prisma = new PrismaClient({ datasourceUrl: url });
+
   try {
+    // The church has to exist before anyone can join it. Registration creates a
+    // login and a membership together, and a membership needs a church — on a
+    // real install the first-run wizard or provisioning does this, and here the
+    // fixture stands in for both.
+    await seedOrg(prisma);
+
+    // Try to register the test admin user — idempotent (server ignores duplicate email)
+    await page.request.post("/api/auth/register", {
+      data: {
+        email: TEST_ADMIN_EMAIL,
+        password: TEST_ADMIN_PASSWORD,
+        name: "E2E Admin",
+      },
+    });
+
     // Registration defaults to a non-admin role.
     await upgradeTestAdminRole(prisma);
     await ensureActiveEvent(prisma);

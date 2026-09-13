@@ -7,7 +7,7 @@ import { validateInvitation, markInvitationUsed } from "@/lib/invitations";
 import { BCRYPT_ROUNDS } from "@/lib/constants";
 import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
-import { requireOrgId } from "@/lib/org-resolve";
+import { currentOrgId } from "@/lib/org-resolve";
 
 const REGISTER_WINDOW_MS = 15 * 60 * 1000;
 const REGISTER_MAX_REQUESTS = 10;
@@ -39,6 +39,17 @@ export async function POST(req: Request) {
           status: 429,
           headers: { "Retry-After": String(rateLimit.retryAfter ?? 60) },
         }
+      );
+    }
+
+    // Registering means joining a church, so there has to be one. On a fresh
+    // install there is not until the first-run wizard has run — answer that
+    // plainly rather than letting requireOrgId() throw into a 500.
+    const orgId = await currentOrgId();
+    if (!orgId) {
+      return NextResponse.json(
+        { error: "This site is not set up yet." },
+        { status: 503 }
       );
     }
 
@@ -92,7 +103,6 @@ export async function POST(req: Request) {
     // The login is global; the role is this person's place in this church. Both
     // in one transaction, because a login with no membership can sign in
     // nowhere and would be a dead account.
-    const orgId = await requireOrgId();
     const user = await prisma.$transaction(async (tx) => {
       const created = await tx.user.create({
         data: {
