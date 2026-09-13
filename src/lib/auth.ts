@@ -3,7 +3,9 @@
  */
 import "server-only";
 import { authOptions } from "@/lib/auth-config";
-import { UnauthorizedError, ForbiddenError } from "./errors";
+import { UnauthorizedError, ForbiddenError, EntitlementError } from "./errors";
+import { currentOrgId } from "./org-resolve";
+import { checkEntitlement } from "./platform/entitlements";
 import { UserRole } from "./constants";
 
 /**
@@ -24,6 +26,22 @@ export async function requireAuth() {
   if (!session?.user) {
     throw new UnauthorizedError("You must be logged in to access this resource");
   }
+
+  // A revoked church has lost access entirely, reads included, so this is the
+  // right place to stop it: before any page renders anything.
+  //
+  // Only REVOKED is checked here. READ_ONLY still reads, and refusing its
+  // writes is the data layer's job - see lib/prisma.ts. Splitting it that way
+  // means neither layer has to guess whether a given request intends to change
+  // something, because each asks the question it can actually answer.
+  const orgId = await currentOrgId();
+  if (orgId) {
+    const decision = await checkEntitlement(orgId, false);
+    if (!decision.allow) {
+      throw new EntitlementError(decision.reason);
+    }
+  }
+
   return session;
 }
 
