@@ -1,4 +1,13 @@
-import { describe, it, expect } from 'vitest'
+import { vi, describe, it, expect } from 'vitest'
+
+// Rate-limit and lockout keys are namespaced per church, and resolving a church
+// reads the database. These are unit tests, so the church is pinned: left
+// unmocked, CI (which has a real Postgres) resolves it for real and a slow or
+// empty lookup can hand the write and the read different keys.
+vi.mock('../org-resolve', () => ({
+  currentOrgId: vi.fn().mockResolvedValue('org-test'),
+}))
+
 import { checkRateLimit, getClientIdentifier } from '../rate-limit'
 
 describe('checkRateLimit (in-memory)', () => {

@@ -1,4 +1,13 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+
+// Lockout keys are namespaced per church, and resolving a church reads the
+// database. These are unit tests of the lockout arithmetic, so the church is
+// pinned: left unmocked, CI (which has a real Postgres) resolves it for real
+// and a slow or empty lookup can hand the write and the read different keys.
+vi.mock('../org-resolve', () => ({
+  currentOrgId: vi.fn().mockResolvedValue('org-test'),
+}))
+
 import {
   recordLoginAttempt,
   isAccountLocked,

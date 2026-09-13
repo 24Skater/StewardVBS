@@ -1,5 +1,6 @@
 import 'server-only'
 import { MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MS, LOCKOUT_WINDOW_MS, ONE_MINUTE_MS } from './constants'
+import { orgScopedKey } from './redis-keys'
 
 export interface LoginAttempt {
   email: string
@@ -30,7 +31,7 @@ async function _tryGetRedis() {
 
 export async function recordLoginAttempt(email: string, success: boolean): Promise<void> {
   const redis = await _tryGetRedis()
-  const key = `lockout:${email}`
+  const key = await orgScopedKey('lockout', email)
 
   if (success) {
     if (redis) {
@@ -78,7 +79,7 @@ async function _getRecentFailureCount(email: string): Promise<number> {
 
   if (redis) {
     try {
-      const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+      const raw = await redis.lrange(await orgScopedKey('lockout', email), 0, -1)
       return raw.filter((e) => {
         const parsed = JSON.parse(e) as { ts: number; success: boolean }
         return !parsed.success && parsed.ts > cutoff
@@ -103,7 +104,7 @@ async function _getLastFailureTs(email: string): Promise<number | null> {
 
   if (redis) {
     try {
-      const raw = await redis.lrange(`lockout:${email}`, 0, -1)
+      const raw = await redis.lrange(await orgScopedKey('lockout', email), 0, -1)
       const failureTimes = raw
         .map((e) => JSON.parse(e) as { ts: number; success: boolean })
         .filter((e) => !e.success && e.ts > cutoff)

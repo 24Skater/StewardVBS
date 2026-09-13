@@ -1,5 +1,6 @@
 import 'server-only'
 import { RATE_LIMIT_WINDOW_MS, RATE_LIMIT_MAX_REQUESTS, ONE_MINUTE_MS } from './constants'
+import { orgScopedKey } from './redis-keys'
 
 export interface RateLimitOptions {
   windowMs: number
@@ -55,7 +56,7 @@ export async function checkRateLimit(
   try {
     const { getRedis } = await import('./redis')
     const redis = getRedis()
-    const key = `rl:${identifier}`
+    const key = await orgScopedKey('rl', identifier)
     const windowSec = Math.ceil(windowMs / 1000)
 
     const luaScript = `

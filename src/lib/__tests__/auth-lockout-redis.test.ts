@@ -11,6 +11,14 @@ vi.mock('../redis', () => ({
   getRedis: () => mockRedis,
 }))
 
+// Lockout keys are namespaced per church now, so the test has to say which.
+vi.mock('../org-resolve', () => ({
+  currentOrgId: vi.fn().mockResolvedValue('org-test'),
+}))
+
+/** The shape lib/redis-keys.ts produces. */
+const KEY = 'org:org-test:lockout:redis-test@example.com'
+
 import {
   recordLoginAttempt,
   isAccountLocked,
@@ -34,7 +42,7 @@ describe('auth-lockout with Redis', () => {
     it('calls lpush and expire on failure', async () => {
       await recordLoginAttempt('redis-test@example.com', false)
       expect(mockRedis.lpush).toHaveBeenCalledWith(
-        'lockout:redis-test@example.com',
+        KEY,
         expect.stringContaining('"success":false')
       )
       expect(mockRedis.expire).toHaveBeenCalled()
@@ -42,7 +50,7 @@ describe('auth-lockout with Redis', () => {
 
     it('calls del on successful login', async () => {
       await recordLoginAttempt('redis-test@example.com', true)
-      expect(mockRedis.del).toHaveBeenCalledWith('lockout:redis-test@example.com')
+      expect(mockRedis.del).toHaveBeenCalledWith(KEY)
       expect(mockRedis.lpush).not.toHaveBeenCalled()
     })
   })
@@ -117,5 +125,49 @@ describe('auth-lockout Redis command failure fallback (non-production)', () => {
 
   it('recordLoginAttempt falls back to in-memory on Redis del failure for success', async () => {
     await expect(recordLoginAttempt('fallback-test@example.com', true)).resolves.toBeUndefined()
+  })
+})
+
+describe('the key a lockout is written to is the key it is read from', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockRedis.lrange.mockResolvedValue([])
+  })
+
+  it('reads back the same key it wrote', async () => {
+    // The regression this exists for: namespacing the keys per church changed
+    // the write path and left the two read paths on the old unprefixed key, so
+    // every recorded failure went into one bucket and every count came out of
+    // an empty one. Lockout silently stopped locking, and no local run could
+    // see it because without a Redis these tests take the in-memory path.
+    await recordLoginAttempt('same-key@example.com', false)
+    await getRemainingAttempts('same-key@example.com')
+
+    const written = mockRedis.lpush.mock.calls[0][0]
+    const read = mockRedis.lrange.mock.calls[0][0]
+    expect(read).toBe(written)
+  })
+
+  it('uses that same key for the lockout countdown too', async () => {
+    await recordLoginAttempt('same-key@example.com', false)
+    await getLockoutRemaining('same-key@example.com')
+
+    const written = mockRedis.lpush.mock.calls[0][0]
+    const read = mockRedis.lrange.mock.calls[0][0]
+    expect(read).toBe(written)
+  })
+
+  it('uses that same key when clearing on success', async () => {
+    await recordLoginAttempt('same-key@example.com', false)
+    const written = mockRedis.lpush.mock.calls[0][0]
+
+    vi.clearAllMocks()
+    await recordLoginAttempt('same-key@example.com', true)
+    expect(mockRedis.del).toHaveBeenCalledWith(written)
+  })
+
+  it('namespaces it, rather than leaving it global', async () => {
+    await recordLoginAttempt('same-key@example.com', false)
+    expect(mockRedis.lpush.mock.calls[0][0]).toBe('org:org-test:lockout:same-key@example.com')
   })
 })
