@@ -1,5 +1,6 @@
 import 'server-only'
 import { MAX_LOGIN_ATTEMPTS, LOCKOUT_DURATION_MS, LOCKOUT_WINDOW_MS, ONE_MINUTE_MS } from './constants'
+import { orgScopedKey } from './redis-keys'
 
 export interface LoginAttempt {
   email: string
@@ -30,7 +31,7 @@ async function _tryGetRedis() {
 
 export async function recordLoginAttempt(email: string, success: boolean): Promise<void> {
   const redis = await _tryGetRedis()
-  const key = `lockout:${email}`
+  const key = await orgScopedKey('lockout', email)
 
   if (success) {
     if (redis) {

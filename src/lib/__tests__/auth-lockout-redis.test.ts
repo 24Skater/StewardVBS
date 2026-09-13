@@ -11,6 +11,14 @@ vi.mock('../redis', () => ({
   getRedis: () => mockRedis,
 }))
 
+// Lockout keys are namespaced per church now, so the test has to say which.
+vi.mock('../org-resolve', () => ({
+  currentOrgId: vi.fn().mockResolvedValue('org-test'),
+}))
+
+/** The shape lib/redis-keys.ts produces. */
+const KEY = 'org:org-test:lockout:redis-test@example.com'
+
 import {
   recordLoginAttempt,
   isAccountLocked,
@@ -34,7 +42,7 @@ describe('auth-lockout with Redis', () => {
     it('calls lpush and expire on failure', async () => {
       await recordLoginAttempt('redis-test@example.com', false)
       expect(mockRedis.lpush).toHaveBeenCalledWith(
-        'lockout:redis-test@example.com',
+        KEY,
         expect.stringContaining('"success":false')
       )
       expect(mockRedis.expire).toHaveBeenCalled()
@@ -42,7 +50,7 @@ describe('auth-lockout with Redis', () => {
 
     it('calls del on successful login', async () => {
       await recordLoginAttempt('redis-test@example.com', true)
-      expect(mockRedis.del).toHaveBeenCalledWith('lockout:redis-test@example.com')
+      expect(mockRedis.del).toHaveBeenCalledWith(KEY)
       expect(mockRedis.lpush).not.toHaveBeenCalled()
     })
   })
