@@ -8,12 +8,23 @@ import OAuthButtons from "./OAuthButtons";
 
 type AuthMode = "magic-link" | "password";
 
+/**
+ * Whether email and password is still offered.
+ *
+ * Derived in next.config.mjs from ALLOW_LOCAL_PASSWORD_LOGIN, which defaults
+ * to on. Turning it off is a deliberate act taken once single sign-on is
+ * proven for everybody who needs to get in.
+ */
+const PASSWORDS_ALLOWED = process.env.NEXT_PUBLIC_ALLOW_PASSWORD_LOGIN !== "false";
+
 export default function SignInForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authMode, setAuthMode] = useState<AuthMode>("password"); // Default to password
+  const [authMode, setAuthMode] = useState<AuthMode>(
+    PASSWORDS_ALLOWED ? "password" : "magic-link"
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -137,8 +148,11 @@ export default function SignInForm() {
         </div>
       )}
 
-      {/* Auth Mode Toggle */}
-      <div className="flex rounded-md border border-[var(--st-border)] p-1">
+      {/* Auth Mode Toggle. Only a toggle when there are two modes to pick. */}
+      <div
+        className="flex rounded-md border border-[var(--st-border)] p-1"
+        hidden={!PASSWORDS_ALLOWED}
+      >
         <button
           type="button"
           onClick={() => setAuthMode("magic-link")}

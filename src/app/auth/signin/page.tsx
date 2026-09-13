@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 import { needsSetup } from "@/lib/setup";
 import SignInForm from "@/components/SignInForm";
+import SsoButton from "@/components/SsoButton";
 import { ArrowLeft } from "lucide-react";
 
 // Rendered per request: this page branches on needsSetup(), which reads the
@@ -87,6 +88,9 @@ export default async function SignInPage({
             <p className="text-sm text-[var(--st-muted)]">{settings.welcomeMessage}</p>
           </div>
         )}
+
+        {/* Single sign-on, when this deployment has an identity provider */}
+        <SsoButton />
 
         {/* Sign In Form */}
         <Suspense fallback={<div className="text-center text-[var(--st-muted)]">Loading...</div>}>
