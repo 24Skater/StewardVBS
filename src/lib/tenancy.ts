@@ -73,6 +73,17 @@ const READ_OPS = new Set([
 /** Operations that select existing rows by `where` in order to change them. */
 const WHERE_WRITE_OPS = new Set(['update', 'updateMany', 'delete', 'deleteMany'])
 
+/**
+ * Whether an operation changes anything.
+ *
+ * Derived from the same two sets the scoping uses rather than listed a third
+ * time, so an operation can never be considered a write by one and a read by
+ * the other.
+ */
+export function isWriteOperation(operation: string): boolean {
+  return !READ_OPS.has(operation)
+}
+
 type Payload = Record<string, unknown> | undefined
 
 function createPayloads(operation: string, args: Record<string, unknown>): Payload[] {
