@@ -8,12 +8,92 @@ import { logger } from "@/lib/logger";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
+import Auth0Provider from "next-auth/providers/auth0";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { roleInCurrentOrg } from "@/lib/membership";
 import { UserRole, SESSION_MAX_AGE_SEC, SESSION_UPDATE_AGE_SEC } from "@/lib/constants";
 import { isAccountLocked, getLockoutRemaining, recordLoginAttempt } from "@/lib/auth-lockout";
+import {
+  decideSsoSignIn,
+  isLocalPasswordLoginAllowed,
+  ssoConfig,
+  type SsoProfileClaims,
+} from "@/lib/sso";
+
+/**
+ * Single sign-on, when this deployment has been given one.
+ *
+ * Read once here rather than at each use, so the provider list and the sign-in
+ * callback can never disagree about whether SSO exists.
+ */
+const sso = ssoConfig();
+
+/**
+ * Email and password.
+ *
+ * Extracted from the provider list so it can be left out by configuration
+ * without the list becoming unreadable. It is present unless somebody
+ * deliberately turns it off, and `password` is never dropped either.
+ */
+const credentialsProvider = CredentialsProvider({
+    name: "credentials",
+    credentials: {
+      email: { label: "Email", type: "email" },
+      password: { label: "Password", type: "password" },
+    },
+    async authorize(credentials) {
+      if (!credentials?.email || !credentials?.password) {
+        throw new Error("Email and password required");
+      }
+
+      const email = (credentials.email as string).toLowerCase();
+      const password = credentials.password as string;
+
+      // Enforce account lockout before attempting auth
+      if (await isAccountLocked(email)) {
+        const remaining = await getLockoutRemaining(email);
+        await recordLoginAttempt(email, false);
+        throw new Error(
+          `Account locked due to too many failed attempts. Please try again in ${Math.ceil((remaining || 0) / 60)} minutes.`
+        );
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user || !user.password) {
+        await recordLoginAttempt(email, false);
+        throw new Error("Invalid email or password");
+      }
+
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) {
+        await recordLoginAttempt(email, false);
+        throw new Error("Invalid email or password");
+      }
+
+      // The role belongs to the church this sign-in is for, not to the
+      // login. Someone with no membership here is not signing in here, even
+      // with the right password — that is what stops a volunteer at one
+      // church reaching another church's VBS on the strength of one account.
+      const role = await roleInCurrentOrg(user.id);
+      if (!role) {
+        await recordLoginAttempt(email, false);
+        throw new Error("Invalid email or password");
+      }
+
+      await recordLoginAttempt(email, true);
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role,
+      };
+    },
+});
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma) as any,
@@ -40,64 +120,26 @@ export const authOptions = {
           }),
         ]
       : []),
-    // Credentials Provider (Email + Password)
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password required");
-        }
-
-        const email = (credentials.email as string).toLowerCase();
-        const password = credentials.password as string;
-
-        // Enforce account lockout before attempting auth
-        if (await isAccountLocked(email)) {
-          const remaining = await getLockoutRemaining(email);
-          await recordLoginAttempt(email, false);
-          throw new Error(
-            `Account locked due to too many failed attempts. Please try again in ${Math.ceil((remaining || 0) / 60)} minutes.`
-          );
-        }
-
-        const user = await prisma.user.findUnique({
-          where: { email },
-        });
-
-        if (!user || !user.password) {
-          await recordLoginAttempt(email, false);
-          throw new Error("Invalid email or password");
-        }
-
-        const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) {
-          await recordLoginAttempt(email, false);
-          throw new Error("Invalid email or password");
-        }
-
-        // The role belongs to the church this sign-in is for, not to the
-        // login. Someone with no membership here is not signing in here, even
-        // with the right password — that is what stops a volunteer at one
-        // church reaching another church's VBS on the strength of one account.
-        const role = await roleInCurrentOrg(user.id);
-        if (!role) {
-          await recordLoginAttempt(email, false);
-          throw new Error("Invalid email or password");
-        }
-
-        await recordLoginAttempt(email, true);
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role,
-        };
-      },
-    }),
+    // Single sign-on (optional - one identity provider across the Steward
+    // applications). Absent configuration means an absent provider, not a
+    // broken one: a church running VBS on its own server never needs this.
+    ...(sso
+      ? [
+          Auth0Provider({
+            issuer: sso.issuer,
+            clientId: sso.clientId,
+            clientSecret: sso.clientSecret,
+            // Linking by address is safe here *only* because signIn below
+            // refuses any profile whose address the provider has not verified.
+            // Removing that check without also removing this flag would let
+            // anyone who can assert an address take over the account that
+            // already owns it.
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
+    // Email and password, unless deliberately turned off.
+    ...(isLocalPasswordLoginAllowed() ? [credentialsProvider] : []),
     // Email Provider (Magic Links)
     EmailProvider({
       server: process.env.EMAIL_SERVER || (process.env.EMAIL_SERVER_HOST ? {
@@ -165,7 +207,20 @@ export const authOptions = {
   },
   callbacks: {
     async signIn(params: any) {
-      const { user, email, account } = params;
+      const { user, email, account, profile } = params;
+
+      // Single sign-on is the one path that can land on an account which
+      // already exists, by matching an address. Everything after that match
+      // trusts the identity provider's word that the address belongs to
+      // whoever is holding it, so refuse when it has not said so — before the
+      // invitation below could hand out a membership on that basis.
+      if (account?.provider === "auth0") {
+        const decision = decideSsoSignIn(profile as SsoProfileClaims | undefined);
+        if (!decision.ok) {
+          logger.warn({ reason: decision.reason }, "Refused a single sign-on attempt");
+          return false;
+        }
+      }
 
       // Magic link lockout check
       if (email?.verificationRequest && user.email) {
