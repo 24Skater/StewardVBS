@@ -23,15 +23,17 @@ async function updateUserRole(formData: FormData) {
     throw new ValidationError("Invalid role specified");
   }
 
-  // Get current user role
-  const targetUser = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, email: true, role: true },
+  // Scoped to this church, so an admin here cannot change a role at another.
+  const targetMembership = await prisma.membership.findFirst({
+    where: { userId },
+    select: { id: true, role: true, user: { select: { id: true, email: true } } },
   });
 
-  if (!targetUser) {
+  if (!targetMembership) {
     throw new ValidationError("User not found");
   }
+
+  const targetUser = { ...targetMembership.user, role: targetMembership.role };
 
   // Prevent self-demotion (admin cannot remove their own admin role)
   if (userId === session.user.id && role !== "ADMIN") {
@@ -40,7 +42,7 @@ async function updateUserRole(formData: FormData) {
 
   // Prevent removing last admin
   if (targetUser.role === "ADMIN" && role !== "ADMIN") {
-    const adminCount = await prisma.user.count({
+    const adminCount = await prisma.membership.count({
       where: { role: "ADMIN" },
     });
     if (adminCount <= 1) {
@@ -48,9 +50,16 @@ async function updateUserRole(formData: FormData) {
     }
   }
 
+  await prisma.membership.update({
+    where: { id: targetMembership.id },
+    data: { role: role as UserRole },
+  });
+
+  // The role lives on the membership now, but the session that caches it hangs
+  // off the login, so the bump still belongs on the user.
   await prisma.user.update({
     where: { id: userId },
-    data: { role: role as UserRole, sessionVersion: { increment: 1 } },
+    data: { sessionVersion: { increment: 1 } },
   });
 
   // Audit log
@@ -70,9 +79,19 @@ async function updateUserRole(formData: FormData) {
 }
 
 export default async function UsersPage() {
-  const users = await prisma.user.findMany({
+  // Memberships, not users. `user.findMany()` is unscoped by design — a login
+  // is global — so listing users directly would show this church every other
+  // church's staff. The membership is the church-shaped half, and the guard
+  // scopes it.
+  const memberships = await prisma.membership.findMany({
     orderBy: { createdAt: "desc" },
+    include: { user: true },
   });
+
+  const users = memberships.map((membership) => ({
+    ...membership.user,
+    role: membership.role,
+  }));
 
   const roleColors: Record<string, string> = {
     ADMIN: "bg-purple-100 text-purple-800",

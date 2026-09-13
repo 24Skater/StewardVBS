@@ -8,12 +8,18 @@ vi.mock("../prisma", () => ({
   },
 }));
 
+// Settings are per-church now, so the code asks which church before it reads.
+vi.mock("../org-resolve", () => ({
+  requireOrgId: vi.fn().mockResolvedValue("org-test"),
+}));
+
 import { formatChurchAddress, generateWebhookSecret, getSettings, updateSettings } from "../settings";
 import type { AppSettings } from "../settings";
 
 function makeSettings(overrides: Partial<AppSettings> = {}): AppSettings {
   return {
-    id: "singleton",
+    id: "settings-1",
+    orgId: "org-test",
     siteName: "Steward VBS",
     primaryColor: "#E8B847",
     secondaryColor: "#C49A2E",
@@ -112,7 +118,7 @@ describe("getSettings", () => {
     const result = await getSettings();
     expect(result.siteName).toBe("Steward VBS");
     expect(mockUpsert).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: "singleton" } })
+      expect.objectContaining({ where: { orgId: "org-test" } })
     );
   });
 

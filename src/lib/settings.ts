@@ -4,9 +4,12 @@
 import "server-only";
 import crypto from 'crypto'
 import { prisma } from "./prisma";
+import { requireOrgId } from "@/lib/org-resolve";
 
 export type AppSettings = {
   id: string;
+  /** The church these settings belong to. Exactly one row per church. */
+  orgId: string;
   
   // Basic Branding
   siteName: string;
@@ -49,10 +52,14 @@ export type AppSettings = {
  */
 export async function getSettings(): Promise<AppSettings> {
   try {
+    // One row per church. The `id: "singleton"` this replaced was the single
+    // most dangerous line in the schema once churches share a database: every
+    // church would have read, and written, the same settings row.
+    const orgId = await requireOrgId();
     return await prisma.appSettings.upsert({
-      where: { id: "singleton" },
+      where: { orgId },
       update: {},
-      create: { id: "singleton" },
+      create: { orgId },
     });
   } catch (error: any) {
     if (error?.code === 'P1001' || error?.message?.includes("Can't reach database server")) {
@@ -71,13 +78,14 @@ export async function getSettings(): Promise<AppSettings> {
  * Update application settings
  */
 export async function updateSettings(
-  data: Partial<Omit<AppSettings, "id" | "createdAt" | "updatedAt">>
+  data: Partial<Omit<AppSettings, "id" | "orgId" | "createdAt" | "updatedAt">>
 ): Promise<AppSettings> {
+  const orgId = await requireOrgId();
   return await prisma.appSettings.upsert({
-    where: { id: "singleton" },
+    where: { orgId },
     update: data,
     create: {
-      id: "singleton",
+      orgId,
       siteName: data.siteName ?? "Steward VBS",
       primaryColor: data.primaryColor ?? "#E8B847",
       secondaryColor: data.secondaryColor ?? "#C49A2E",

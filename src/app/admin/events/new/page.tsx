@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import { auditLog } from "@/lib/audit-log";
 import { MIN_YEAR, MAX_YEAR, MAX_THEME_LENGTH } from "@/lib/constants";
+import { requireOrgId } from "@/lib/org-resolve";
 
 async function createEvent(formData: FormData) {
   "use server";
@@ -41,7 +42,8 @@ async function createEvent(formData: FormData) {
   }
 
   // Check if year already exists
-  const existing = await prisma.event.findUnique({ where: { year } });
+  const orgId = await requireOrgId();
+  const existing = await prisma.event.findUnique({ where: { orgId_year: { orgId, year } } });
   if (existing) {
     throw new ValidationError(`Event for year ${year} already exists`);
   }
@@ -55,6 +57,7 @@ async function createEvent(formData: FormData) {
 
   const event = await prisma.event.create({
     data: {
+      orgId,
       year,
       theme,
       startDate,

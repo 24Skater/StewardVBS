@@ -7,6 +7,7 @@ import { validateInvitation, markInvitationUsed } from "@/lib/invitations";
 import { BCRYPT_ROUNDS } from "@/lib/constants";
 import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
+import { currentOrgId } from "@/lib/org-resolve";
 
 const REGISTER_WINDOW_MS = 15 * 60 * 1000;
 const REGISTER_MAX_REQUESTS = 10;
@@ -38,6 +39,17 @@ export async function POST(req: Request) {
           status: 429,
           headers: { "Retry-After": String(rateLimit.retryAfter ?? 60) },
         }
+      );
+    }
+
+    // Registering means joining a church, so there has to be one. On a fresh
+    // install there is not until the first-run wizard has run — answer that
+    // plainly rather than letting requireOrgId() throw into a 500.
+    const orgId = await currentOrgId();
+    if (!orgId) {
+      return NextResponse.json(
+        { error: "This site is not set up yet." },
+        { status: 503 }
       );
     }
 
@@ -88,15 +100,24 @@ export async function POST(req: Request) {
     // Hash password with bcrypt (12 rounds as specified in requirements)
     const hashedPassword = await bcrypt.hash(password, BCRYPT_ROUNDS);
 
-    // Create user with assigned role (from invitation or default VIEWER)
-    const user = await prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        password: hashedPassword,
-        name: name || null,
-        role: assignedRole,
-        emailVerified: new Date(), // Consider email verified for credentials users
-      },
+    // The login is global; the role is this person's place in this church. Both
+    // in one transaction, because a login with no membership can sign in
+    // nowhere and would be a dead account.
+    const user = await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: {
+          email: normalizedEmail,
+          password: hashedPassword,
+          name: name || null,
+          emailVerified: new Date(), // Consider email verified for credentials users
+        },
+      });
+
+      await tx.membership.create({
+        data: { userId: created.id, orgId, role: assignedRole },
+      });
+
+      return created;
     });
 
     // Mark invitation as used if applicable

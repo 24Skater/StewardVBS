@@ -1,6 +1,7 @@
 import { test as setup, expect } from "@playwright/test";
 import { PrismaClient } from "@prisma/client";
 import { TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD } from "./helpers/auth";
+import { seedOrg } from "../prisma/seed-org";
 
 // This runs once before authenticated specs. It registers a test admin user
 // (if not already registered), upgrades them to ADMIN role, and saves session
@@ -20,15 +21,17 @@ import { TEST_ADMIN_EMAIL, TEST_ADMIN_PASSWORD } from "./helpers/auth";
  * suite to fail later and somewhere else.
  */
 async function upgradeTestAdminRole(prisma: PrismaClient): Promise<void> {
-  const { count } = await prisma.user.updateMany({
-    where: { email: TEST_ADMIN_EMAIL },
+  // The role lives on the membership now, not on the login, so the promotion
+  // has to name the church the test admin belongs to.
+  const { count } = await prisma.membership.updateMany({
+    where: { user: { email: TEST_ADMIN_EMAIL } },
     data: { role: "ADMIN" },
   });
   // Fail here, loudly, rather than letting every downstream spec fail
   // obscurely against the setup wizard.
   expect(
     count,
-    `Expected to promote ${TEST_ADMIN_EMAIL} to ADMIN, but no such user exists. Did registration fail?`
+    `Expected to promote ${TEST_ADMIN_EMAIL} to ADMIN, but they have no membership. Did registration fail?`
   ).toBeGreaterThan(0);
 }
 
@@ -40,28 +43,20 @@ async function upgradeTestAdminRole(prisma: PrismaClient): Promise<void> {
  * the admin panel." The check-in specs assert on real page content, so without
  * this they test the error state instead of the feature.
  *
- * Idempotent: Event.year is unique, so re-running upserts rather than duplicates.
+ * Idempotent: (orgId, year) is unique, so re-running upserts rather than
+ * duplicates.
  */
 async function ensureActiveEvent(prisma: PrismaClient): Promise<void> {
   const year = new Date().getFullYear();
+  const org = await seedOrg(prisma);
   await prisma.event.upsert({
-    where: { year },
+    where: { orgId_year: { orgId: org.id, year } },
     update: { isActive: true },
-    create: { year, theme: "E2E Test Event", isActive: true },
+    create: { orgId: org.id, year, theme: "E2E Test Event", isActive: true },
   });
 }
 
 setup("create test admin session", async ({ page }) => {
-  // Try to register the test admin user — idempotent (server ignores duplicate email)
-  await page.request.post("/api/auth/register", {
-    data: {
-      email: TEST_ADMIN_EMAIL,
-      password: TEST_ADMIN_PASSWORD,
-      name: "E2E Admin",
-    },
-  });
-
-  // Prepare the database state every downstream spec assumes.
   const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL;
   if (!url) {
     throw new Error(
@@ -69,7 +64,23 @@ setup("create test admin session", async ({ page }) => {
     );
   }
   const prisma = new PrismaClient({ datasourceUrl: url });
+
   try {
+    // The church has to exist before anyone can join it. Registration creates a
+    // login and a membership together, and a membership needs a church — on a
+    // real install the first-run wizard or provisioning does this, and here the
+    // fixture stands in for both.
+    await seedOrg(prisma);
+
+    // Try to register the test admin user — idempotent (server ignores duplicate email)
+    await page.request.post("/api/auth/register", {
+      data: {
+        email: TEST_ADMIN_EMAIL,
+        password: TEST_ADMIN_PASSWORD,
+        name: "E2E Admin",
+      },
+    });
+
     // Registration defaults to a non-admin role.
     await upgradeTestAdminRole(prisma);
     await ensureActiveEvent(prisma);

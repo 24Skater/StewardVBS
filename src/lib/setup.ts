@@ -3,6 +3,7 @@
  */
 import "server-only";
 import { prisma } from "./prisma";
+import { unscopedPrisma } from "./prisma-unscoped";
 import { logger } from "./logger";
 
 /**
@@ -24,7 +25,10 @@ export async function isFirstLaunch(): Promise<boolean> {
  */
 export async function needsSetup(): Promise<boolean> {
   try {
-    const adminCount = await prisma.user.count({
+    // Counted across every church, not within one. Setup is a question about
+    // the installation — "has anyone ever finished setting this up" — and on a
+    // fresh install there is no church for a scoped count to belong to.
+    const adminCount = await unscopedPrisma.membership.count({
       where: { role: "ADMIN" },
     });
     logger.info({ adminCount, needsSetup: adminCount === 0 }, '[Setup] Admin count checked');

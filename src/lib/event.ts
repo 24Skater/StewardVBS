@@ -5,6 +5,7 @@ import "server-only";
 import { prisma } from "./prisma";
 import { NotFoundError } from "./errors";
 import { cache } from "react";
+import { requireOrgId } from '@/lib/org-resolve';
 
 /**
  * Get the currently active event
@@ -30,7 +31,7 @@ export const getActiveEvent = cache(async () => {
  */
 export async function getEventByYear(year: number) {
   const event = await prisma.event.findUnique({
-    where: { year },
+    where: { orgId_year: { orgId: await requireOrgId(), year } },
   });
 
   if (!event) {

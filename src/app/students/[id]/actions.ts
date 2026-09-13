@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { getActiveEvent } from "@/lib/event";
 import { verifyStudentAccess, validateId } from "@/lib/resource-access";
 import { getTodayRange } from "@/lib/date-utils";
+import { requireOrgId } from "@/lib/org-resolve";
 
 export async function checkInAction(studentId: number) {
   await requireRole("STAFF");
@@ -31,7 +32,7 @@ export async function checkInAction(studentId: number) {
 
   if (!existing) {
     await prisma.attendance.create({
-      data: { studentId: validId, eventId: event.id },
+      data: { orgId: await requireOrgId(), studentId: validId, eventId: event.id },
     });
   }
 
@@ -57,7 +58,7 @@ export async function togglePaidAction(studentId: number) {
     await prisma.payment.delete({ where: { id: existing.id } });
   } else {
     await prisma.payment.create({
-      data: { studentId: validId, eventId: event.id, amount: 0 },
+      data: { orgId: await requireOrgId(), studentId: validId, eventId: event.id, amount: 0 },
     });
   }
 

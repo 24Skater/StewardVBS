@@ -7,6 +7,7 @@ import { requireRole } from "@/lib/auth";
 import { scheduleSessionSchema } from "@/lib/validation";
 import { verifySessionAccess, validateId } from "@/lib/resource-access";
 import { MAX_FUTURE_YEARS } from "@/lib/constants";
+import { requireOrgId } from "@/lib/org-resolve";
 
 export async function createSession(formData: FormData) {
   await requireRole("STAFF");
@@ -43,6 +44,7 @@ export async function createSession(formData: FormData) {
 
   await prisma.scheduleSession.create({
     data: {
+      orgId: await requireOrgId(),
       title: data.title,
       start: data.start,
       end: data.end,

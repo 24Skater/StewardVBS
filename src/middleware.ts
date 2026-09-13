@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { addSecurityHeaders } from '@/lib/security-headers'
+import { extractTenantSlug, ORG_SLUG_HEADER } from '@/lib/platform-domain'
 
 const PROTECTED_PREFIXES = [
   '/dashboard',
@@ -37,6 +38,20 @@ export function middleware(request: NextRequest): NextResponse {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-nonce', nonce)
   requestHeaders.set('x-request-id', crypto.randomUUID())
+
+  // Which church this request is for, taken from the host it arrived on.
+  //
+  // Stripped first, then set: a client that sends the header itself must not be
+  // able to choose its own church. Only the hostname decides, and the hostname
+  // is the one thing the browser cannot forge past the edge.
+  //
+  // The database lookup that turns this slug into a church id happens in Node,
+  // in lib/org-resolve.ts — middleware runs on the Edge runtime, which has no
+  // Prisma. A self-hosted install has no root domain, sets no header, and
+  // resolves its sole church there instead.
+  requestHeaders.delete(ORG_SLUG_HEADER)
+  const slug = extractTenantSlug(request.headers.get('host'))
+  if (slug) requestHeaders.set(ORG_SLUG_HEADER, slug)
 
   const response = NextResponse.next({
     request: { headers: requestHeaders },

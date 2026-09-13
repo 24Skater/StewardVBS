@@ -2,6 +2,7 @@ import "server-only";
 import { prisma } from "./prisma";
 import { randomBytes } from "crypto";
 import { UserRole } from "./constants";
+import { requireOrgId } from '@/lib/org-resolve';
 
 /**
  * Create an invitation for a user to join with a specific role
@@ -23,6 +24,7 @@ export async function createInvitation(
 
   return await prisma.invitation.create({
     data: {
+      orgId: await requireOrgId(),
       email: normalizedEmail,
       role,
       token,
@@ -94,7 +96,7 @@ export async function deleteInvitation(id: string) {
  */
 export async function checkInvitationForEmail(email: string): Promise<UserRole | null> {
   const invitation = await prisma.invitation.findUnique({
-    where: { email: email.toLowerCase() },
+    where: { orgId_email: { orgId: await requireOrgId(), email: email.toLowerCase() } },
   });
 
   if (!invitation) return null;

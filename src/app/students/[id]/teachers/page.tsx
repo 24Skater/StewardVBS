@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { ValidationError } from "@/lib/errors";
 import ConfirmButton from "@/components/ConfirmButton";
 import { GraduationCap, ArrowLeft } from "lucide-react";
+import { requireOrgId } from "@/lib/org-resolve";
 
 async function assignTeacher(studentId: number, formData: FormData) {
   "use server";
@@ -32,6 +33,7 @@ async function assignTeacher(studentId: number, formData: FormData) {
 
   await prisma.studentTeacher.create({
     data: {
+      orgId: await requireOrgId(),
       studentId,
       teacherId,
       role,
