@@ -17,7 +17,8 @@ import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand, S3Client } fro
  * keep using a feature it already had. Hosted Steward configures it; a
  * self-hoster may, and need not.
  *
- * Any S3-compatible store works — MinIO, Cloudflare R2, Backblaze, AWS itself.
+ * Any S3-compatible store works — the bundled Versity gateway, Cloudflare R2,
+ * Backblaze, AWS itself.
  */
 
 export interface StorageEnv {
